@@ -38,7 +38,6 @@
 
   // Главная функция расчёта
   function calculate() {
-    // 1. Плотность (прямо из полей)
     const dSt = getVal(densitySt);
     const dRo = getVal(densityRow);
     if (dSt <= 0 || dRo <= 0) {
@@ -46,20 +45,18 @@
       return;
     }
 
-    // 2. Раппорт, симметрия, кромочные
     const rSt = getInt(repSt);
     const rRo = getInt(repRow);
     const sSt = getInt(symSt);
     const sRo = getInt(symRow);
     const e = parseInt(edges.value);
 
-    // 3. Размеры шарфа
     let wCm = fromDisplayCm(getVal(widthCm));
     let lCm = fromDisplayCm(getVal(lengthCm));
     let wRep = getInt(widthRep);
     let lRep = getInt(lengthRep);
 
-    // 4. Синхронизация ширины: если введены раппорты — пересчитаем см
+    // Синхронизация ширины
     if (wRep > 0 && rSt > 0) {
       const totalSt = wRep * rSt + sSt + e;
       const wCmCalc = (totalSt / dSt) * 10;
@@ -85,7 +82,7 @@
       }
     }
 
-    // 5. Синхронизация длины
+    // Синхронизация длины
     if (lRep > 0 && rRo > 0) {
       const totalRo = lRep * rRo + sRo;
       const lCmCalc = (totalRo / dRo) * 10;
@@ -111,7 +108,6 @@
       }
     }
 
-    // 6. Наборный край и ряды в зависимости от направления
     let castOnTotal, rowsTotal;
     let castOnCm, rowsCm;
 
@@ -120,21 +116,19 @@
       castOnCm = (castOnTotal / dSt) * 10;
       rowsTotal = lRep * rRo + sRo;
       rowsCm = (rowsTotal / dRo) * 10;
-    } else { // cross
+    } else {
       castOnTotal = lRep * rSt + sSt + e;
       castOnCm = (castOnTotal / dSt) * 10;
       rowsTotal = wRep * rRo + sRo;
       rowsCm = (rowsTotal / dRo) * 10;
     }
 
-    // 7. Отображение результатов
     const isRu = currentLang === 'ru';
     const stLabel = currentTool === 'knit' ? (isRu ? 'петель' : 'sts') : (isRu ? 'столбиков' : 'sts');
     const rowLabel = isRu ? 'рядов' : 'rows';
     const repLabel = isRu ? 'рапп.' : 'rep.';
     const lengthUnit = currentUnits === 'metric' ? (isRu ? 'см' : 'cm') : 'in';
 
-    // Наборный край
     const castOnReps = Math.floor((castOnTotal - sSt - e) / rSt);
     const symText = isRu ? 'сим.' : 'sym';
     const edgeText = isRu ? 'кром.' : 'edge';
@@ -149,7 +143,6 @@
     else devCastText += ` (${isRu ? 'на' : ''} ${toDisplayCm(Math.abs(diffCast)).toFixed(1)} ${lengthUnit} ${isRu ? 'меньше' : 'less'})`;
     resCastOnDev.textContent = devCastText;
 
-    // Ряды
     const rowsReps = Math.floor((rowsTotal - sRo) / rRo);
     resRows.textContent = `${rowsTotal} ${rowLabel}`;
     resRowsSub.textContent = `${rowsReps} ${repLabel} + ${symText} ${sRo}`;
@@ -163,11 +156,12 @@
     resRowsDev.textContent = devRowText;
   }
 
-  // Translations
+  // Translations (with separate warnings for knit and crochet)
   const translations = {
     ru: {
       donate: 'Поддержать',
-      warning: 'Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Плотность замеряйте строго в центре, на участке 10×10 см (4×4 in), отступив от краёв.',
+      warningKnit: 'Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 in), не включая кромочные и края.',
+      warningCrochet: 'Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 in), не включая петли подъёма.',
       toolKnit: 'Спицы',
       toolCrochet: 'Крючок',
       lblStitch: 'Петель в 10 см',
@@ -191,7 +185,8 @@
     },
     us: {
       donate: 'Support',
-      warning: 'Swatch must be at least 5×5 in (12×12 cm) after blocking. Measure gauge strictly in the center, on a 4×4 in (10×10 cm) area, away from edges.',
+      warningKnit: 'Swatch must be at least 5×5 in (12×12 cm) after blocking. Measure gauge strictly in the center of the swatch, on a 4×4 in (10×10 cm) area, excluding edge stitches and borders.',
+      warningCrochet: 'Swatch must be at least 5×5 in (12×12 cm) after blocking. Measure gauge strictly in the center of the swatch, on a 4×4 in (10×10 cm) area, excluding turning chains.',
       toolKnit: 'Knit',
       toolCrochet: 'Crochet',
       lblStitch: 'Sts per 4 in',
@@ -215,7 +210,8 @@
     },
     uk: {
       donate: 'Support',
-      warning: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure tension strictly in the centre, on a 4×4 in (10×10 cm) area, away from edges.',
+      warningKnit: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure tension strictly in the centre of the square, on a 4×4 in (10×10 cm) area, excluding edge stitches and borders.',
+      warningCrochet: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure tension strictly in the centre of the square, on a 4×4 in (10×10 cm) area, excluding turning chains.',
       toolKnit: 'Knit',
       toolCrochet: 'Crochet',
       lblStitch: 'Sts per 4 in',
@@ -239,6 +235,13 @@
     }
   };
 
+  function updateWarningText() {
+    const lang = currentLang;
+    const t = translations[lang] || translations.ru;
+    const warningKey = currentTool === 'knit' ? 'warningKnit' : 'warningCrochet';
+    document.getElementById('warningText').textContent = t[warningKey];
+  }
+
   function updateLanguage() {
     const lang = currentLang;
     const t = translations[lang] || translations.ru;
@@ -246,7 +249,7 @@
     document.querySelector('.logo-text').textContent = (lang === 'ru' ? 'Хаттер' : 'The Hatter');
     document.querySelector('.logo-sub').textContent = (lang === 'ru' ? 'Дизайнер шарфов' : 'Scarf Studio');
     document.getElementById('donateText').textContent = t.donate;
-    document.getElementById('warningText').textContent = t.warning;
+    // warningText обновляется через updateWarningText()
     document.getElementById('toolKnit').textContent = t.toolKnit;
     document.getElementById('toolCrochet').textContent = t.toolCrochet;
     document.getElementById('lblStitch').textContent = t.lblStitch;
@@ -271,6 +274,7 @@
     document.title = (lang === 'ru' ? 'Хаттер — Калькулятор шарфов' : 'The Hatter — Scarf Calculator');
 
     updateUnitSymbols();
+    updateWarningText(); // обновляем текст предупреждения
   }
 
   function updateUnitSymbols() {
@@ -299,7 +303,6 @@
     if (fromMetric !== toMetric) {
       convertField(widthCm, v => fromMetric ? v / 2.54 : v * 2.54);
       convertField(lengthCm, v => fromMetric ? v / 2.54 : v * 2.54);
-      // Плотность не пересчитываем, только подписи меняются (см → in)
     }
 
     currentUnits = newUnits;
@@ -332,6 +335,7 @@
         document.querySelectorAll('#toolToggle .toggle-option').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         currentTool = this.dataset.tool;
+        updateWarningText(); // обновляем предупреждение при смене инструмента
       });
     });
     document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {
@@ -362,10 +366,8 @@
     });
   });
 
-  // Кнопка "Рассчитать"
   document.getElementById('calculateBtn').addEventListener('click', calculate);
 
-  // Установка начальных единиц и языка
   currentUnits = 'metric';
   document.querySelector('#unitToggle .unit-opt[data-unit="metric"]').classList.add('active');
   updateUnitSymbols();
@@ -374,8 +376,7 @@
   document.getElementById('langSelect').value = 'ru';
   updateLanguage();
 
-  // Ссылка на Boosty
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (density-based, no yarn)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (density-based, dynamic warnings)');
 })();

@@ -4,55 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title id="pageTitle">The Hatter: Crochet & Knit Scarf Studio</title>
-    <meta name="theme-color" content="#fcf8f3" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#faf7f2" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiVGhlIEhhdHRlciBTY2FyZiBTdHVkaW8iLCJkZXNjcmlwdGlvbiI6IkNyb2NoZXQgYW5kIEtuaXQgU2NhcmYgQ2FsY3VsYXRvciIsInN0YXJ0X3VybCI6Ii4iLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTAwIDEwMCc+PHRleHQgeT0nNTAlJyB4PSc1MCUnIHN0eWxlPSd0ZXh0LWFuY2hvcjptaWRkbGU7Zm9udC1zaXplOjQwcHg7Zm9udC1mYW1pbHk6c2Fucy1zZXJpZjtmaWxsOiM0YTkwZTI7Jz7in6Pwn5KjPC90ZXh0Pjwvc3ZnPg=="LCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiVGhlIEhhdHRlciBTY2FyZiBTdHVkaW8iLCJkZXNjcmlwdGlvbiI6IkNyb2NoZXQgYW5kIEtuaXQgU2NhcmYgQ2FsY3VsYXRvciIsInN0YXJ0X3VybCI6Ii4iLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTAwIDEwMCc+PHRleHQgeT0nNTAlJyB4PSc1MCUnIHN0eWxlPSd0ZXh0LWFuY2hvcjptaWRkbGU7Zm9udC1zaXplOjQwcHg7Zm9udC1mYW1pbHk6c2Fucy1zZXJpZjtmaWxsOiNjNjdhNWM7Jz7in6Pwn5KjPC90ZXh0Pjwvc3ZnPg=="LCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
     <style>
-        /* ---------- CSS Variables (Light & Dark) ---------- */
+        /* ---------- Общие переменные ---------- */
         :root {
-            --transition: 0.3s ease;
-            --radius: 16px;
             --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: 0.3s ease;
         }
         .light-theme {
-            --bg: #f4efe9;
-            --bg-card: #ffffff;
-            --text: #1e1e2a;
-            --text-secondary: #4a4a5a;
-            --border: #dcd5cc;
-            --input-bg: #faf8f5;
-            --shadow: 0 8px 30px rgba(0,0,0,0.08);
-            --accent: #b47c5e;
-            --accent-light: #e8d5c8;
-            --toggle-bg: #e0d8d0;
-            --radius-sm: 8px;
-            --warning-bg: #fff3cd;
-            --warning-text: #856404;
-            --hint-bg: #e8f0fe;
-            --hint-text: #1a3a6a;
+            --bg: #f5f0eb;
+            --card-bg: #ffffff;
+            --text: #2c2c2c;
+            --text-secondary: #6b6b6b;
+            --border: #e8e0d8;
+            --input-bg: #f9f6f2;
+            --shadow: 0 8px 40px rgba(0,0,0,0.06);
+            --accent: #c67a5c;
+            --accent-light: #f0e2d9;
+            --accent-dark: #a85f42;
+            --toggle-bg: #e8e0d8;
+            --warning-bg: #fff5e6;
+            --warning-text: #8a6d3b;
+            --hint-bg: #edf3f8;
+            --hint-text: #2a4a6a;
+            --success: #3a9b6e;
+            --error: #c45a5a;
         }
         .dark-theme {
-            --bg: #121212;
-            --bg-card: #1e1e24;
-            --text: #e8e6e3;
-            --text-secondary: #b0aca8;
+            --bg: #16161a;
+            --card-bg: #22222a;
+            --text: #e8e4de;
+            --text-secondary: #a8a49e;
             --border: #3a3a44;
-            --input-bg: #2a2a32;
-            --shadow: 0 8px 30px rgba(0,0,0,0.6);
-            --accent: #c99a7a;
+            --input-bg: #2c2c36;
+            --shadow: 0 8px 40px rgba(0,0,0,0.4);
+            --accent: #d48e70;
             --accent-light: #3a2e28;
+            --accent-dark: #b87355;
             --toggle-bg: #33333e;
             --warning-bg: #3a2e1a;
             --warning-text: #d4b87a;
             --hint-bg: #1a2a3a;
             --hint-text: #aac8f0;
+            --success: #5bb88a;
+            --error: #d47a7a;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: var(--font);
             background: var(--bg);
             color: var(--text);
-            padding: 16px;
+            padding: 20px;
             transition: background var(--transition), color var(--transition);
             min-height: 100vh;
             display: flex;
@@ -60,11 +66,11 @@
             align-items: center;
         }
         .app-container {
-            max-width: 960px;
+            max-width: 1000px;
             width: 100%;
             margin: 0 auto;
         }
-        /* ---------- Header ---------- */
+        /* ---------- Шапка ---------- */
         .header {
             display: flex;
             flex-wrap: wrap;
@@ -72,27 +78,28 @@
             justify-content: space-between;
             gap: 12px;
             padding: 12px 0 20px 0;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 24px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 28px;
         }
         .logo {
             font-size: 1.2rem;
             font-weight: 700;
-            letter-spacing: -0.5px;
             color: var(--accent);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            letter-spacing: -0.3px;
         }
-        .logo span { font-size: 1.6rem; }
-        .header-actions {
+        .logo-icon { font-size: 1.8rem; }
+        .logo-text { white-space: nowrap; }
+        .header-controls {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             gap: 8px;
         }
-        .btn-icon, .unit-toggle-btn {
-            background: var(--bg-card);
+        .header-btn {
+            background: var(--card-bg);
             border: 1px solid var(--border);
             color: var(--text);
             padding: 8px 14px;
@@ -102,38 +109,55 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.2s;
+            transition: 0.2s;
+            height: 42px;
             font-weight: 500;
-            height: 44px;
-            white-space: nowrap;
             text-decoration: none;
+            white-space: nowrap;
         }
-        .btn-icon:hover { background: var(--accent-light); }
-        .unit-toggle-btn {
+        .header-btn:hover { background: var(--accent-light); }
+        .unit-toggle {
             padding: 4px 8px;
             gap: 2px;
             background: var(--toggle-bg);
             border: none;
         }
-        .unit-toggle-btn .unit-opt {
+        .unit-toggle .unit-opt {
             padding: 4px 12px;
             border-radius: 30px;
             transition: 0.2s;
+            font-weight: 500;
         }
-        .unit-toggle-btn .unit-opt.active {
-            background: var(--bg-card);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        .unit-toggle .unit-opt.active {
+            background: var(--card-bg);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             font-weight: 600;
         }
-        .dark-theme .unit-toggle-btn .unit-opt.active { box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
-
+        .lang-select {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 14px 8px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            height: 42px;
+            cursor: pointer;
+            font-weight: 500;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+        .lang-select:focus { outline: 2px solid var(--accent); }
         .btn-donate {
             background: #ff6f00;
             border: none;
             color: #fff;
             font-weight: 600;
             padding: 8px 18px;
-            height: 44px;
+            height: 42px;
             border-radius: 30px;
             display: inline-flex;
             align-items: center;
@@ -145,55 +169,39 @@
         }
         .btn-donate:hover { background: #e65c00; }
 
-        .lang-select {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 8px 14px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            height: 44px;
-            cursor: pointer;
-            font-weight: 500;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 36px;
-        }
-        .lang-select:focus { outline: 2px solid var(--accent); }
-
-        /* ---------- Cards ---------- */
+        /* ---------- Карточки ---------- */
         .card {
-            background: var(--bg-card);
+            background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 20px 18px;
-            margin-bottom: 20px;
+            padding: 24px 24px 28px;
+            margin-bottom: 24px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             transition: background var(--transition), border var(--transition), box-shadow var(--transition);
         }
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             color: var(--text-secondary);
             border-bottom: 2px solid var(--border);
-            padding-bottom: 10px;
+            padding-bottom: 12px;
         }
+        .card-title .icon { font-size: 1.4rem; }
+
+        /* ---------- Предупреждения и подсказки ---------- */
         .warning-box {
             background: var(--warning-bg);
             color: var(--warning-text);
-            padding: 12px 16px;
+            padding: 14px 18px;
             border-radius: var(--radius-sm);
             font-size: 0.9rem;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: flex-start;
             border-left: 4px solid var(--warning-text);
         }
@@ -201,36 +209,48 @@
         .hint-box {
             background: var(--hint-bg);
             color: var(--hint-text);
-            padding: 10px 16px;
+            padding: 12px 16px;
             border-radius: var(--radius-sm);
             font-size: 0.9rem;
-            margin-bottom: 16px;
+            margin-top: 16px;
             border-left: 4px solid var(--hint-text);
         }
-        .row {
+
+        /* ---------- Сетки полей ---------- */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px 24px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px 24px;
+        }
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 16px 20px;
+        }
+        .field-group {
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 12px;
+            flex-direction: column;
+            gap: 4px;
         }
-        .col {
-            flex: 1 1 calc(50% - 12px);
-            min-width: 140px;
-        }
-        .col-full { flex: 1 1 100%; }
-        label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 4px;
+        .field-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
             color: var(--text-secondary);
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
         }
-        .label-hint {
+        .field-group .label-hint {
             font-weight: 400;
-            font-size: 0.75rem;
+            text-transform: none;
+            font-size: 0.7rem;
             opacity: 0.7;
         }
-        input, select {
+        .field-group input, .field-group select {
             width: 100%;
             padding: 12px 14px;
             background: var(--input-bg);
@@ -238,30 +258,31 @@
             border-radius: var(--radius-sm);
             color: var(--text);
             font-size: 1rem;
-            transition: all 0.2s;
+            transition: 0.2s;
             height: 48px;
             font-family: var(--font);
         }
-        input:focus, select:focus {
+        .field-group input:focus, .field-group select:focus {
             outline: 2px solid var(--accent);
             outline-offset: 1px;
         }
-        input[type="number"] { -moz-appearance: textfield; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; }
-        .input-group {
+        .field-group input[type="number"] { -moz-appearance: textfield; }
+        .field-group input::-webkit-outer-spin-button,
+        .field-group input::-webkit-inner-spin-button { -webkit-appearance: none; }
+        .input-with-unit {
             display: flex;
             align-items: center;
             gap: 6px;
         }
-        .input-group input { flex: 1; }
-        .input-group .unit {
+        .input-with-unit input { flex: 1; }
+        .input-with-unit .unit {
             font-size: 0.8rem;
             color: var(--text-secondary);
             min-width: 30px;
             font-weight: 500;
         }
 
-        /* Toggle Buttons (Pills) */
+        /* ---------- Переключатели (плитки) ---------- */
         .toggle-group {
             display: flex;
             background: var(--toggle-bg);
@@ -279,113 +300,27 @@
             font-weight: 500;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
             white-space: nowrap;
             flex: 1;
             text-align: center;
         }
         .toggle-option.active {
-            background: var(--bg-card);
+            background: var(--card-bg);
             color: var(--text);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             font-weight: 600;
         }
-        .dark-theme .toggle-option.active { box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+        .dark-theme .toggle-option.active { box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
 
-        /* Result Block */
-        .result-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 8px;
-        }
-        .result-item {
-            background: var(--input-bg);
-            padding: 14px;
-            border-radius: var(--radius-sm);
-            border-left: 4px solid var(--accent);
-        }
-        .result-item .label { font-size: 0.75rem; text-transform: uppercase; opacity: 0.6; }
-        .result-item .value { font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
-        .result-item .sub { font-size: 0.9rem; opacity: 0.8; }
-        .deviation { font-size: 0.85rem; margin-top: 4px; }
-        .deviation.positive { color: #e67e22; }
-        .deviation.negative { color: #27ae60; }
-        .deviation.zero { color: var(--text-secondary); }
-
-        /* Print / PDF Buttons */
-        .action-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-        .btn-print {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            padding: 14px 32px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            flex: 1 1 auto;
-            min-width: 150px;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .btn-print:hover { filter: brightness(0.9); }
-        .btn-print.secondary { background: var(--border); color: var(--text); }
-
-        /* Responsive */
-        @media (max-width: 600px) {
-            .col { flex: 1 1 100%; }
-            .result-grid { grid-template-columns: 1fr; }
-            .header { flex-direction: column; align-items: stretch; }
-            .header-actions { justify-content: flex-end; }
-            .logo { font-size: 1.1rem; }
-            .btn-icon, .unit-toggle-btn, .lang-select, .btn-donate { height: 38px; font-size: 0.8rem; }
-            .unit-toggle-btn { padding: 2px 6px; }
-            .card { padding: 16px 12px; }
-        }
-        @media (min-width: 601px) and (max-width: 1024px) {
-            .col { flex: 1 1 calc(50% - 12px); }
-        }
-        @media (min-width: 1025px) {
-            .col { flex: 1 1 calc(50% - 12px); }
-            .dimension-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        }
-
-        .mt-1 { margin-top: 8px; }
-        .mb-0 { margin-bottom: 0; }
-        .text-center { text-align: center; }
-        .hidden { display: none; }
-
-        @media print {
-            body { background: #fff !important; padding: 0.5in; color: #000 !important; }
-            .card { box-shadow: none !important; border: 1px solid #ccc !important; background: #fff !important; }
-            .btn-icon, .btn-print, .action-bar, .header-actions { display: none !important; }
-            .dark-theme .card, .dark-theme body { background: #fff !important; color: #000 !important; }
-            .dark-theme input, .dark-theme .result-item { background: #f5f5f5 !important; border-color: #ccc !important; color: #000 !important; }
-            .toggle-group { background: #eee !important; }
-            .toggle-option.active { background: #ddd !important; color: #000 !important; }
-            .warning-box { background: #fff3cd !important; color: #856404 !important; border-color: #856404 !important; }
-            .hint-box { background: #e8f0fe !important; color: #1a3a6a !important; border-color: #1a3a6a !important; }
-        }
-
-        /* Reserve group */
+        /* ---------- Запас пряжи ---------- */
         .reserve-group {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-top: 4px;
         }
         .reserve-option {
-            padding: 6px 16px;
+            padding: 8px 20px;
             border-radius: 30px;
             border: 2px solid var(--border);
             background: var(--input-bg);
@@ -400,24 +335,124 @@
         .reserve-option.active {
             border-color: var(--accent);
             background: var(--accent-light);
-            color: var(--accent);
+            color: var(--accent-dark);
         }
         .dark-theme .reserve-option.active {
             background: var(--accent-light);
             color: var(--accent);
         }
-        .reserve-option:hover { opacity: 0.8; }
+
+        /* ---------- Результаты ---------- */
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .result-item {
+            background: var(--input-bg);
+            padding: 18px 20px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--accent);
+        }
+        .result-item .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.6;
+            font-weight: 600;
+        }
+        .result-item .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-top: 2px;
+        }
+        .result-item .sub {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+        .result-item .deviation {
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+        .deviation.positive { color: var(--error); }
+        .deviation.negative { color: var(--success); }
+        .deviation.zero { color: var(--text-secondary); }
+
+        .result-item-full {
+            grid-column: 1 / -1;
+            border-left-color: var(--text-secondary);
+        }
+        .result-item-full .value { font-size: 1.4rem; }
+
+        /* ---------- Кнопки ---------- */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: center;
+        }
+        .btn-print {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            flex: 1 1 auto;
+            min-width: 180px;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-print:hover { background: var(--accent-dark); }
+
+        /* ---------- Адаптивность ---------- */
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .result-grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; align-items: stretch; }
+            .header-controls { justify-content: flex-end; }
+            .logo { font-size: 1rem; }
+            .card { padding: 16px 14px 20px; }
+            .result-item .value { font-size: 1.4rem; }
+        }
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .grid-4 { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* ---------- Печать ---------- */
+        @media print {
+            body { background: #fff !important; padding: 0.4in; color: #000 !important; }
+            .card { box-shadow: none !important; border: 1px solid #ddd !important; background: #fff !important; }
+            .header-btn, .btn-print, .action-bar, .header-controls { display: none !important; }
+            .dark-theme .card, .dark-theme body { background: #fff !important; color: #000 !important; }
+            .dark-theme input, .dark-theme .result-item { background: #f5f5f5 !important; border-color: #ccc !important; color: #000 !important; }
+            .toggle-group { background: #eee !important; }
+            .toggle-option.active { background: #ddd !important; color: #000 !important; }
+            .warning-box { background: #fff5e6 !important; color: #8a6d3b !important; border-color: #8a6d3b !important; }
+            .hint-box { background: #edf3f8 !important; color: #2a4a6a !important; border-color: #2a4a6a !important; }
+        }
     </style>
 </head>
 <body class="light-theme">
 <div class="app-container" id="app">
 
-    <!-- Header -->
+    <!-- Шапка -->
     <header class="header">
-        <div class="logo"><span>🧶</span> <span id="logoText">The Hatter: Crochet & Knit Scarf Studio</span></div>
-        <div class="header-actions">
-            <button class="btn-icon" id="themeToggle" title="Toggle theme">🌓</button>
-            <div class="unit-toggle-btn" id="unitToggle">
+        <div class="logo">
+            <span class="logo-icon">🧶</span>
+            <span class="logo-text" id="logoText">Хаттер: Дизайнер шарфов</span>
+        </div>
+        <div class="header-controls">
+            <button class="header-btn" id="themeToggle" title="Toggle theme">🌓</button>
+            <div class="header-btn unit-toggle" id="unitToggle">
                 <span class="unit-opt active" data-unit="metric" id="unitMetric">см</span>
                 <span class="unit-opt" data-unit="imperial" id="unitImperial">in</span>
             </div>
@@ -426,214 +461,200 @@
                 <option value="us">🇺🇸 US</option>
                 <option value="uk">🇬🇧 UK</option>
             </select>
-            <!-- Кнопка Boosty -->
             <a href="#" target="_blank" class="btn-donate" id="donateBoosty">
-                ☕ <span id="donateText">Поддержать проект</span>
+                ☕ <span id="donateText">Поддержать</span>
             </a>
         </div>
     </header>
 
-    <!-- 1. Density -->
+    <!-- 1. Плотность -->
     <section class="card">
-        <div class="card-title">📏 <span id="densityTitle">Плотность (после ВТО)</span></div>
-        <div class="warning-box" id="densityWarning">
+        <div class="card-title"><span class="icon">📏</span> <span id="densityTitle">Плотность (после ВТО)</span></div>
+        <div class="warning-box">
             <span class="icon">⚠️</span>
-            <span id="warningText">Образец должен быть не менее 12×12 см (или 5×5 дюймов), обязательно после ВТО. Измеряйте 10×10 см (или 4×4 дюйма) строго в центре образца.</span>
+            <span id="warningText">Образец не менее 12×12 см (5×5 in), после ВТО. Измеряйте 10×10 см (4×4 in) в центре.</span>
         </div>
-        <div class="row">
-            <div class="col">
+        <div class="grid-2">
+            <div class="field-group">
                 <label>Инструмент</label>
                 <div class="toggle-group" id="toolToggle">
                     <button class="toggle-option active" data-tool="knit"><span id="toolKnit">Спицы</span></button>
                     <button class="toggle-option" data-tool="crochet"><span id="toolCrochet">Крючок</span></button>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
+            <div class="field-group">
                 <label id="lblStitch">Петель в 10 см</label>
                 <input type="number" id="densityStitches" value="22" step="0.5">
             </div>
-            <div class="col">
+            <div class="field-group">
                 <label id="lblRow">Рядов в 10 см</label>
                 <input type="number" id="densityRows" value="30" step="0.5">
             </div>
         </div>
-        <div class="hint-box" id="densityHint">
-            💡 <span id="densityHintText">Для точного расчёта пряжи укажите в секции ниже вес вашего образца и его фактические размеры (не только 10×10 см, а любые).</span>
+        <div class="hint-box">
+            💡 <span id="densityHintText">Для точного расчёта пряжи укажите вес образца и его фактические размеры (не только 10×10 см).</span>
         </div>
     </section>
 
-    <!-- 2. Rapport & Symmetry -->
+    <!-- 2. Раппорт и симметрия -->
     <section class="card">
-        <div class="card-title">🔄 <span id="rapportTitle">Раппорт и симметрия</span></div>
-        <div class="row">
-            <div class="col">
-                <label id="lblRepSt">Раппорт (петель)</label>
+        <div class="card-title"><span class="icon">🔄</span> <span id="rapportTitle">Раппорт и симметрия</span></div>
+        <div class="grid-3">
+            <div class="field-group">
+                <label id="lblRepSt">Раппорт (петли)</label>
                 <input type="number" id="repStitch" value="4" step="1" min="1">
             </div>
-            <div class="col">
-                <label id="lblRepRow">Раппорт (рядов)</label>
+            <div class="field-group">
+                <label id="lblRepRow">Раппорт (ряды)</label>
                 <input type="number" id="repRow" value="2" step="1" min="1">
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label id="lblSymSt">Симметрия (петель) <span class="label-hint" id="symHint">*общая сумма</span></label>
+            <div class="field-group">
+                <label id="lblSymSt">Симметрия (петли) <span class="label-hint" id="symHint">*общая</span></label>
                 <input type="number" id="symStitch" value="0" step="1" min="0">
-                <div style="font-size:0.7rem; opacity:0.6; margin-top:4px;" id="symDesc">* Для начала и конца ряда вместе</div>
+                <span style="font-size:0.7rem; opacity:0.6;" id="symDesc">* для начала и конца ряда</span>
             </div>
-            <div class="col">
-                <label id="lblSymRow">Симметрия (рядов)</label>
+            <div class="field-group">
+                <label id="lblSymRow">Симметрия (ряды)</label>
                 <input type="number" id="symRow" value="0" step="1" min="0">
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label id="lblEdges">Кромочные петли <span class="label-hint" id="edgeHint">(добавляются к наборному краю)</span></label>
+            <div class="field-group">
+                <label id="lblEdges">Кромочные <span class="label-hint" id="edgeHint">(к наборному краю)</span></label>
                 <select id="edges">
                     <option value="0">0</option>
                     <option value="1" selected>1</option>
                     <option value="2">2</option>
                 </select>
-                <div style="font-size:0.7rem; opacity:0.6; margin-top:4px;" id="edgeDesc">Кромочные не входят в раппорт</div>
+                <span style="font-size:0.7rem; opacity:0.6;" id="edgeDesc">не входят в раппорт</span>
             </div>
         </div>
     </section>
 
-    <!-- 3. Dimensions -->
+    <!-- 3. Размеры и направление -->
     <section class="card">
-        <div class="card-title">📐 <span id="dimTitle">Размеры и направление</span></div>
-        <div class="row">
-            <div class="col-full">
-                <label id="lblDir">Направление вязания</label>
-                <div class="toggle-group" id="directionToggle">
-                    <button class="toggle-option active" data-dir="classic"><span id="dirClassic">Классическое (ширина → набор)</span></button>
-                    <button class="toggle-option" data-dir="cross"><span id="dirCross">Поперечное (длина → набор)</span></button>
-                </div>
+        <div class="card-title"><span class="icon">📐</span> <span id="dimTitle">Размеры и направление</span></div>
+        <div class="field-group" style="margin-bottom:16px;">
+            <label id="lblDir">Направление вязания</label>
+            <div class="toggle-group" id="directionToggle">
+                <button class="toggle-option active" data-dir="classic"><span id="dirClassic">Классическое (ширина → набор)</span></button>
+                <button class="toggle-option" data-dir="cross"><span id="dirCross">Поперечное (длина → набор)</span></button>
             </div>
         </div>
-        <div class="dimension-grid">
-            <div class="col">
+        <div class="grid-4">
+            <div class="field-group">
                 <label id="lblWidth">Ширина</label>
-                <div class="input-group">
+                <div class="input-with-unit">
                     <input type="number" id="widthCm" value="30" step="0.1">
                     <span class="unit" id="unitCm">см</span>
                 </div>
             </div>
-            <div class="col">
+            <div class="field-group">
                 <label id="lblWidthRep">Ширина (в раппортах)</label>
                 <input type="number" id="widthRep" value="7" step="1" min="1">
             </div>
-            <div class="col">
+            <div class="field-group">
                 <label id="lblLength">Длина</label>
-                <div class="input-group">
+                <div class="input-with-unit">
                     <input type="number" id="lengthCm" value="180" step="0.1">
                     <span class="unit" id="unitCm2">см</span>
                 </div>
             </div>
-            <div class="col">
+            <div class="field-group">
                 <label id="lblLengthRep">Длина (в раппортах)</label>
                 <input type="number" id="lengthRep" value="45" step="1" min="1">
             </div>
         </div>
     </section>
 
-    <!-- 4. Yarn Calculator -->
+    <!-- 4. Калькулятор пряжи -->
     <section class="card">
-        <div class="card-title">🧵 <span id="yarnTitle">Калькулятор пряжи</span></div>
-        <div class="row">
-            <div class="col">
+        <div class="card-title"><span class="icon">🧵</span> <span id="yarnTitle">Калькулятор пряжи</span></div>
+        <div class="grid-3">
+            <div class="field-group">
                 <label id="lblSwatch">Вес образца</label>
-                <div class="input-group">
+                <div class="input-with-unit">
                     <input type="number" id="swatchWeight" value="4.5" step="0.1">
                     <span class="unit" id="unitWeight">г</span>
                 </div>
             </div>
-            <div class="col">
+            <div class="field-group">
                 <label id="lblSwatchW">Ширина образца</label>
-                <div class="input-group">
+                <div class="input-with-unit">
                     <input type="number" id="swatchWidth" value="10" step="0.1">
                     <span class="unit" id="unitSwatchW">см</span>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
+            <div class="field-group">
                 <label id="lblSwatchH">Высота образца</label>
-                <div class="input-group">
+                <div class="input-with-unit">
                     <input type="number" id="swatchHeight" value="10" step="0.1">
                     <span class="unit" id="unitSwatchH">см</span>
                 </div>
             </div>
-            <div class="col">
+            <div class="field-group">
                 <label id="lblSkeinW">Вес мотка</label>
-                <div class="input-group">
+                <div class="input-with-unit">
                     <input type="number" id="skeinWeight" value="100" step="1">
                     <span class="unit" id="unitWeight2">г</span>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
+            <div class="field-group">
                 <label id="lblSkeinY">Метраж мотка</label>
-                <div class="input-group">
+                <div class="input-with-unit">
                     <input type="number" id="skeinYardage" value="200" step="1">
                     <span class="unit" id="unitLength">м</span>
                 </div>
             </div>
-            <div class="col">
+            <div class="field-group">
                 <label id="lblSkeinP">Цена мотка</label>
-                <div class="input-group">
+                <div class="input-with-unit">
                     <input type="number" id="skeinPrice" value="1200" step="10">
                     <span class="unit" id="unitCurrency">₽</span>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-full">
-                <label id="lblReserve">Запас пряжи (%)</label>
-                <div class="reserve-group" id="reserveGroup">
-                    <span class="reserve-option" data-reserve="5">5%</span>
-                    <span class="reserve-option active" data-reserve="10">10%</span>
-                    <span class="reserve-option" data-reserve="15">15%</span>
-                    <span class="reserve-option" data-reserve="20">20%</span>
-                </div>
+        <div class="field-group" style="margin-top:12px;">
+            <label id="lblReserve">Запас пряжи (%)</label>
+            <div class="reserve-group" id="reserveGroup">
+                <span class="reserve-option" data-reserve="5">5%</span>
+                <span class="reserve-option active" data-reserve="10">10%</span>
+                <span class="reserve-option" data-reserve="15">15%</span>
+                <span class="reserve-option" data-reserve="20">20%</span>
             </div>
         </div>
     </section>
 
-    <!-- 5. Results -->
-    <section class="card" id="resultCard">
-        <div class="card-title">📊 <span id="resultTitle">Результат расчета</span></div>
+    <!-- 5. Результаты -->
+    <section class="card">
+        <div class="card-title"><span class="icon">📊</span> <span id="resultTitle">Результат расчета</span></div>
         <div class="result-grid" id="resultGrid">
             <div class="result-item">
                 <div class="label" id="resLabelCastOn">Наборный край</div>
                 <div class="value" id="resCastOn">0</div>
                 <div class="sub" id="resCastOnSub">0 рапп.</div>
-                <div class="deviation" id="resCastOnDev">→ 0.0 см (откл. 0.0)</div>
+                <div class="deviation" id="resCastOnDev">→ 0.0 см (точно)</div>
             </div>
             <div class="result-item">
                 <div class="label" id="resLabelRows">Ряды</div>
                 <div class="value" id="resRows">0</div>
                 <div class="sub" id="resRowsSub">0 рапп.</div>
-                <div class="deviation" id="resRowsDev">→ 0.0 см (откл. 0.0)</div>
+                <div class="deviation" id="resRowsDev">→ 0.0 см (точно)</div>
             </div>
-            <div class="result-item" style="grid-column: 1 / -1;">
+            <div class="result-item result-item-full">
                 <div class="label" id="resLabelYarn">Расход пряжи</div>
-                <div class="value" id="resYarnTotal" style="font-size:1.3rem;">0 м / 0 г</div>
-                <div class="sub" id="resYarnSkeins">Потребуется 0 мотков (купить 0 шт). Бюджет: 0 ₽</div>
+                <div class="value" id="resYarnTotal">0 м / 0 г</div>
+                <div class="sub" id="resYarnSkeins">Потребуется 0 мотков (купить 0 шт)</div>
             </div>
-            <div class="result-item" style="grid-column: 1 / -1; border-left-color: var(--text-secondary);">
+            <div class="result-item result-item-full" style="border-left-color: var(--text-secondary);">
                 <div class="label" id="resLabelPrice">Цена</div>
-                <div class="sub" id="resPriceUsed" style="font-size:1rem;">Использовано: 0 ₽</div>
-                <div class="sub" id="resPricePurchase" style="font-size:1rem; font-weight:600;">К покупке: 0 ₽ (с запасом)</div>
+                <div class="sub" id="resPriceUsed" style="font-size:1.1rem;">Использовано: 0 ₽</div>
+                <div class="sub" id="resPricePurchase" style="font-size:1.1rem; font-weight:600;">К покупке: 0 ₽ (с запасом)</div>
             </div>
         </div>
         <div class="action-bar">
             <button class="btn-print" onclick="window.print()">🖨️ <span id="printBtnText">Печать / PDF</span></button>
         </div>
     </section>
+
 </div>
 
 <script>
@@ -690,7 +711,6 @@
         function fromDisplayG(val) { return currentUnits === 'metric' ? val : val / 0.035274; }
         function fromDisplayM(val) { return currentUnits === 'metric' ? val : val / 1.09361; }
 
-        // Recalc dimensions from reps (including edges and symmetry)
         function recalcDimensionsFromReps() {
             const dSt = fromDisplayCm(getVal(densitySt));
             const dRo = fromDisplayCm(getVal(densityRow));
@@ -715,7 +735,6 @@
             }
         }
 
-        // Core calculation
         function calculate() {
             const active = document.activeElement;
             const repFields = [widthRep, lengthRep, repSt, repRow, symSt, symRow, edges];
@@ -736,7 +755,6 @@
             let wRep = getInt(widthRep);
             let lRep = getInt(lengthRep);
 
-            // Sync cm <-> rep for width
             if (active === widthRep) {
                 wCm = fromDisplayCm(getVal(widthCm));
             } else if (active === widthCm || active === null || !repFields.includes(active)) {
@@ -759,7 +777,6 @@
                 }
             }
 
-            // Sync cm <-> rep for length
             if (active === lengthRep) {
                 lCm = fromDisplayCm(getVal(lengthCm));
             } else if (active === lengthCm || active === null || !repFields.includes(active)) {
@@ -782,7 +799,6 @@
                 }
             }
 
-            // Cast-on and rows
             let castOnTotal, rowsTotal;
             let castOnCm, rowsCm;
             let desiredCastOnCm, desiredRowsCm;
@@ -803,7 +819,7 @@
                 desiredRowsCm = wCm;
             }
 
-            // Yarn calculation
+            // Yarn
             const swWeightMetric = fromDisplayG(getVal(swatchWeight));
             const swWmetric = fromDisplayCm(getVal(swatchWidth));
             const swHmetric = fromDisplayCm(getVal(swatchHeight));
@@ -880,25 +896,25 @@
         // --- Translations ---
         const translations = {
             ru: {
-                logo: 'Хаттер: Дизайнер шарфов спицами и крючком',
-                donate: 'Поддержать проект',
+                logo: 'Хаттер: Дизайнер шарфов',
+                donate: 'Поддержать',
                 densityTitle: 'Плотность (после ВТО)',
-                warning: 'Образец должен быть не менее 12×12 см (или 5×5 дюймов), обязательно после ВТО. Измеряйте 10×10 см (или 4×4 дюйма) строго в центре образца.',
-                densityHint: 'Для точного расчёта пряжи укажите в секции ниже вес вашего образца и его фактические размеры (не только 10×10 см, а любые).',
+                warning: 'Образец не менее 12×12 см (5×5 in), после ВТО. Измеряйте 10×10 см (4×4 in) в центре.',
+                densityHint: 'Для точного расчёта пряжи укажите вес образца и его фактические размеры (не только 10×10 см).',
                 toolKnit: 'Спицы',
                 toolCrochet: 'Крючок',
                 lblStitch: 'Петель в 10 см',
                 lblRow: 'Рядов в 10 см',
                 rapportTitle: 'Раппорт и симметрия',
-                lblRepSt: 'Раппорт (петель)',
-                lblRepRow: 'Раппорт (рядов)',
-                lblSymSt: 'Симметрия (петель) *общая сумма',
-                symHint: '*общая сумма',
-                symDesc: '* Для начала и конца ряда вместе',
-                lblSymRow: 'Симметрия (рядов)',
-                lblEdges: 'Кромочные петли',
-                edgeHint: '(добавляются к наборному краю)',
-                edgeDesc: 'Кромочные не входят в раппорт',
+                lblRepSt: 'Раппорт (петли)',
+                lblRepRow: 'Раппорт (ряды)',
+                lblSymSt: 'Симметрия (петли) *общая',
+                symHint: '*общая',
+                symDesc: '* для начала и конца ряда',
+                lblSymRow: 'Симметрия (ряды)',
+                lblEdges: 'Кромочные (к наборному краю)',
+                edgeHint: '(к наборному краю)',
+                edgeDesc: 'не входят в раппорт',
                 dimTitle: 'Размеры и направление',
                 lblDir: 'Направление вязания',
                 dirClassic: 'Классическое (ширина → набор)',
@@ -923,11 +939,11 @@
                 printBtnText: 'Печать / PDF'
             },
             us: {
-                logo: 'The Hatter: Crochet & Knit Scarf Studio',
-                donate: 'Support the project',
+                logo: 'The Hatter: Scarf Studio',
+                donate: 'Support',
                 densityTitle: 'Gauge (after blocking)',
-                warning: 'Swatch must be at least 5×5 inches (12×12 cm), after blocking. Measure 4×4 inches (10×10 cm) strictly in the center.',
-                densityHint: 'For accurate yarn calculation, enter the weight of your swatch and its actual dimensions (not just 4×4 in) in the section below.',
+                warning: 'Swatch at least 5×5 in (12×12 cm), after blocking. Measure 4×4 in (10×10 cm) in the center.',
+                densityHint: 'For accurate yarn calculation, enter the swatch weight and its actual dimensions (not just 4×4 in).',
                 toolKnit: 'Knit',
                 toolCrochet: 'Crochet',
                 lblStitch: 'Sts per 4 in',
@@ -935,13 +951,13 @@
                 rapportTitle: 'Pattern repeat & symmetry',
                 lblRepSt: 'Repeat (sts)',
                 lblRepRow: 'Repeat (rows)',
-                lblSymSt: 'Symmetry (sts) *total amount',
-                symHint: '*total amount',
-                symDesc: '* For beginning and end of row combined',
+                lblSymSt: 'Symmetry (sts) *total',
+                symHint: '*total',
+                symDesc: '* for beginning and end',
                 lblSymRow: 'Symmetry (rows)',
-                lblEdges: 'Edge stitches',
-                edgeHint: '(added to cast-on edge)',
-                edgeDesc: 'Edge stitches are not part of the repeat',
+                lblEdges: 'Edge stitches (to cast-on)',
+                edgeHint: '(to cast-on)',
+                edgeDesc: 'not part of repeat',
                 dimTitle: 'Size & direction',
                 lblDir: 'Knitting direction',
                 dirClassic: 'Classic (width → cast on)',
@@ -966,11 +982,11 @@
                 printBtnText: 'Print / PDF'
             },
             uk: {
-                logo: 'The Hatter: Crochet & Knit Scarf Studio',
-                donate: 'Support the project',
+                logo: 'The Hatter: Scarf Studio',
+                donate: 'Support',
                 densityTitle: 'Tension (after blocking)',
-                warning: 'Tension square must be at least 5×5 inches (12×12 cm), after blocking. Measure 4×4 inches (10×10 cm) strictly in the centre.',
-                densityHint: 'For accurate yarn calculation, enter the weight of your tension square and its actual dimensions (not just 4×4 in) in the section below.',
+                warning: 'Tension square at least 5×5 in (12×12 cm), after blocking. Measure 4×4 in (10×10 cm) in the centre.',
+                densityHint: 'For accurate yarn calculation, enter the tension square weight and its actual dimensions (not just 4×4 in).',
                 toolKnit: 'Knit',
                 toolCrochet: 'Crochet',
                 lblStitch: 'Sts per 4 in',
@@ -978,13 +994,13 @@
                 rapportTitle: 'Pattern repeat & symmetry',
                 lblRepSt: 'Repeat (sts)',
                 lblRepRow: 'Repeat (rows)',
-                lblSymSt: 'Symmetry (sts) *total amount',
-                symHint: '*total amount',
-                symDesc: '* For beginning and end of row combined',
+                lblSymSt: 'Symmetry (sts) *total',
+                symHint: '*total',
+                symDesc: '* for beginning and end',
                 lblSymRow: 'Symmetry (rows)',
-                lblEdges: 'Edge stitches',
-                edgeHint: '(added to cast-on edge)',
-                edgeDesc: 'Edge stitches are not part of the repeat',
+                lblEdges: 'Edge stitches (to cast-on)',
+                edgeHint: '(to cast-on)',
+                edgeDesc: 'not part of repeat',
                 dimTitle: 'Size & direction',
                 lblDir: 'Knitting direction',
                 dirClassic: 'Classic (width → cast on)',
@@ -1026,7 +1042,7 @@
             document.getElementById('rapportTitle').textContent = t.rapportTitle;
             document.getElementById('lblRepSt').textContent = t.lblRepSt;
             document.getElementById('lblRepRow').textContent = t.lblRepRow;
-            document.getElementById('lblSymSt').innerHTML = t.lblSymSt.replace(/\*.*$/, '') + ' <span class="label-hint">' + t.symHint + '</span>';
+            document.getElementById('lblSymSt').innerHTML = t.lblSymSt + ' <span class="label-hint">' + t.symHint + '</span>';
             document.getElementById('symDesc').textContent = t.symDesc;
             document.getElementById('lblSymRow').textContent = t.lblSymRow;
             document.getElementById('lblEdges').innerHTML = t.lblEdges + ' <span class="label-hint">' + t.edgeHint + '</span>';
@@ -1054,7 +1070,7 @@
             document.getElementById('resLabelPrice').textContent = t.resLabelPrice;
             document.getElementById('printBtnText').textContent = t.printBtnText;
 
-            document.getElementById('pageTitle').textContent = t.logo;
+            document.getElementById('pageTitle').textContent = t.logo + ' — ' + (lang === 'ru' ? 'Шарфы спицами и крючком' : 'Crochet & Knit Scarves');
 
             updateUnitSymbols();
             calculate();
@@ -1121,7 +1137,7 @@
                 body.classList.remove('dark-theme');
                 body.classList.add('light-theme');
                 currentTheme = 'light';
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fcf8f3');
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#faf7f2');
             }
             localStorage.setItem('theme', currentTheme);
         }
@@ -1133,10 +1149,9 @@
             document.body.classList.add(theme === 'dark' ? 'dark-theme' : 'light-theme');
             document.body.classList.remove(theme === 'dark' ? 'light-theme' : 'dark-theme');
             currentTheme = theme;
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#1a1a1a' : '#fcf8f3');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#1a1a1a' : '#faf7f2');
         }
 
-        // --- Event Listeners ---
         function setupToggles() {
             document.querySelectorAll('#toolToggle .toggle-option').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -1182,6 +1197,7 @@
         setupToggles();
         setupInputs();
         setupReserve();
+
         document.getElementById('themeToggle').addEventListener('click', toggleTheme);
         document.getElementById('langSelect').addEventListener('change', function(e) {
             const newLang = e.target.value;
@@ -1198,17 +1214,20 @@
             });
         });
 
+        // Set initial units to metric
         currentUnits = 'metric';
         document.querySelector('#unitToggle .unit-opt[data-unit="metric"]').classList.add('active');
         updateUnitSymbols();
 
+        // Set initial language
         currentLang = 'ru';
         document.getElementById('langSelect').value = 'ru';
         updateLanguage();
-        calculate();
 
-        // Set donate link (replace with your Boosty URL)
+        // Set donate link
         document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
+
+        calculate();
 
         window.addEventListener('resize', calculate);
         console.log('🧶 The Hatter: Scarf Studio loaded!');

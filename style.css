@@ -45,7 +45,6 @@
   --error: #d47a7a;
 }
 
-/* ---------- Глобальные сбросы ---------- */
 * {
   margin: 0;
   padding: 0;
@@ -360,31 +359,32 @@ body {
   font-weight: 600;
 }
 
-/* ---------- Запас пряжи ---------- */
-.reserve-group {
+/* ---------- Кнопка печати ---------- */
+.action-bar {
   display: flex;
-  gap: 10px;
   flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+  justify-content: center;
 }
 
-.reserve-option {
-  padding: 8px 20px;
-  border-radius: 30px;
-  border: 2px solid var(--border);
-  background: var(--input-bg);
-  color: var(--text);
-  font-weight: 500;
+.btn-print {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 16px 48px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: 0.2s;
-  font-size: 0.95rem;
-  flex: 1 1 auto;
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.reserve-option.active {
-  border-color: var(--accent);
-  background: var(--accent-light);
-  color: var(--accent-dark);
+.btn-print:hover {
+  background: var(--accent-dark);
 }
 
 /* ---------- Результаты ---------- */
@@ -448,32 +448,9 @@ body {
   color: var(--text);
 }
 
-/* ---------- Кнопка печати ---------- */
-.action-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 28px;
-  justify-content: center;
-}
-
-.btn-print {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  padding: 16px 48px;
-  border-radius: 40px;
-  font-weight: 600;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.btn-print:hover {
-  background: var(--accent-dark);
+/* ---------- Скрытие элементов ---------- */
+.hidden {
+  display: none !important;
 }
 
 /* ---------- Адаптивность ---------- */
@@ -558,10 +535,5 @@ body {
     background: #fff5e6 !important;
     color: #8a6d3b !important;
     border-color: #8a6d3b !important;
-  }
-  .hint {
-    background: #edf3f8 !important;
-    color: #2a4a6a !important;
-    border-color: #2a4a6a !important;
   }
 }

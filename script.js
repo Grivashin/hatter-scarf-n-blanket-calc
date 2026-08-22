@@ -435,6 +435,7 @@
     });
   }
 
+  // ---------- Исправленная функция переключения единиц ----------
   function toggleUnits(newUnits) {
     if (newUnits === currentUnits) return;
     const fromMetric = currentUnits === 'metric';
@@ -450,13 +451,14 @@
     }
 
     if (fromMetric !== toMetric) {
-      convertField(densitySt, v => fromMetric ? v / 2.54 : v * 2.54);
-      convertField(densityRow, v => fromMetric ? v / 2.54 : v * 2.54);
+      // Плотность НЕ пересчитываем — оставляем как есть
+      // Конвертируем только размеры (см ⇄ дюймы)
       convertField(widthCm, v => fromMetric ? v / 2.54 : v * 2.54);
       convertField(lengthCm, v => fromMetric ? v / 2.54 : v * 2.54);
-      convertField(swatchWeight, v => fromMetric ? v * 0.035274 : v / 0.035274);
       convertField(swatchWidth, v => fromMetric ? v / 2.54 : v * 2.54);
       convertField(swatchHeight, v => fromMetric ? v / 2.54 : v * 2.54);
+      // Конвертируем вес и метраж
+      convertField(swatchWeight, v => fromMetric ? v * 0.035274 : v / 0.035274);
       convertField(skeinW, v => fromMetric ? v * 0.035274 : v / 0.035274);
       convertField(skeinY, v => fromMetric ? v * 1.09361 : v / 1.09361);
     }

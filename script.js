@@ -3,10 +3,8 @@
 
   // DOM refs
   const $ = id => document.getElementById(id);
-  const swatchWidth = $('swatchWidth');
-  const swatchHeight = $('swatchHeight');
-  const swatchStitches = $('swatchStitches');
-  const swatchRows = $('swatchRows');
+  const densitySt = $('densityStitches');
+  const densityRow = $('densityRows');
   const repSt = $('repStitch');
   const repRow = $('repRow');
   const symSt = $('symStitch');
@@ -40,37 +38,28 @@
 
   // Главная функция расчёта
   function calculate() {
-    // 1. Читаем данные образца
-    const swW_display = getVal(swatchWidth);
-    const swH_display = getVal(swatchHeight);
-    const swSt = getInt(swatchStitches);
-    const swRo = getInt(swatchRows);
-    const swW = fromDisplayCm(swW_display);
-    const swH = fromDisplayCm(swH_display);
-
-    if (swW < 0.5 || swH < 0.5 || swSt < 1 || swRo < 1) {
-      alert('Пожалуйста, заполните все поля образца корректно.');
+    // 1. Плотность (прямо из полей)
+    const dSt = getVal(densitySt);
+    const dRo = getVal(densityRow);
+    if (dSt <= 0 || dRo <= 0) {
+      alert('Пожалуйста, введите плотность (петли и ряды на 10 см).');
       return;
     }
 
-    // 2. Плотность (петель и рядов на 10 см)
-    const dSt = (swSt / swW) * 10;
-    const dRo = (swRo / swH) * 10;
-
-    // 3. Раппорт, симметрия, кромочные
+    // 2. Раппорт, симметрия, кромочные
     const rSt = getInt(repSt);
     const rRo = getInt(repRow);
     const sSt = getInt(symSt);
     const sRo = getInt(symRow);
     const e = parseInt(edges.value);
 
-    // 4. Размеры шарфа
+    // 3. Размеры шарфа
     let wCm = fromDisplayCm(getVal(widthCm));
     let lCm = fromDisplayCm(getVal(lengthCm));
     let wRep = getInt(widthRep);
     let lRep = getInt(lengthRep);
 
-    // 5. Синхронизация ширины: если введены раппорты — пересчитаем см
+    // 4. Синхронизация ширины: если введены раппорты — пересчитаем см
     if (wRep > 0 && rSt > 0) {
       const totalSt = wRep * rSt + sSt + e;
       const wCmCalc = (totalSt / dSt) * 10;
@@ -96,7 +85,7 @@
       }
     }
 
-    // 6. Синхронизация длины
+    // 5. Синхронизация длины
     if (lRep > 0 && rRo > 0) {
       const totalRo = lRep * rRo + sRo;
       const lCmCalc = (totalRo / dRo) * 10;
@@ -122,7 +111,7 @@
       }
     }
 
-    // 7. Наборный край и ряды в зависимости от направления
+    // 6. Наборный край и ряды в зависимости от направления
     let castOnTotal, rowsTotal;
     let castOnCm, rowsCm;
 
@@ -138,7 +127,7 @@
       rowsCm = (rowsTotal / dRo) * 10;
     }
 
-    // 8. Отображение результатов
+    // 7. Отображение результатов
     const isRu = currentLang === 'ru';
     const stLabel = currentTool === 'knit' ? (isRu ? 'петель' : 'sts') : (isRu ? 'столбиков' : 'sts');
     const rowLabel = isRu ? 'рядов' : 'rows';
@@ -178,14 +167,11 @@
   const translations = {
     ru: {
       donate: 'Поддержать',
-      warning: 'Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Измеряйте точно.',
-      densityHint: 'Введите размеры образца, количество петель и рядов.',
+      warning: 'Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Плотность замеряйте строго в центре, на участке 10×10 см (4×4 in), отступив от краёв.',
       toolKnit: 'Спицы',
       toolCrochet: 'Крючок',
-      lblSwatchW: 'Ширина образца',
-      lblSwatchH: 'Высота образца',
-      lblSwatchSt: 'Петель в образце',
-      lblSwatchRows: 'Рядов в образце',
+      lblStitch: 'Петель в 10 см',
+      lblRow: 'Рядов в 10 см',
       lblRepSt: 'Раппорт (петли)',
       lblRepRow: 'Раппорт (ряды)',
       lblSymSt: 'Симметрия (петли)',
@@ -205,14 +191,11 @@
     },
     us: {
       donate: 'Support',
-      warning: 'Swatch must be at least 5×5 in (12×12 cm) after blocking. Measure accurately.',
-      densityHint: 'Enter swatch dimensions, stitch and row counts.',
+      warning: 'Swatch must be at least 5×5 in (12×12 cm) after blocking. Measure gauge strictly in the center, on a 4×4 in (10×10 cm) area, away from edges.',
       toolKnit: 'Knit',
       toolCrochet: 'Crochet',
-      lblSwatchW: 'Swatch width',
-      lblSwatchH: 'Swatch height',
-      lblSwatchSt: 'Stitches in swatch',
-      lblSwatchRows: 'Rows in swatch',
+      lblStitch: 'Sts per 4 in',
+      lblRow: 'Rows per 4 in',
       lblRepSt: 'Repeat (sts)',
       lblRepRow: 'Repeat (rows)',
       lblSymSt: 'Symmetry (sts)',
@@ -232,14 +215,11 @@
     },
     uk: {
       donate: 'Support',
-      warning: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure accurately.',
-      densityHint: 'Enter tension square dimensions, stitch and row counts.',
+      warning: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure tension strictly in the centre, on a 4×4 in (10×10 cm) area, away from edges.',
       toolKnit: 'Knit',
       toolCrochet: 'Crochet',
-      lblSwatchW: 'Swatch width',
-      lblSwatchH: 'Swatch height',
-      lblSwatchSt: 'Stitches in swatch',
-      lblSwatchRows: 'Rows in swatch',
+      lblStitch: 'Sts per 4 in',
+      lblRow: 'Rows per 4 in',
       lblRepSt: 'Repeat (sts)',
       lblRepRow: 'Repeat (rows)',
       lblSymSt: 'Symmetry (sts)',
@@ -267,13 +247,10 @@
     document.querySelector('.logo-sub').textContent = (lang === 'ru' ? 'Дизайнер шарфов' : 'Scarf Studio');
     document.getElementById('donateText').textContent = t.donate;
     document.getElementById('warningText').textContent = t.warning;
-    document.getElementById('densityHintText').textContent = t.densityHint;
     document.getElementById('toolKnit').textContent = t.toolKnit;
     document.getElementById('toolCrochet').textContent = t.toolCrochet;
-    document.getElementById('lblSwatchW').textContent = t.lblSwatchW;
-    document.getElementById('lblSwatchH').textContent = t.lblSwatchH;
-    document.getElementById('lblSwatchSt').textContent = t.lblSwatchSt;
-    document.getElementById('lblSwatchRows').textContent = t.lblSwatchRows;
+    document.getElementById('lblStitch').textContent = t.lblStitch;
+    document.getElementById('lblRow').textContent = t.lblRow;
     document.getElementById('lblRepSt').textContent = t.lblRepSt;
     document.getElementById('lblRepRow').textContent = t.lblRepRow;
     document.getElementById('lblSymSt').textContent = t.lblSymSt;
@@ -320,10 +297,9 @@
     }
 
     if (fromMetric !== toMetric) {
-      convertField(swatchWidth, v => fromMetric ? v / 2.54 : v * 2.54);
-      convertField(swatchHeight, v => fromMetric ? v / 2.54 : v * 2.54);
       convertField(widthCm, v => fromMetric ? v / 2.54 : v * 2.54);
       convertField(lengthCm, v => fromMetric ? v / 2.54 : v * 2.54);
+      // Плотность не пересчитываем, только подписи меняются (см → in)
     }
 
     currentUnits = newUnits;
@@ -401,5 +377,5 @@
   // Ссылка на Boosty
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (no yarn calculation)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (density-based, no yarn)');
 })();

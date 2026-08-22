@@ -22,6 +22,10 @@
   const resRowsSub = $('resRowsSub');
   const resRowsDev = $('resRowsDev');
 
+  const edgesGroup = $('edgesGroup');
+  const lblEdges = $('lblEdges');
+  const edgeDesc = $('edgeDesc');
+
   // State
   let currentLang = 'ru';
   let currentUnits = 'metric';
@@ -36,7 +40,7 @@
   function toDisplayCm(val) { return currentUnits === 'metric' ? val : val / 2.54; }
   function fromDisplayCm(val) { return currentUnits === 'metric' ? val : val * 2.54; }
 
-  // Главная функция расчёта
+  // ---------- Основной расчёт ----------
   function calculate() {
     const dSt = getVal(densitySt);
     const dRo = getVal(densityRow);
@@ -49,7 +53,7 @@
     const rRo = getInt(repRow);
     const sSt = getInt(symSt);
     const sRo = getInt(symRow);
-    const e = parseInt(edges.value);
+    const e = currentTool === 'knit' ? parseInt(edges.value) : 0; // для крючка кромочных нет
 
     let wCm = fromDisplayCm(getVal(widthCm));
     let lCm = fromDisplayCm(getVal(lengthCm));
@@ -108,6 +112,7 @@
       }
     }
 
+    // Наборный край и ряды
     let castOnTotal, rowsTotal;
     let castOnCm, rowsCm;
 
@@ -123,8 +128,10 @@
       rowsCm = (rowsTotal / dRo) * 10;
     }
 
+    // Отображение результатов
     const isRu = currentLang === 'ru';
-    const stLabel = currentTool === 'knit' ? (isRu ? 'петель' : 'sts') : (isRu ? 'столбиков' : 'sts');
+    const isKnit = currentTool === 'knit';
+    const stLabel = isKnit ? (isRu ? 'петель' : 'sts') : (isRu ? 'столбиков' : 'sts');
     const rowLabel = isRu ? 'рядов' : 'rows';
     const repLabel = isRu ? 'рапп.' : 'rep.';
     const lengthUnit = currentUnits === 'metric' ? (isRu ? 'см' : 'cm') : 'in';
@@ -133,7 +140,9 @@
     const symText = isRu ? 'сим.' : 'sym';
     const edgeText = isRu ? 'кром.' : 'edge';
     resCastOn.textContent = `${castOnTotal} ${stLabel}`;
-    resCastOnSub.textContent = `${castOnReps} ${repLabel} + ${symText} ${sSt} + ${edgeText} ${e}`;
+    resCastOnSub.textContent = isKnit ? 
+      `${castOnReps} ${repLabel} + ${symText} ${sSt} + ${edgeText} ${e}` :
+      `${castOnReps} ${repLabel} + ${symText} ${sSt}`;
 
     const desiredCastOnCm = currentDir === 'classic' ? wCm : lCm;
     const diffCast = castOnCm - desiredCastOnCm;
@@ -156,7 +165,7 @@
     resRowsDev.textContent = devRowText;
   }
 
-  // Translations (with separate warnings for knit and crochet)
+  // ---------- Переводы ----------
   const translations = {
     ru: {
       donate: 'Поддержать',
@@ -235,13 +244,7 @@
     }
   };
 
-  function updateWarningText() {
-    const lang = currentLang;
-    const t = translations[lang] || translations.ru;
-    const warningKey = currentTool === 'knit' ? 'warningKnit' : 'warningCrochet';
-    document.getElementById('warningText').textContent = t[warningKey];
-  }
-
+  // ---------- Обновление UI в зависимости от языка и инструмента ----------
   function updateLanguage() {
     const lang = currentLang;
     const t = translations[lang] || translations.ru;
@@ -249,16 +252,13 @@
     document.querySelector('.logo-text').textContent = (lang === 'ru' ? 'Хаттер' : 'The Hatter');
     document.querySelector('.logo-sub').textContent = (lang === 'ru' ? 'Дизайнер шарфов' : 'Scarf Studio');
     document.getElementById('donateText').textContent = t.donate;
-    // warningText обновляется через updateWarningText()
     document.getElementById('toolKnit').textContent = t.toolKnit;
     document.getElementById('toolCrochet').textContent = t.toolCrochet;
     document.getElementById('lblStitch').textContent = t.lblStitch;
     document.getElementById('lblRow').textContent = t.lblRow;
-    document.getElementById('lblRepSt').textContent = t.lblRepSt;
     document.getElementById('lblRepRow').textContent = t.lblRepRow;
-    document.getElementById('lblSymSt').textContent = t.lblSymSt;
-    document.getElementById('symDesc').textContent = t.symDesc;
     document.getElementById('lblSymRow').textContent = t.lblSymRow;
+    document.getElementById('symDesc').textContent = t.symDesc;
     document.getElementById('lblEdges').textContent = t.lblEdges;
     document.getElementById('edgeDesc').textContent = t.edgeDesc;
     document.getElementById('lblDir').textContent = t.lblDir;
@@ -273,19 +273,43 @@
 
     document.title = (lang === 'ru' ? 'Хаттер — Калькулятор шарфов' : 'The Hatter — Scarf Calculator');
 
+    updateToolSpecificUI();
+    updateWarningText();
     updateUnitSymbols();
-    updateWarningText(); // обновляем текст предупреждения
+  }
+
+  function updateToolSpecificUI() {
+    const isKnit = currentTool === 'knit';
+    const isRu = currentLang === 'ru';
+
+    // Показываем/скрываем поле "Кромочные"
+    edgesGroup.classList.toggle('hidden', !isKnit);
+
+    // Меняем подписи "петли" ↔ "столбики"
+    const stWord = isKnit ? (isRu ? 'петли' : 'sts') : (isRu ? 'столбики' : 'sts');
+    document.getElementById('lblRepSt').textContent = isRu ? `Раппорт (${stWord})` : `Repeat (${stWord})`;
+    document.getElementById('lblSymSt').textContent = isRu ? `Симметрия (${stWord})` : `Symmetry (${stWord})`;
+
+    // Обновляем предупреждение
+    updateWarningText();
+  }
+
+  function updateWarningText() {
+    const lang = currentLang;
+    const t = translations[lang] || translations.ru;
+    const key = currentTool === 'knit' ? 'warningKnit' : 'warningCrochet';
+    document.getElementById('warningText').textContent = t[key];
   }
 
   function updateUnitSymbols() {
     const isMetric = currentUnits === 'metric';
     const lengthSym = isMetric ? 'см' : 'in';
-
     document.querySelectorAll('.unit').forEach(el => {
       if (el.dataset.unit === 'length') el.textContent = lengthSym;
     });
   }
 
+  // ---------- Переключение единиц ----------
   function toggleUnits(newUnits) {
     if (newUnits === currentUnits) return;
     const fromMetric = currentUnits === 'metric';
@@ -312,6 +336,7 @@
     updateUnitSymbols();
   }
 
+  // ---------- Тема ----------
   function toggleTheme() {
     const body = document.body;
     const isDark = body.getAttribute('data-theme') === 'dark';
@@ -329,13 +354,14 @@
     document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#1a1a1a' : '#f6f0ea');
   }
 
+  // ---------- Инициализация переключателей ----------
   function setupToggles() {
     document.querySelectorAll('#toolToggle .toggle-option').forEach(btn => {
       btn.addEventListener('click', function() {
         document.querySelectorAll('#toolToggle .toggle-option').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         currentTool = this.dataset.tool;
-        updateWarningText(); // обновляем предупреждение при смене инструмента
+        updateToolSpecificUI();
       });
     });
     document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {
@@ -347,7 +373,7 @@
     });
   }
 
-  // --- Init ---
+  // ---------- Init ----------
   initTheme();
   setupToggles();
 
@@ -368,6 +394,7 @@
 
   document.getElementById('calculateBtn').addEventListener('click', calculate);
 
+  // Начальные единицы и язык
   currentUnits = 'metric';
   document.querySelector('#unitToggle .unit-opt[data-unit="metric"]').classList.add('active');
   updateUnitSymbols();
@@ -376,7 +403,8 @@
   document.getElementById('langSelect').value = 'ru';
   updateLanguage();
 
+  // Ссылка на Boosty
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (density-based, dynamic warnings)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (final version)');
 })();

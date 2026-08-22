@@ -53,7 +53,7 @@
     const rRo = getInt(repRow);
     const sSt = getInt(symSt);
     const sRo = getInt(symRow);
-    const e = currentTool === 'knit' ? parseInt(edges.value) : 0; // для крючка кромочных нет
+    const e = currentTool === 'knit' ? parseInt(edges.value) : 0;
 
     let wCm = fromDisplayCm(getVal(widthCm));
     let lCm = fromDisplayCm(getVal(lengthCm));
@@ -283,22 +283,24 @@
     const isRu = currentLang === 'ru';
 
     // Показываем/скрываем поле "Кромочные"
-    edgesGroup.classList.toggle('hidden', !isKnit);
+    if (edgesGroup) {
+      edgesGroup.classList.toggle('hidden', !isKnit);
+    }
 
     // Меняем подписи "петли" ↔ "столбики"
     const stWord = isKnit ? (isRu ? 'петли' : 'sts') : (isRu ? 'столбики' : 'sts');
-    document.getElementById('lblRepSt').textContent = isRu ? `Раппорт (${stWord})` : `Repeat (${stWord})`;
-    document.getElementById('lblSymSt').textContent = isRu ? `Симметрия (${stWord})` : `Symmetry (${stWord})`;
-
-    // Обновляем предупреждение
-    updateWarningText();
+    const lblRepSt = document.getElementById('lblRepSt');
+    const lblSymSt = document.getElementById('lblSymSt');
+    if (lblRepSt) lblRepSt.textContent = isRu ? `Раппорт (${stWord})` : `Repeat (${stWord})`;
+    if (lblSymSt) lblSymSt.textContent = isRu ? `Симметрия (${stWord})` : `Symmetry (${stWord})`;
   }
 
   function updateWarningText() {
     const lang = currentLang;
     const t = translations[lang] || translations.ru;
     const key = currentTool === 'knit' ? 'warningKnit' : 'warningCrochet';
-    document.getElementById('warningText').textContent = t[key];
+    const warningEl = document.getElementById('warningText');
+    if (warningEl) warningEl.textContent = t[key];
   }
 
   function updateUnitSymbols() {
@@ -362,6 +364,8 @@
         this.classList.add('active');
         currentTool = this.dataset.tool;
         updateToolSpecificUI();
+        updateWarningText();
+        // Не пересчитываем автоматически
       });
     });
     document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {
@@ -402,6 +406,10 @@
   currentLang = 'ru';
   document.getElementById('langSelect').value = 'ru';
   updateLanguage();
+
+  // Явно вызываем обновление UI для начального состояния (на случай, если что-то пропущено)
+  updateToolSpecificUI();
+  updateWarningText();
 
   // Ссылка на Boosty
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';

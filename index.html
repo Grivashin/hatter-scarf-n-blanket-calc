@@ -1,232 +1,405 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-  <title>Хаттер — Калькулятор шарфов</title>
-  <meta name="theme-color" content="#f6f0ea">
-  <link rel="icon" href="images/icon-192.png" type="image/png">
-  <link rel="apple-touch-icon" href="images/icon-192.png">
-  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiVGhlIEhhdHRlciBTY2FyZiBTdHVkaW8iLCJkZXNjcmlwdGlvbiI6IkNyb2NoZXQgYW5kIEtuaXQgU2NhcmYgQ2FsY3VsYXRvciIsInN0YXJ0X3VybCI6Ii4iLCJpY29ucyI6W3sic3JjIjoiaW1hZ2VzL2ljb24tMTkyLnBuZyIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9wbmcifSx7InNyYyI6ImltYWdlcy9pY29uLTUxMi5wbmciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIn1dfQ==">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="app">
+(function() {
+  "use strict";
 
-  <!-- Шапка -->
-  <header class="header">
-    <div class="logo">
-      <img src="images/icon-192.png" alt="The Hatter" width="44" height="44">
-      <span class="logo-text">Хаттер</span>
-      <small class="logo-sub">Дизайнер шарфов</small>
-    </div>
-    <div class="controls">
-      <button class="header-btn" id="themeToggle" title="Toggle theme">🌓</button>
-      <div class="header-btn unit-toggle" id="unitToggle">
-        <span class="unit-opt active" data-unit="metric">см</span>
-        <span class="unit-opt" data-unit="imperial">in</span>
-      </div>
-      <select class="lang-select" id="langSelect">
-        <option value="ru">🇷🇺 RU</option>
-        <option value="us">🇺🇸 US</option>
-        <option value="uk">🇬🇧 UK</option>
-      </select>
-      <a href="#" target="_blank" class="btn-donate" id="donateBoosty">
-        ☕ <span id="donateText">Поддержать</span>
-      </a>
-    </div>
-  </header>
+  // DOM refs
+  const $ = id => document.getElementById(id);
+  const swatchWidth = $('swatchWidth');
+  const swatchHeight = $('swatchHeight');
+  const swatchStitches = $('swatchStitches');
+  const swatchRows = $('swatchRows');
+  const repSt = $('repStitch');
+  const repRow = $('repRow');
+  const symSt = $('symStitch');
+  const symRow = $('symRow');
+  const edges = $('edges');
+  const widthCm = $('widthCm');
+  const lengthCm = $('lengthCm');
+  const widthRep = $('widthRep');
+  const lengthRep = $('lengthRep');
 
-  <!-- 1. Плотность -->
-  <section class="card">
-    <div class="card-title"><span>📏</span> <span id="densityTitle">Плотность (после ВТО)</span></div>
-    <div class="warning">
-      <span class="icon">⚠️</span>
-      <span id="warningText">Образец не менее 12×12 см (5×5 in), после ВТО. Измеряйте 10×10 см (4×4 in) в центре.</span>
-    </div>
-    <div class="grid-2">
-      <div class="field-group">
-        <label>Инструмент</label>
-        <div class="toggle-group" id="toolToggle">
-          <button class="toggle-option active" data-tool="knit"><span id="toolKnit">Спицы</span></button>
-          <button class="toggle-option" data-tool="crochet"><span id="toolCrochet">Крючок</span></button>
-        </div>
-      </div>
-      <div class="field-group">
-        <label id="lblStitch">Петель в 10 см</label>
-        <input type="number" id="densityStitches" value="22" step="0.5">
-      </div>
-      <div class="field-group">
-        <label id="lblRow">Рядов в 10 см</label>
-        <input type="number" id="densityRows" value="30" step="0.5">
-      </div>
-    </div>
-    <div class="hint">
-      <span class="icon">💡</span>
-      <span id="densityHintText">Для точного расчёта пряжи укажите вес образца и его фактические размеры (не только 10×10 см).</span>
-    </div>
-  </section>
+  const resCastOn = $('resCastOn');
+  const resCastOnSub = $('resCastOnSub');
+  const resCastOnDev = $('resCastOnDev');
+  const resRows = $('resRows');
+  const resRowsSub = $('resRowsSub');
+  const resRowsDev = $('resRowsDev');
 
-  <!-- 2. Раппорт и симметрия -->
-  <section class="card">
-    <div class="card-title"><span class="icon">⟳</span> <span id="rapportTitle">Раппорт и симметрия</span></div>
-    <div class="grid-3">
-      <div class="field-group">
-        <label id="lblRepSt">Раппорт (петли)</label>
-        <input type="number" id="repStitch" value="4" step="1" min="1">
-      </div>
-      <div class="field-group">
-        <label id="lblRepRow">Раппорт (ряды)</label>
-        <input type="number" id="repRow" value="2" step="1" min="1">
-      </div>
-      <div class="field-group">
-        <label id="lblSymSt">Симметрия (петли) <span class="label-hint" id="symHint">*общая</span></label>
-        <input type="number" id="symStitch" value="0" step="1" min="0">
-        <span style="font-size:0.7rem; opacity:0.6;" id="symDesc">* для начала и конца ряда</span>
-      </div>
-      <div class="field-group">
-        <label id="lblSymRow">Симметрия (ряды)</label>
-        <input type="number" id="symRow" value="0" step="1" min="0">
-      </div>
-      <div class="field-group">
-        <label id="lblEdges">Кромочные (к наборному краю)</label>
-        <select id="edges">
-          <option value="0">0</option>
-          <option value="1" selected>1</option>
-          <option value="2">2</option>
-        </select>
-        <span style="font-size:0.7rem; opacity:0.6;" id="edgeDesc">не входят в раппорт</span>
-      </div>
-    </div>
-  </section>
+  // State
+  let currentLang = 'ru';
+  let currentUnits = 'metric';
+  let currentTheme = 'light';
+  let currentTool = 'knit';
+  let currentDir = 'classic';
 
-  <!-- 3. Размеры и направление -->
-  <section class="card">
-    <div class="card-title"><span>📐</span> <span id="dimTitle">Размеры и направление</span></div>
-    <div class="field-group" style="margin-bottom:16px;">
-      <label id="lblDir">Направление вязания</label>
-      <div class="toggle-group" id="directionToggle">
-        <button class="toggle-option active" data-dir="classic"><span id="dirClassic">Классическое (ширина → набор)</span></button>
-        <button class="toggle-option" data-dir="cross"><span id="dirCross">Поперечное (длина → набор)</span></button>
-      </div>
-    </div>
-    <div class="grid-4">
-      <div class="field-group">
-        <label id="lblWidth">Ширина</label>
-        <div class="input-with-unit">
-          <input type="number" id="widthCm" value="30" step="0.1">
-          <span class="unit" data-unit="length">см</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <label id="lblWidthRep">Ширина (в раппортах)</label>
-        <input type="number" id="widthRep" value="7" step="1" min="1">
-      </div>
-      <div class="field-group">
-        <label id="lblLength">Длина</label>
-        <div class="input-with-unit">
-          <input type="number" id="lengthCm" value="180" step="0.1">
-          <span class="unit" data-unit="length">см</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <label id="lblLengthRep">Длина (в раппортах)</label>
-        <input type="number" id="lengthRep" value="45" step="1" min="1">
-      </div>
-    </div>
-  </section>
+  // Helpers
+  function getVal(el) { return parseFloat(el.value) || 0; }
+  function getInt(el) { return parseInt(el.value) || 0; }
 
-  <!-- 4. Калькулятор пряжи -->
-  <section class="card">
-    <div class="card-title"><span>🧵</span> <span id="yarnTitle">Калькулятор пряжи</span></div>
-    <div class="grid-3">
-      <div class="field-group">
-        <label id="lblSwatch">Вес образца</label>
-        <div class="input-with-unit">
-          <input type="number" id="swatchWeight" value="4.5" step="0.1">
-          <span class="unit" data-unit="weight">г</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <label id="lblSwatchW">Ширина образца</label>
-        <div class="input-with-unit">
-          <input type="number" id="swatchWidth" value="10" step="0.1">
-          <span class="unit" data-unit="length">см</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <label id="lblSwatchH">Высота образца</label>
-        <div class="input-with-unit">
-          <input type="number" id="swatchHeight" value="10" step="0.1">
-          <span class="unit" data-unit="length">см</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <label id="lblSkeinW">Вес мотка</label>
-        <div class="input-with-unit">
-          <input type="number" id="skeinWeight" value="100" step="1">
-          <span class="unit" data-unit="weight">г</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <label id="lblSkeinY">Метраж мотка</label>
-        <div class="input-with-unit">
-          <input type="number" id="skeinYardage" value="200" step="1">
-          <span class="unit" data-unit="yard">м</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <label id="lblSkeinP">Цена мотка</label>
-        <div class="input-with-unit">
-          <input type="number" id="skeinPrice" value="1200" step="10">
-          <span class="unit" data-unit="currency">₽</span>
-        </div>
-      </div>
-    </div>
-    <div class="field-group" style="margin-top:12px;">
-      <label id="lblReserve">Запас пряжи (%)</label>
-      <div class="reserve-group" id="reserveGroup">
-        <span class="reserve-option" data-reserve="5">5%</span>
-        <span class="reserve-option active" data-reserve="10">10%</span>
-        <span class="reserve-option" data-reserve="15">15%</span>
-        <span class="reserve-option" data-reserve="20">20%</span>
-      </div>
-    </div>
-  </section>
+  function toDisplayCm(val) { return currentUnits === 'metric' ? val : val / 2.54; }
+  function fromDisplayCm(val) { return currentUnits === 'metric' ? val : val * 2.54; }
 
-  <!-- 5. Результаты -->
-  <section class="card">
-    <div class="card-title"><span>📊</span> <span id="resultTitle">Результат расчета</span></div>
-    <div class="result-grid" id="resultGrid">
-      <div class="result-item">
-        <div class="label" id="resLabelCastOn">Наборный край</div>
-        <div class="value" id="resCastOn">0</div>
-        <div class="sub" id="resCastOnSub">0 рапп.</div>
-        <div class="deviation" id="resCastOnDev">→ 0.0 см (точно)</div>
-      </div>
-      <div class="result-item">
-        <div class="label" id="resLabelRows">Ряды</div>
-        <div class="value" id="resRows">0</div>
-        <div class="sub" id="resRowsSub">0 рапп.</div>
-        <div class="deviation" id="resRowsDev">→ 0.0 см (точно)</div>
-      </div>
-      <div class="result-item result-item-full">
-        <div class="label" id="resLabelYarn">Расход пряжи</div>
-        <div class="value" id="resYarnTotal">0 м / 0 г</div>
-        <div class="sub" id="resYarnSkeins">Потребуется 0 мотков (купить 0 шт)</div>
-      </div>
-      <div class="result-item result-item-full" style="border-left-color: var(--text-secondary);">
-        <div class="label" id="resLabelPrice">Цена</div>
-        <div class="sub" id="resPriceUsed" style="font-size:1.1rem;">Использовано: 0 ₽</div>
-        <div class="sub" id="resPricePurchase" style="font-size:1.1rem; font-weight:600;">К покупке: 0 ₽ (с запасом)</div>
-      </div>
-    </div>
-    <div class="action-bar">
-      <button class="btn-print" onclick="window.print()">🖨️ <span id="printBtnText">Печать / PDF</span></button>
-    </div>
-  </section>
+  // Главная функция расчёта
+  function calculate() {
+    // 1. Читаем данные образца
+    const swW_display = getVal(swatchWidth);
+    const swH_display = getVal(swatchHeight);
+    const swSt = getInt(swatchStitches);
+    const swRo = getInt(swatchRows);
+    const swW = fromDisplayCm(swW_display);
+    const swH = fromDisplayCm(swH_display);
 
-</div>
-<script src="script.js"></script>
-</body>
-</html>
+    if (swW < 0.5 || swH < 0.5 || swSt < 1 || swRo < 1) {
+      alert('Пожалуйста, заполните все поля образца корректно.');
+      return;
+    }
+
+    // 2. Плотность (петель и рядов на 10 см)
+    const dSt = (swSt / swW) * 10;
+    const dRo = (swRo / swH) * 10;
+
+    // 3. Раппорт, симметрия, кромочные
+    const rSt = getInt(repSt);
+    const rRo = getInt(repRow);
+    const sSt = getInt(symSt);
+    const sRo = getInt(symRow);
+    const e = parseInt(edges.value);
+
+    // 4. Размеры шарфа
+    let wCm = fromDisplayCm(getVal(widthCm));
+    let lCm = fromDisplayCm(getVal(lengthCm));
+    let wRep = getInt(widthRep);
+    let lRep = getInt(lengthRep);
+
+    // 5. Синхронизация ширины: если введены раппорты — пересчитаем см
+    if (wRep > 0 && rSt > 0) {
+      const totalSt = wRep * rSt + sSt + e;
+      const wCmCalc = (totalSt / dSt) * 10;
+      widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
+      wCm = wCmCalc;
+    } else if (wCm > 0 && rSt > 0) {
+      const base = (wCm / 10) * dSt - sSt - e;
+      if (base > 0) {
+        const n = Math.round(base / rSt);
+        wRep = Math.max(1, n);
+        widthRep.value = wRep;
+        const totalSt = wRep * rSt + sSt + e;
+        const wCmCalc = (totalSt / dSt) * 10;
+        widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
+        wCm = wCmCalc;
+      } else {
+        wRep = 1;
+        widthRep.value = 1;
+        const totalSt = wRep * rSt + sSt + e;
+        const wCmCalc = (totalSt / dSt) * 10;
+        widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
+        wCm = wCmCalc;
+      }
+    }
+
+    // 6. Синхронизация длины
+    if (lRep > 0 && rRo > 0) {
+      const totalRo = lRep * rRo + sRo;
+      const lCmCalc = (totalRo / dRo) * 10;
+      lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
+      lCm = lCmCalc;
+    } else if (lCm > 0 && rRo > 0) {
+      const base = (lCm / 10) * dRo - sRo;
+      if (base > 0) {
+        const m = Math.round(base / rRo);
+        lRep = Math.max(1, m);
+        lengthRep.value = lRep;
+        const totalRo = lRep * rRo + sRo;
+        const lCmCalc = (totalRo / dRo) * 10;
+        lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
+        lCm = lCmCalc;
+      } else {
+        lRep = 1;
+        lengthRep.value = 1;
+        const totalRo = lRep * rRo + sRo;
+        const lCmCalc = (totalRo / dRo) * 10;
+        lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
+        lCm = lCmCalc;
+      }
+    }
+
+    // 7. Наборный край и ряды в зависимости от направления
+    let castOnTotal, rowsTotal;
+    let castOnCm, rowsCm;
+
+    if (currentDir === 'classic') {
+      castOnTotal = wRep * rSt + sSt + e;
+      castOnCm = (castOnTotal / dSt) * 10;
+      rowsTotal = lRep * rRo + sRo;
+      rowsCm = (rowsTotal / dRo) * 10;
+    } else { // cross
+      castOnTotal = lRep * rSt + sSt + e;
+      castOnCm = (castOnTotal / dSt) * 10;
+      rowsTotal = wRep * rRo + sRo;
+      rowsCm = (rowsTotal / dRo) * 10;
+    }
+
+    // 8. Отображение результатов
+    const isRu = currentLang === 'ru';
+    const stLabel = currentTool === 'knit' ? (isRu ? 'петель' : 'sts') : (isRu ? 'столбиков' : 'sts');
+    const rowLabel = isRu ? 'рядов' : 'rows';
+    const repLabel = isRu ? 'рапп.' : 'rep.';
+    const lengthUnit = currentUnits === 'metric' ? (isRu ? 'см' : 'cm') : 'in';
+
+    // Наборный край
+    const castOnReps = Math.floor((castOnTotal - sSt - e) / rSt);
+    const symText = isRu ? 'сим.' : 'sym';
+    const edgeText = isRu ? 'кром.' : 'edge';
+    resCastOn.textContent = `${castOnTotal} ${stLabel}`;
+    resCastOnSub.textContent = `${castOnReps} ${repLabel} + ${symText} ${sSt} + ${edgeText} ${e}`;
+
+    const desiredCastOnCm = currentDir === 'classic' ? wCm : lCm;
+    const diffCast = castOnCm - desiredCastOnCm;
+    let devCastText = `→ ${toDisplayCm(castOnCm).toFixed(1)} ${lengthUnit}`;
+    if (Math.abs(diffCast) < 0.01) devCastText += ` (${isRu ? 'точно' : 'exact'})`;
+    else if (diffCast > 0) devCastText += ` (${isRu ? 'на' : '+'} ${toDisplayCm(diffCast).toFixed(1)} ${lengthUnit} ${isRu ? 'больше' : 'more'})`;
+    else devCastText += ` (${isRu ? 'на' : ''} ${toDisplayCm(Math.abs(diffCast)).toFixed(1)} ${lengthUnit} ${isRu ? 'меньше' : 'less'})`;
+    resCastOnDev.textContent = devCastText;
+
+    // Ряды
+    const rowsReps = Math.floor((rowsTotal - sRo) / rRo);
+    resRows.textContent = `${rowsTotal} ${rowLabel}`;
+    resRowsSub.textContent = `${rowsReps} ${repLabel} + ${symText} ${sRo}`;
+
+    const desiredRowsCm = currentDir === 'classic' ? lCm : wCm;
+    const diffRow = rowsCm - desiredRowsCm;
+    let devRowText = `→ ${toDisplayCm(rowsCm).toFixed(1)} ${lengthUnit}`;
+    if (Math.abs(diffRow) < 0.01) devRowText += ` (${isRu ? 'точно' : 'exact'})`;
+    else if (diffRow > 0) devRowText += ` (${isRu ? 'на' : '+'} ${toDisplayCm(diffRow).toFixed(1)} ${lengthUnit} ${isRu ? 'больше' : 'more'})`;
+    else devRowText += ` (${isRu ? 'на' : ''} ${toDisplayCm(Math.abs(diffRow)).toFixed(1)} ${lengthUnit} ${isRu ? 'меньше' : 'less'})`;
+    resRowsDev.textContent = devRowText;
+  }
+
+  // Translations
+  const translations = {
+    ru: {
+      donate: 'Поддержать',
+      warning: 'Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Измеряйте точно.',
+      densityHint: 'Введите размеры образца, количество петель и рядов.',
+      toolKnit: 'Спицы',
+      toolCrochet: 'Крючок',
+      lblSwatchW: 'Ширина образца',
+      lblSwatchH: 'Высота образца',
+      lblSwatchSt: 'Петель в образце',
+      lblSwatchRows: 'Рядов в образце',
+      lblRepSt: 'Раппорт (петли)',
+      lblRepRow: 'Раппорт (ряды)',
+      lblSymSt: 'Симметрия (петли)',
+      symDesc: '* общая для начала и конца',
+      lblSymRow: 'Симметрия (ряды)',
+      lblEdges: 'Кромочные (к наборному краю)',
+      edgeDesc: 'не входят в раппорт',
+      lblDir: 'Направление вязания',
+      dirClassic: 'Классическое (ширина → набор)',
+      dirCross: 'Поперечное (длина → набор)',
+      lblWidth: 'Ширина',
+      lblWidthRep: 'Ширина (в раппортах)',
+      lblLength: 'Длина',
+      lblLengthRep: 'Длина (в раппортах)',
+      resLabelCastOn: 'Наборный край',
+      resLabelRows: 'Ряды',
+    },
+    us: {
+      donate: 'Support',
+      warning: 'Swatch must be at least 5×5 in (12×12 cm) after blocking. Measure accurately.',
+      densityHint: 'Enter swatch dimensions, stitch and row counts.',
+      toolKnit: 'Knit',
+      toolCrochet: 'Crochet',
+      lblSwatchW: 'Swatch width',
+      lblSwatchH: 'Swatch height',
+      lblSwatchSt: 'Stitches in swatch',
+      lblSwatchRows: 'Rows in swatch',
+      lblRepSt: 'Repeat (sts)',
+      lblRepRow: 'Repeat (rows)',
+      lblSymSt: 'Symmetry (sts)',
+      symDesc: '* total for beginning and end',
+      lblSymRow: 'Symmetry (rows)',
+      lblEdges: 'Edge stitches (to cast-on)',
+      edgeDesc: 'not part of repeat',
+      lblDir: 'Knitting direction',
+      dirClassic: 'Classic (width → cast on)',
+      dirCross: 'Crosswise (length → cast on)',
+      lblWidth: 'Width',
+      lblWidthRep: 'Width (in repeats)',
+      lblLength: 'Length',
+      lblLengthRep: 'Length (in repeats)',
+      resLabelCastOn: 'Cast on',
+      resLabelRows: 'Rows',
+    },
+    uk: {
+      donate: 'Support',
+      warning: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure accurately.',
+      densityHint: 'Enter tension square dimensions, stitch and row counts.',
+      toolKnit: 'Knit',
+      toolCrochet: 'Crochet',
+      lblSwatchW: 'Swatch width',
+      lblSwatchH: 'Swatch height',
+      lblSwatchSt: 'Stitches in swatch',
+      lblSwatchRows: 'Rows in swatch',
+      lblRepSt: 'Repeat (sts)',
+      lblRepRow: 'Repeat (rows)',
+      lblSymSt: 'Symmetry (sts)',
+      symDesc: '* total for beginning and end',
+      lblSymRow: 'Symmetry (rows)',
+      lblEdges: 'Edge stitches (to cast-on)',
+      edgeDesc: 'not part of repeat',
+      lblDir: 'Knitting direction',
+      dirClassic: 'Classic (width → cast on)',
+      dirCross: 'Crosswise (length → cast on)',
+      lblWidth: 'Width',
+      lblWidthRep: 'Width (in repeats)',
+      lblLength: 'Length',
+      lblLengthRep: 'Length (in repeats)',
+      resLabelCastOn: 'Cast on',
+      resLabelRows: 'Rows',
+    }
+  };
+
+  function updateLanguage() {
+    const lang = currentLang;
+    const t = translations[lang] || translations.ru;
+
+    document.querySelector('.logo-text').textContent = (lang === 'ru' ? 'Хаттер' : 'The Hatter');
+    document.querySelector('.logo-sub').textContent = (lang === 'ru' ? 'Дизайнер шарфов' : 'Scarf Studio');
+    document.getElementById('donateText').textContent = t.donate;
+    document.getElementById('warningText').textContent = t.warning;
+    document.getElementById('densityHintText').textContent = t.densityHint;
+    document.getElementById('toolKnit').textContent = t.toolKnit;
+    document.getElementById('toolCrochet').textContent = t.toolCrochet;
+    document.getElementById('lblSwatchW').textContent = t.lblSwatchW;
+    document.getElementById('lblSwatchH').textContent = t.lblSwatchH;
+    document.getElementById('lblSwatchSt').textContent = t.lblSwatchSt;
+    document.getElementById('lblSwatchRows').textContent = t.lblSwatchRows;
+    document.getElementById('lblRepSt').textContent = t.lblRepSt;
+    document.getElementById('lblRepRow').textContent = t.lblRepRow;
+    document.getElementById('lblSymSt').textContent = t.lblSymSt;
+    document.getElementById('symDesc').textContent = t.symDesc;
+    document.getElementById('lblSymRow').textContent = t.lblSymRow;
+    document.getElementById('lblEdges').textContent = t.lblEdges;
+    document.getElementById('edgeDesc').textContent = t.edgeDesc;
+    document.getElementById('lblDir').textContent = t.lblDir;
+    document.getElementById('dirClassic').textContent = t.dirClassic;
+    document.getElementById('dirCross').textContent = t.dirCross;
+    document.getElementById('lblWidth').textContent = t.lblWidth;
+    document.getElementById('lblWidthRep').textContent = t.lblWidthRep;
+    document.getElementById('lblLength').textContent = t.lblLength;
+    document.getElementById('lblLengthRep').textContent = t.lblLengthRep;
+    document.getElementById('resLabelCastOn').textContent = t.resLabelCastOn;
+    document.getElementById('resLabelRows').textContent = t.resLabelRows;
+
+    document.title = (lang === 'ru' ? 'Хаттер — Калькулятор шарфов' : 'The Hatter — Scarf Calculator');
+
+    updateUnitSymbols();
+  }
+
+  function updateUnitSymbols() {
+    const isMetric = currentUnits === 'metric';
+    const lengthSym = isMetric ? 'см' : 'in';
+
+    document.querySelectorAll('.unit').forEach(el => {
+      if (el.dataset.unit === 'length') el.textContent = lengthSym;
+    });
+  }
+
+  function toggleUnits(newUnits) {
+    if (newUnits === currentUnits) return;
+    const fromMetric = currentUnits === 'metric';
+    const toMetric = newUnits === 'metric';
+
+    function convertField(el, convFn) {
+      if (el) {
+        const val = parseFloat(el.value);
+        if (!isNaN(val)) {
+          el.value = convFn(val).toFixed(el.step && el.step.includes('.') ? 2 : 0);
+        }
+      }
+    }
+
+    if (fromMetric !== toMetric) {
+      convertField(swatchWidth, v => fromMetric ? v / 2.54 : v * 2.54);
+      convertField(swatchHeight, v => fromMetric ? v / 2.54 : v * 2.54);
+      convertField(widthCm, v => fromMetric ? v / 2.54 : v * 2.54);
+      convertField(lengthCm, v => fromMetric ? v / 2.54 : v * 2.54);
+    }
+
+    currentUnits = newUnits;
+    document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
+      el.classList.toggle('active', el.dataset.unit === newUnits);
+    });
+    updateUnitSymbols();
+  }
+
+  function toggleTheme() {
+    const body = document.body;
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', newTheme === 'dark' ? '#1a1a1a' : '#f6f0ea');
+  }
+
+  function initTheme() {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = saved || (prefersDark ? 'dark' : 'light');
+    document.body.setAttribute('data-theme', theme);
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#1a1a1a' : '#f6f0ea');
+  }
+
+  function setupToggles() {
+    document.querySelectorAll('#toolToggle .toggle-option').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('#toolToggle .toggle-option').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentTool = this.dataset.tool;
+      });
+    });
+    document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('#directionToggle .toggle-option').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentDir = this.dataset.dir;
+      });
+    });
+  }
+
+  // --- Init ---
+  initTheme();
+  setupToggles();
+
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('langSelect').addEventListener('change', function(e) {
+    const newLang = e.target.value;
+    if (newLang !== currentLang) {
+      currentLang = newLang;
+      updateLanguage();
+    }
+  });
+
+  document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
+    el.addEventListener('click', function() {
+      toggleUnits(this.dataset.unit);
+    });
+  });
+
+  // Кнопка "Рассчитать"
+  document.getElementById('calculateBtn').addEventListener('click', calculate);
+
+  // Установка начальных единиц и языка
+  currentUnits = 'metric';
+  document.querySelector('#unitToggle .unit-opt[data-unit="metric"]').classList.add('active');
+  updateUnitSymbols();
+
+  currentLang = 'ru';
+  document.getElementById('langSelect').value = 'ru';
+  updateLanguage();
+
+  // Ссылка на Boosty
+  document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
+
+  console.log('🧶 The Hatter: Scarf Studio loaded (no yarn calculation)');
+})();

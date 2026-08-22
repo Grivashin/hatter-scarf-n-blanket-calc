@@ -1,1237 +1,232 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title id="pageTitle">The Hatter: Crochet & Knit Scarf Studio</title>
-    <meta name="theme-color" content="#faf7f2" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiVGhlIEhhdHRlciBTY2FyZiBTdHVkaW8iLCJkZXNjcmlwdGlvbiI6IkNyb2NoZXQgYW5kIEtuaXQgU2NhcmYgQ2FsY3VsYXRvciIsInN0YXJ0X3VybCI6Ii4iLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTAwIDEwMCc+PHRleHQgeT0nNTAlJyB4PSc1MCUnIHN0eWxlPSd0ZXh0LWFuY2hvcjptaWRkbGU7Zm9udC1zaXplOjQwcHg7Zm9udC1mYW1pbHk6c2Fucy1zZXJpZjtmaWxsOiNjNjdhNWM7Jz7in6Pwn5KjPC90ZXh0Pjwvc3ZnPg=="LCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
-    <style>
-        /* ---------- Общие переменные ---------- */
-        :root {
-            --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            --radius: 20px;
-            --radius-sm: 12px;
-            --transition: 0.3s ease;
-        }
-        .light-theme {
-            --bg: #f5f0eb;
-            --card-bg: #ffffff;
-            --text: #2c2c2c;
-            --text-secondary: #6b6b6b;
-            --border: #e8e0d8;
-            --input-bg: #f9f6f2;
-            --shadow: 0 8px 40px rgba(0,0,0,0.06);
-            --accent: #c67a5c;
-            --accent-light: #f0e2d9;
-            --accent-dark: #a85f42;
-            --toggle-bg: #e8e0d8;
-            --warning-bg: #fff5e6;
-            --warning-text: #8a6d3b;
-            --hint-bg: #edf3f8;
-            --hint-text: #2a4a6a;
-            --success: #3a9b6e;
-            --error: #c45a5a;
-        }
-        .dark-theme {
-            --bg: #16161a;
-            --card-bg: #22222a;
-            --text: #e8e4de;
-            --text-secondary: #a8a49e;
-            --border: #3a3a44;
-            --input-bg: #2c2c36;
-            --shadow: 0 8px 40px rgba(0,0,0,0.4);
-            --accent: #d48e70;
-            --accent-light: #3a2e28;
-            --accent-dark: #b87355;
-            --toggle-bg: #33333e;
-            --warning-bg: #3a2e1a;
-            --warning-text: #d4b87a;
-            --hint-bg: #1a2a3a;
-            --hint-text: #aac8f0;
-            --success: #5bb88a;
-            --error: #d47a7a;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: var(--font);
-            background: var(--bg);
-            color: var(--text);
-            padding: 20px;
-            transition: background var(--transition), color var(--transition);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .app-container {
-            max-width: 1000px;
-            width: 100%;
-            margin: 0 auto;
-        }
-        /* ---------- Шапка ---------- */
-        .header {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 12px 0 20px 0;
-            border-bottom: 2px solid var(--border);
-            margin-bottom: 28px;
-        }
-        .logo {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            letter-spacing: -0.3px;
-        }
-        .logo-icon { font-size: 1.8rem; }
-        .logo-text { white-space: nowrap; }
-        .header-controls {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 8px;
-        }
-        .header-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 8px 14px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.2s;
-            height: 42px;
-            font-weight: 500;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-        .header-btn:hover { background: var(--accent-light); }
-        .unit-toggle {
-            padding: 4px 8px;
-            gap: 2px;
-            background: var(--toggle-bg);
-            border: none;
-        }
-        .unit-toggle .unit-opt {
-            padding: 4px 12px;
-            border-radius: 30px;
-            transition: 0.2s;
-            font-weight: 500;
-        }
-        .unit-toggle .unit-opt.active {
-            background: var(--card-bg);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            font-weight: 600;
-        }
-        .lang-select {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 8px 14px 8px 16px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            height: 42px;
-            cursor: pointer;
-            font-weight: 500;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 36px;
-        }
-        .lang-select:focus { outline: 2px solid var(--accent); }
-        .btn-donate {
-            background: #ff6f00;
-            border: none;
-            color: #fff;
-            font-weight: 600;
-            padding: 8px 18px;
-            height: 42px;
-            border-radius: 30px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: 0.2s;
-            cursor: pointer;
-        }
-        .btn-donate:hover { background: #e65c00; }
-
-        /* ---------- Карточки ---------- */
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 24px 24px 28px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: background var(--transition), border var(--transition), box-shadow var(--transition);
-        }
-        .card-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text-secondary);
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 12px;
-        }
-        .card-title .icon { font-size: 1.4rem; }
-
-        /* ---------- Предупреждения и подсказки ---------- */
-        .warning-box {
-            background: var(--warning-bg);
-            color: var(--warning-text);
-            padding: 14px 18px;
-            border-radius: var(--radius-sm);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            border-left: 4px solid var(--warning-text);
-        }
-        .warning-box .icon { font-size: 1.2rem; flex-shrink: 0; }
-        .hint-box {
-            background: var(--hint-bg);
-            color: var(--hint-text);
-            padding: 12px 16px;
-            border-radius: var(--radius-sm);
-            font-size: 0.9rem;
-            margin-top: 16px;
-            border-left: 4px solid var(--hint-text);
-        }
-
-        /* ---------- Сетки полей ---------- */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px 24px;
-        }
-        .grid-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 16px 24px;
-        }
-        .grid-4 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 16px 20px;
-        }
-        .field-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .field-group label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
-        }
-        .field-group .label-hint {
-            font-weight: 400;
-            text-transform: none;
-            font-size: 0.7rem;
-            opacity: 0.7;
-        }
-        .field-group input, .field-group select {
-            width: 100%;
-            padding: 12px 14px;
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            color: var(--text);
-            font-size: 1rem;
-            transition: 0.2s;
-            height: 48px;
-            font-family: var(--font);
-        }
-        .field-group input:focus, .field-group select:focus {
-            outline: 2px solid var(--accent);
-            outline-offset: 1px;
-        }
-        .field-group input[type="number"] { -moz-appearance: textfield; }
-        .field-group input::-webkit-outer-spin-button,
-        .field-group input::-webkit-inner-spin-button { -webkit-appearance: none; }
-        .input-with-unit {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .input-with-unit input { flex: 1; }
-        .input-with-unit .unit {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            min-width: 30px;
-            font-weight: 500;
-        }
-
-        /* ---------- Переключатели (плитки) ---------- */
-        .toggle-group {
-            display: flex;
-            background: var(--toggle-bg);
-            border-radius: 30px;
-            padding: 4px;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-        .toggle-option {
-            padding: 8px 18px;
-            border-radius: 30px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-weight: 500;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.2s;
-            white-space: nowrap;
-            flex: 1;
-            text-align: center;
-        }
-        .toggle-option.active {
-            background: var(--card-bg);
-            color: var(--text);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            font-weight: 600;
-        }
-        .dark-theme .toggle-option.active { box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
-
-        /* ---------- Запас пряжи ---------- */
-        .reserve-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .reserve-option {
-            padding: 8px 20px;
-            border-radius: 30px;
-            border: 2px solid var(--border);
-            background: var(--input-bg);
-            color: var(--text);
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.95rem;
-            flex: 1 1 auto;
-            text-align: center;
-        }
-        .reserve-option.active {
-            border-color: var(--accent);
-            background: var(--accent-light);
-            color: var(--accent-dark);
-        }
-        .dark-theme .reserve-option.active {
-            background: var(--accent-light);
-            color: var(--accent);
-        }
-
-        /* ---------- Результаты ---------- */
-        .result-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .result-item {
-            background: var(--input-bg);
-            padding: 18px 20px;
-            border-radius: var(--radius-sm);
-            border-left: 4px solid var(--accent);
-        }
-        .result-item .label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            opacity: 0.6;
-            font-weight: 600;
-        }
-        .result-item .value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-top: 2px;
-        }
-        .result-item .sub {
-            font-size: 0.85rem;
-            opacity: 0.7;
-            margin-top: 2px;
-        }
-        .result-item .deviation {
-            font-size: 0.85rem;
-            margin-top: 4px;
-        }
-        .deviation.positive { color: var(--error); }
-        .deviation.negative { color: var(--success); }
-        .deviation.zero { color: var(--text-secondary); }
-
-        .result-item-full {
-            grid-column: 1 / -1;
-            border-left-color: var(--text-secondary);
-        }
-        .result-item-full .value { font-size: 1.4rem; }
-
-        /* ---------- Кнопки ---------- */
-        .action-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 24px;
-            justify-content: center;
-        }
-        .btn-print {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            padding: 14px 40px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            flex: 1 1 auto;
-            min-width: 180px;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .btn-print:hover { background: var(--accent-dark); }
-
-        /* ---------- Адаптивность ---------- */
-        @media (max-width: 768px) {
-            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-            .result-grid { grid-template-columns: 1fr; }
-            .header { flex-direction: column; align-items: stretch; }
-            .header-controls { justify-content: flex-end; }
-            .logo { font-size: 1rem; }
-            .card { padding: 16px 14px 20px; }
-            .result-item .value { font-size: 1.4rem; }
-        }
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .grid-4 { grid-template-columns: 1fr 1fr; }
-        }
-
-        /* ---------- Печать ---------- */
-        @media print {
-            body { background: #fff !important; padding: 0.4in; color: #000 !important; }
-            .card { box-shadow: none !important; border: 1px solid #ddd !important; background: #fff !important; }
-            .header-btn, .btn-print, .action-bar, .header-controls { display: none !important; }
-            .dark-theme .card, .dark-theme body { background: #fff !important; color: #000 !important; }
-            .dark-theme input, .dark-theme .result-item { background: #f5f5f5 !important; border-color: #ccc !important; color: #000 !important; }
-            .toggle-group { background: #eee !important; }
-            .toggle-option.active { background: #ddd !important; color: #000 !important; }
-            .warning-box { background: #fff5e6 !important; color: #8a6d3b !important; border-color: #8a6d3b !important; }
-            .hint-box { background: #edf3f8 !important; color: #2a4a6a !important; border-color: #2a4a6a !important; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>Хаттер — Калькулятор шарфов</title>
+  <meta name="theme-color" content="#f6f0ea">
+  <link rel="icon" href="images/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="images/icon-192.png">
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiVGhlIEhhdHRlciBTY2FyZiBTdHVkaW8iLCJkZXNjcmlwdGlvbiI6IkNyb2NoZXQgYW5kIEtuaXQgU2NhcmYgQ2FsY3VsYXRvciIsInN0YXJ0X3VybCI6Ii4iLCJpY29ucyI6W3sic3JjIjoiaW1hZ2VzL2ljb24tMTkyLnBuZyIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9wbmcifSx7InNyYyI6ImltYWdlcy9pY29uLTUxMi5wbmciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIn1dfQ==">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="light-theme">
-<div class="app-container" id="app">
+<body>
+<div class="app">
 
-    <!-- Шапка -->
-    <header class="header">
-        <div class="logo">
-            <span class="logo-icon">🧶</span>
-            <span class="logo-text" id="logoText">Хаттер: Дизайнер шарфов</span>
-        </div>
-        <div class="header-controls">
-            <button class="header-btn" id="themeToggle" title="Toggle theme">🌓</button>
-            <div class="header-btn unit-toggle" id="unitToggle">
-                <span class="unit-opt active" data-unit="metric" id="unitMetric">см</span>
-                <span class="unit-opt" data-unit="imperial" id="unitImperial">in</span>
-            </div>
-            <select class="lang-select" id="langSelect">
-                <option value="ru">🇷🇺 RU</option>
-                <option value="us">🇺🇸 US</option>
-                <option value="uk">🇬🇧 UK</option>
-            </select>
-            <a href="#" target="_blank" class="btn-donate" id="donateBoosty">
-                ☕ <span id="donateText">Поддержать</span>
-            </a>
-        </div>
-    </header>
+  <!-- Шапка -->
+  <header class="header">
+    <div class="logo">
+      <img src="images/icon-192.png" alt="The Hatter" width="44" height="44">
+      <span class="logo-text">Хаттер</span>
+      <small class="logo-sub">Дизайнер шарфов</small>
+    </div>
+    <div class="controls">
+      <button class="header-btn" id="themeToggle" title="Toggle theme">🌓</button>
+      <div class="header-btn unit-toggle" id="unitToggle">
+        <span class="unit-opt active" data-unit="metric">см</span>
+        <span class="unit-opt" data-unit="imperial">in</span>
+      </div>
+      <select class="lang-select" id="langSelect">
+        <option value="ru">🇷🇺 RU</option>
+        <option value="us">🇺🇸 US</option>
+        <option value="uk">🇬🇧 UK</option>
+      </select>
+      <a href="#" target="_blank" class="btn-donate" id="donateBoosty">
+        ☕ <span id="donateText">Поддержать</span>
+      </a>
+    </div>
+  </header>
 
-    <!-- 1. Плотность -->
-    <section class="card">
-        <div class="card-title"><span class="icon">📏</span> <span id="densityTitle">Плотность (после ВТО)</span></div>
-        <div class="warning-box">
-            <span class="icon">⚠️</span>
-            <span id="warningText">Образец не менее 12×12 см (5×5 in), после ВТО. Измеряйте 10×10 см (4×4 in) в центре.</span>
+  <!-- 1. Плотность -->
+  <section class="card">
+    <div class="card-title"><span>📏</span> <span id="densityTitle">Плотность (после ВТО)</span></div>
+    <div class="warning">
+      <span class="icon">⚠️</span>
+      <span id="warningText">Образец не менее 12×12 см (5×5 in), после ВТО. Измеряйте 10×10 см (4×4 in) в центре.</span>
+    </div>
+    <div class="grid-2">
+      <div class="field-group">
+        <label>Инструмент</label>
+        <div class="toggle-group" id="toolToggle">
+          <button class="toggle-option active" data-tool="knit"><span id="toolKnit">Спицы</span></button>
+          <button class="toggle-option" data-tool="crochet"><span id="toolCrochet">Крючок</span></button>
         </div>
-        <div class="grid-2">
-            <div class="field-group">
-                <label>Инструмент</label>
-                <div class="toggle-group" id="toolToggle">
-                    <button class="toggle-option active" data-tool="knit"><span id="toolKnit">Спицы</span></button>
-                    <button class="toggle-option" data-tool="crochet"><span id="toolCrochet">Крючок</span></button>
-                </div>
-            </div>
-            <div class="field-group">
-                <label id="lblStitch">Петель в 10 см</label>
-                <input type="number" id="densityStitches" value="22" step="0.5">
-            </div>
-            <div class="field-group">
-                <label id="lblRow">Рядов в 10 см</label>
-                <input type="number" id="densityRows" value="30" step="0.5">
-            </div>
-        </div>
-        <div class="hint-box">
-            💡 <span id="densityHintText">Для точного расчёта пряжи укажите вес образца и его фактические размеры (не только 10×10 см).</span>
-        </div>
-    </section>
+      </div>
+      <div class="field-group">
+        <label id="lblStitch">Петель в 10 см</label>
+        <input type="number" id="densityStitches" value="22" step="0.5">
+      </div>
+      <div class="field-group">
+        <label id="lblRow">Рядов в 10 см</label>
+        <input type="number" id="densityRows" value="30" step="0.5">
+      </div>
+    </div>
+    <div class="hint">
+      <span class="icon">💡</span>
+      <span id="densityHintText">Для точного расчёта пряжи укажите вес образца и его фактические размеры (не только 10×10 см).</span>
+    </div>
+  </section>
 
-    <!-- 2. Раппорт и симметрия -->
-    <section class="card">
-        <div class="card-title"><span class="icon">🔄</span> <span id="rapportTitle">Раппорт и симметрия</span></div>
-        <div class="grid-3">
-            <div class="field-group">
-                <label id="lblRepSt">Раппорт (петли)</label>
-                <input type="number" id="repStitch" value="4" step="1" min="1">
-            </div>
-            <div class="field-group">
-                <label id="lblRepRow">Раппорт (ряды)</label>
-                <input type="number" id="repRow" value="2" step="1" min="1">
-            </div>
-            <div class="field-group">
-                <label id="lblSymSt">Симметрия (петли) <span class="label-hint" id="symHint">*общая</span></label>
-                <input type="number" id="symStitch" value="0" step="1" min="0">
-                <span style="font-size:0.7rem; opacity:0.6;" id="symDesc">* для начала и конца ряда</span>
-            </div>
-            <div class="field-group">
-                <label id="lblSymRow">Симметрия (ряды)</label>
-                <input type="number" id="symRow" value="0" step="1" min="0">
-            </div>
-            <div class="field-group">
-                <label id="lblEdges">Кромочные <span class="label-hint" id="edgeHint">(к наборному краю)</span></label>
-                <select id="edges">
-                    <option value="0">0</option>
-                    <option value="1" selected>1</option>
-                    <option value="2">2</option>
-                </select>
-                <span style="font-size:0.7rem; opacity:0.6;" id="edgeDesc">не входят в раппорт</span>
-            </div>
-        </div>
-    </section>
+  <!-- 2. Раппорт и симметрия -->
+  <section class="card">
+    <div class="card-title"><span>🔄</span> <span id="rapportTitle">Раппорт и симметрия</span></div>
+    <div class="grid-3">
+      <div class="field-group">
+        <label id="lblRepSt">Раппорт (петли)</label>
+        <input type="number" id="repStitch" value="4" step="1" min="1">
+      </div>
+      <div class="field-group">
+        <label id="lblRepRow">Раппорт (ряды)</label>
+        <input type="number" id="repRow" value="2" step="1" min="1">
+      </div>
+      <div class="field-group">
+        <label id="lblSymSt">Симметрия (петли) <span class="label-hint" id="symHint">*общая</span></label>
+        <input type="number" id="symStitch" value="0" step="1" min="0">
+        <span style="font-size:0.7rem; opacity:0.6;" id="symDesc">* для начала и конца ряда</span>
+      </div>
+      <div class="field-group">
+        <label id="lblSymRow">Симметрия (ряды)</label>
+        <input type="number" id="symRow" value="0" step="1" min="0">
+      </div>
+      <div class="field-group">
+        <label id="lblEdges">Кромочные (к наборному краю)</label>
+        <select id="edges">
+          <option value="0">0</option>
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+        </select>
+        <span style="font-size:0.7rem; opacity:0.6;" id="edgeDesc">не входят в раппорт</span>
+      </div>
+    </div>
+  </section>
 
-    <!-- 3. Размеры и направление -->
-    <section class="card">
-        <div class="card-title"><span class="icon">📐</span> <span id="dimTitle">Размеры и направление</span></div>
-        <div class="field-group" style="margin-bottom:16px;">
-            <label id="lblDir">Направление вязания</label>
-            <div class="toggle-group" id="directionToggle">
-                <button class="toggle-option active" data-dir="classic"><span id="dirClassic">Классическое (ширина → набор)</span></button>
-                <button class="toggle-option" data-dir="cross"><span id="dirCross">Поперечное (длина → набор)</span></button>
-            </div>
+  <!-- 3. Размеры и направление -->
+  <section class="card">
+    <div class="card-title"><span>📐</span> <span id="dimTitle">Размеры и направление</span></div>
+    <div class="field-group" style="margin-bottom:16px;">
+      <label id="lblDir">Направление вязания</label>
+      <div class="toggle-group" id="directionToggle">
+        <button class="toggle-option active" data-dir="classic"><span id="dirClassic">Классическое (ширина → набор)</span></button>
+        <button class="toggle-option" data-dir="cross"><span id="dirCross">Поперечное (длина → набор)</span></button>
+      </div>
+    </div>
+    <div class="grid-4">
+      <div class="field-group">
+        <label id="lblWidth">Ширина</label>
+        <div class="input-with-unit">
+          <input type="number" id="widthCm" value="30" step="0.1">
+          <span class="unit" data-unit="length">см</span>
         </div>
-        <div class="grid-4">
-            <div class="field-group">
-                <label id="lblWidth">Ширина</label>
-                <div class="input-with-unit">
-                    <input type="number" id="widthCm" value="30" step="0.1">
-                    <span class="unit" id="unitCm">см</span>
-                </div>
-            </div>
-            <div class="field-group">
-                <label id="lblWidthRep">Ширина (в раппортах)</label>
-                <input type="number" id="widthRep" value="7" step="1" min="1">
-            </div>
-            <div class="field-group">
-                <label id="lblLength">Длина</label>
-                <div class="input-with-unit">
-                    <input type="number" id="lengthCm" value="180" step="0.1">
-                    <span class="unit" id="unitCm2">см</span>
-                </div>
-            </div>
-            <div class="field-group">
-                <label id="lblLengthRep">Длина (в раппортах)</label>
-                <input type="number" id="lengthRep" value="45" step="1" min="1">
-            </div>
+      </div>
+      <div class="field-group">
+        <label id="lblWidthRep">Ширина (в раппортах)</label>
+        <input type="number" id="widthRep" value="7" step="1" min="1">
+      </div>
+      <div class="field-group">
+        <label id="lblLength">Длина</label>
+        <div class="input-with-unit">
+          <input type="number" id="lengthCm" value="180" step="0.1">
+          <span class="unit" data-unit="length">см</span>
         </div>
-    </section>
+      </div>
+      <div class="field-group">
+        <label id="lblLengthRep">Длина (в раппортах)</label>
+        <input type="number" id="lengthRep" value="45" step="1" min="1">
+      </div>
+    </div>
+  </section>
 
-    <!-- 4. Калькулятор пряжи -->
-    <section class="card">
-        <div class="card-title"><span class="icon">🧵</span> <span id="yarnTitle">Калькулятор пряжи</span></div>
-        <div class="grid-3">
-            <div class="field-group">
-                <label id="lblSwatch">Вес образца</label>
-                <div class="input-with-unit">
-                    <input type="number" id="swatchWeight" value="4.5" step="0.1">
-                    <span class="unit" id="unitWeight">г</span>
-                </div>
-            </div>
-            <div class="field-group">
-                <label id="lblSwatchW">Ширина образца</label>
-                <div class="input-with-unit">
-                    <input type="number" id="swatchWidth" value="10" step="0.1">
-                    <span class="unit" id="unitSwatchW">см</span>
-                </div>
-            </div>
-            <div class="field-group">
-                <label id="lblSwatchH">Высота образца</label>
-                <div class="input-with-unit">
-                    <input type="number" id="swatchHeight" value="10" step="0.1">
-                    <span class="unit" id="unitSwatchH">см</span>
-                </div>
-            </div>
-            <div class="field-group">
-                <label id="lblSkeinW">Вес мотка</label>
-                <div class="input-with-unit">
-                    <input type="number" id="skeinWeight" value="100" step="1">
-                    <span class="unit" id="unitWeight2">г</span>
-                </div>
-            </div>
-            <div class="field-group">
-                <label id="lblSkeinY">Метраж мотка</label>
-                <div class="input-with-unit">
-                    <input type="number" id="skeinYardage" value="200" step="1">
-                    <span class="unit" id="unitLength">м</span>
-                </div>
-            </div>
-            <div class="field-group">
-                <label id="lblSkeinP">Цена мотка</label>
-                <div class="input-with-unit">
-                    <input type="number" id="skeinPrice" value="1200" step="10">
-                    <span class="unit" id="unitCurrency">₽</span>
-                </div>
-            </div>
+  <!-- 4. Калькулятор пряжи -->
+  <section class="card">
+    <div class="card-title"><span>🧵</span> <span id="yarnTitle">Калькулятор пряжи</span></div>
+    <div class="grid-3">
+      <div class="field-group">
+        <label id="lblSwatch">Вес образца</label>
+        <div class="input-with-unit">
+          <input type="number" id="swatchWeight" value="4.5" step="0.1">
+          <span class="unit" data-unit="weight">г</span>
         </div>
-        <div class="field-group" style="margin-top:12px;">
-            <label id="lblReserve">Запас пряжи (%)</label>
-            <div class="reserve-group" id="reserveGroup">
-                <span class="reserve-option" data-reserve="5">5%</span>
-                <span class="reserve-option active" data-reserve="10">10%</span>
-                <span class="reserve-option" data-reserve="15">15%</span>
-                <span class="reserve-option" data-reserve="20">20%</span>
-            </div>
+      </div>
+      <div class="field-group">
+        <label id="lblSwatchW">Ширина образца</label>
+        <div class="input-with-unit">
+          <input type="number" id="swatchWidth" value="10" step="0.1">
+          <span class="unit" data-unit="length">см</span>
         </div>
-    </section>
+      </div>
+      <div class="field-group">
+        <label id="lblSwatchH">Высота образца</label>
+        <div class="input-with-unit">
+          <input type="number" id="swatchHeight" value="10" step="0.1">
+          <span class="unit" data-unit="length">см</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <label id="lblSkeinW">Вес мотка</label>
+        <div class="input-with-unit">
+          <input type="number" id="skeinWeight" value="100" step="1">
+          <span class="unit" data-unit="weight">г</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <label id="lblSkeinY">Метраж мотка</label>
+        <div class="input-with-unit">
+          <input type="number" id="skeinYardage" value="200" step="1">
+          <span class="unit" data-unit="yard">м</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <label id="lblSkeinP">Цена мотка</label>
+        <div class="input-with-unit">
+          <input type="number" id="skeinPrice" value="1200" step="10">
+          <span class="unit" data-unit="currency">₽</span>
+        </div>
+      </div>
+    </div>
+    <div class="field-group" style="margin-top:12px;">
+      <label id="lblReserve">Запас пряжи (%)</label>
+      <div class="reserve-group" id="reserveGroup">
+        <span class="reserve-option" data-reserve="5">5%</span>
+        <span class="reserve-option active" data-reserve="10">10%</span>
+        <span class="reserve-option" data-reserve="15">15%</span>
+        <span class="reserve-option" data-reserve="20">20%</span>
+      </div>
+    </div>
+  </section>
 
-    <!-- 5. Результаты -->
-    <section class="card">
-        <div class="card-title"><span class="icon">📊</span> <span id="resultTitle">Результат расчета</span></div>
-        <div class="result-grid" id="resultGrid">
-            <div class="result-item">
-                <div class="label" id="resLabelCastOn">Наборный край</div>
-                <div class="value" id="resCastOn">0</div>
-                <div class="sub" id="resCastOnSub">0 рапп.</div>
-                <div class="deviation" id="resCastOnDev">→ 0.0 см (точно)</div>
-            </div>
-            <div class="result-item">
-                <div class="label" id="resLabelRows">Ряды</div>
-                <div class="value" id="resRows">0</div>
-                <div class="sub" id="resRowsSub">0 рапп.</div>
-                <div class="deviation" id="resRowsDev">→ 0.0 см (точно)</div>
-            </div>
-            <div class="result-item result-item-full">
-                <div class="label" id="resLabelYarn">Расход пряжи</div>
-                <div class="value" id="resYarnTotal">0 м / 0 г</div>
-                <div class="sub" id="resYarnSkeins">Потребуется 0 мотков (купить 0 шт)</div>
-            </div>
-            <div class="result-item result-item-full" style="border-left-color: var(--text-secondary);">
-                <div class="label" id="resLabelPrice">Цена</div>
-                <div class="sub" id="resPriceUsed" style="font-size:1.1rem;">Использовано: 0 ₽</div>
-                <div class="sub" id="resPricePurchase" style="font-size:1.1rem; font-weight:600;">К покупке: 0 ₽ (с запасом)</div>
-            </div>
-        </div>
-        <div class="action-bar">
-            <button class="btn-print" onclick="window.print()">🖨️ <span id="printBtnText">Печать / PDF</span></button>
-        </div>
-    </section>
+  <!-- 5. Результаты -->
+  <section class="card">
+    <div class="card-title"><span>📊</span> <span id="resultTitle">Результат расчета</span></div>
+    <div class="result-grid" id="resultGrid">
+      <div class="result-item">
+        <div class="label" id="resLabelCastOn">Наборный край</div>
+        <div class="value" id="resCastOn">0</div>
+        <div class="sub" id="resCastOnSub">0 рапп.</div>
+        <div class="deviation" id="resCastOnDev">→ 0.0 см (точно)</div>
+      </div>
+      <div class="result-item">
+        <div class="label" id="resLabelRows">Ряды</div>
+        <div class="value" id="resRows">0</div>
+        <div class="sub" id="resRowsSub">0 рапп.</div>
+        <div class="deviation" id="resRowsDev">→ 0.0 см (точно)</div>
+      </div>
+      <div class="result-item result-item-full">
+        <div class="label" id="resLabelYarn">Расход пряжи</div>
+        <div class="value" id="resYarnTotal">0 м / 0 г</div>
+        <div class="sub" id="resYarnSkeins">Потребуется 0 мотков (купить 0 шт)</div>
+      </div>
+      <div class="result-item result-item-full" style="border-left-color: var(--text-secondary);">
+        <div class="label" id="resLabelPrice">Цена</div>
+        <div class="sub" id="resPriceUsed" style="font-size:1.1rem;">Использовано: 0 ₽</div>
+        <div class="sub" id="resPricePurchase" style="font-size:1.1rem; font-weight:600;">К покупке: 0 ₽ (с запасом)</div>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="btn-print" onclick="window.print()">🖨️ <span id="printBtnText">Печать / PDF</span></button>
+    </div>
+  </section>
 
 </div>
-
-<script>
-    (function() {
-        "use strict";
-
-        // DOM refs
-        const $ = id => document.getElementById(id);
-        const densitySt = $('densityStitches');
-        const densityRow = $('densityRows');
-        const repSt = $('repStitch');
-        const repRow = $('repRow');
-        const symSt = $('symStitch');
-        const symRow = $('symRow');
-        const edges = $('edges');
-        const widthCm = $('widthCm');
-        const lengthCm = $('lengthCm');
-        const widthRep = $('widthRep');
-        const lengthRep = $('lengthRep');
-        const swatchWeight = $('swatchWeight');
-        const swatchWidth = $('swatchWidth');
-        const swatchHeight = $('swatchHeight');
-        const skeinW = $('skeinWeight');
-        const skeinY = $('skeinYardage');
-        const skeinP = $('skeinPrice');
-
-        const resCastOn = $('resCastOn');
-        const resCastOnSub = $('resCastOnSub');
-        const resCastOnDev = $('resCastOnDev');
-        const resRows = $('resRows');
-        const resRowsSub = $('resRowsSub');
-        const resRowsDev = $('resRowsDev');
-        const resYarnTotal = $('resYarnTotal');
-        const resYarnSkeins = $('resYarnSkeins');
-        const resPriceUsed = $('resPriceUsed');
-        const resPricePurchase = $('resPricePurchase');
-
-        // State
-        let currentLang = 'ru';
-        let currentUnits = 'metric';
-        let currentTheme = 'light';
-        let currentTool = 'knit';
-        let currentDir = 'classic';
-        let currentReserve = 10;
-
-        // Helpers
-        function getVal(el) { return parseFloat(el.value) || 0; }
-        function getInt(el) { return parseInt(el.value) || 0; }
-
-        function toDisplayCm(val) { return currentUnits === 'metric' ? val : val / 2.54; }
-        function toDisplayG(val) { return currentUnits === 'metric' ? val : val * 0.035274; }
-        function toDisplayM(val) { return currentUnits === 'metric' ? val : val * 1.09361; }
-        function fromDisplayCm(val) { return currentUnits === 'metric' ? val : val * 2.54; }
-        function fromDisplayG(val) { return currentUnits === 'metric' ? val : val / 0.035274; }
-        function fromDisplayM(val) { return currentUnits === 'metric' ? val : val / 1.09361; }
-
-        function recalcDimensionsFromReps() {
-            const dSt = fromDisplayCm(getVal(densitySt));
-            const dRo = fromDisplayCm(getVal(densityRow));
-            const rSt = getInt(repSt);
-            const rRo = getInt(repRow);
-            const sSt = getInt(symSt);
-            const sRo = getInt(symRow);
-            const e = parseInt(edges.value);
-
-            let wRep = getInt(widthRep);
-            if (rSt > 0 && wRep > 0) {
-                const totalSt = wRep * rSt + sSt + e;
-                const wCm = (totalSt / dSt) * 10;
-                widthCm.value = toDisplayCm(wCm).toFixed(2);
-            }
-
-            let lRep = getInt(lengthRep);
-            if (rRo > 0 && lRep > 0) {
-                const totalRo = lRep * rRo + sRo;
-                const lCm = (totalRo / dRo) * 10;
-                lengthCm.value = toDisplayCm(lCm).toFixed(2);
-            }
-        }
-
-        function calculate() {
-            const active = document.activeElement;
-            const repFields = [widthRep, lengthRep, repSt, repRow, symSt, symRow, edges];
-            if (repFields.includes(active)) {
-                recalcDimensionsFromReps();
-            }
-
-            const dSt = fromDisplayCm(getVal(densitySt));
-            const dRo = fromDisplayCm(getVal(densityRow));
-            const rSt = getInt(repSt);
-            const rRo = getInt(repRow);
-            const sSt = getInt(symSt);
-            const sRo = getInt(symRow);
-            const e = parseInt(edges.value);
-
-            let wCm = fromDisplayCm(getVal(widthCm));
-            let lCm = fromDisplayCm(getVal(lengthCm));
-            let wRep = getInt(widthRep);
-            let lRep = getInt(lengthRep);
-
-            if (active === widthRep) {
-                wCm = fromDisplayCm(getVal(widthCm));
-            } else if (active === widthCm || active === null || !repFields.includes(active)) {
-                if (rSt > 0) {
-                    const base = (wCm / 10) * dSt - sSt - e;
-                    if (base > 0) {
-                        const n = Math.round(base / rSt);
-                        wRep = Math.max(1, n);
-                        widthRep.value = wRep;
-                        const totalSt = wRep * rSt + sSt + e;
-                        wCm = (totalSt / dSt) * 10;
-                        widthCm.value = toDisplayCm(wCm).toFixed(2);
-                    } else {
-                        wRep = 1;
-                        widthRep.value = 1;
-                        const totalSt = wRep * rSt + sSt + e;
-                        wCm = (totalSt / dSt) * 10;
-                        widthCm.value = toDisplayCm(wCm).toFixed(2);
-                    }
-                }
-            }
-
-            if (active === lengthRep) {
-                lCm = fromDisplayCm(getVal(lengthCm));
-            } else if (active === lengthCm || active === null || !repFields.includes(active)) {
-                if (rRo > 0) {
-                    const base = (lCm / 10) * dRo - sRo;
-                    if (base > 0) {
-                        const m = Math.round(base / rRo);
-                        lRep = Math.max(1, m);
-                        lengthRep.value = lRep;
-                        const totalRo = lRep * rRo + sRo;
-                        lCm = (totalRo / dRo) * 10;
-                        lengthCm.value = toDisplayCm(lCm).toFixed(2);
-                    } else {
-                        lRep = 1;
-                        lengthRep.value = 1;
-                        const totalRo = lRep * rRo + sRo;
-                        lCm = (totalRo / dRo) * 10;
-                        lengthCm.value = toDisplayCm(lCm).toFixed(2);
-                    }
-                }
-            }
-
-            let castOnTotal, rowsTotal;
-            let castOnCm, rowsCm;
-            let desiredCastOnCm, desiredRowsCm;
-
-            if (currentDir === 'classic') {
-                castOnTotal = wRep * rSt + sSt + e;
-                castOnCm = (castOnTotal / dSt) * 10;
-                desiredCastOnCm = wCm;
-                rowsTotal = lRep * rRo + sRo;
-                rowsCm = (rowsTotal / dRo) * 10;
-                desiredRowsCm = lCm;
-            } else {
-                castOnTotal = lRep * rSt + sSt + e;
-                castOnCm = (castOnTotal / dSt) * 10;
-                desiredCastOnCm = lCm;
-                rowsTotal = wRep * rRo + sRo;
-                rowsCm = (rowsTotal / dRo) * 10;
-                desiredRowsCm = wCm;
-            }
-
-            // Yarn
-            const swWeightMetric = fromDisplayG(getVal(swatchWeight));
-            const swWmetric = fromDisplayCm(getVal(swatchWidth));
-            const swHmetric = fromDisplayCm(getVal(swatchHeight));
-            const skWmetric = fromDisplayG(getVal(skeinW));
-            const skYmetric = fromDisplayM(getVal(skeinY));
-            const skP = getVal(skeinP);
-
-            let totalWeight = 0, totalYardage = 0, totalCost = 0, skeinsNeeded = 0;
-            let usedCost = 0, purchaseCost = 0;
-            if (swWeightMetric > 0 && swWmetric > 0 && swHmetric > 0 && skWmetric > 0 && skYmetric > 0) {
-                const swatchArea = swWmetric * swHmetric;
-                const weightPerCm2 = swWeightMetric / swatchArea;
-                const scarfArea = wCm * lCm;
-                totalWeight = weightPerCm2 * scarfArea;
-                totalYardage = (totalWeight / skWmetric) * skYmetric;
-                if (skP > 0) {
-                    totalCost = (totalYardage / skYmetric) * skP;
-                    usedCost = totalCost;
-                }
-                const reserveFactor = 1 + currentReserve / 100;
-                const yardageWithReserve = totalYardage * reserveFactor;
-                skeinsNeeded = Math.ceil(yardageWithReserve / skYmetric);
-                if (skP > 0) {
-                    purchaseCost = skeinsNeeded * skP;
-                }
-            }
-
-            // --- Update UI ---
-            const isRu = currentLang === 'ru';
-            const stLabel = currentTool === 'knit' ? (isRu ? 'петель' : 'sts') : (isRu ? 'столбиков' : 'sts');
-            const rowLabel = isRu ? 'рядов' : 'rows';
-            const repLabel = isRu ? 'рапп.' : 'rep.';
-            const lengthUnit = currentUnits === 'metric' ? (isRu ? 'см' : 'cm') : 'in';
-            const weightUnit = currentUnits === 'metric' ? (isRu ? 'г' : 'g') : 'oz';
-            const yardUnit = currentUnits === 'metric' ? (isRu ? 'м' : 'm') : 'yd';
-            const currency = isRu ? '₽' : '$';
-
-            resCastOn.textContent = `${castOnTotal} ${stLabel}`;
-            const castOnReps = Math.floor((castOnTotal - sSt - e) / rSt);
-            const symText = isRu ? 'сим.' : 'sym';
-            const edgeText = isRu ? 'кром.' : 'edge';
-            resCastOnSub.textContent = `${castOnReps} ${repLabel} + ${symText} ${sSt} + ${edgeText} ${e}`;
-            const diffCast = castOnCm - desiredCastOnCm;
-            let devCastText = `→ ${toDisplayCm(castOnCm).toFixed(1)} ${lengthUnit}`;
-            if (Math.abs(diffCast) < 0.01) devCastText += ` (${isRu ? 'точно' : 'exact'})`;
-            else if (diffCast > 0) devCastText += ` (${isRu ? 'на' : '+'} ${toDisplayCm(diffCast).toFixed(1)} ${lengthUnit} ${isRu ? 'больше' : 'more'})`;
-            else devCastText += ` (${isRu ? 'на' : ''} ${toDisplayCm(Math.abs(diffCast)).toFixed(1)} ${lengthUnit} ${isRu ? 'меньше' : 'less'})`;
-            resCastOnDev.textContent = devCastText;
-
-            resRows.textContent = `${rowsTotal} ${rowLabel}`;
-            const rowsReps = Math.floor((rowsTotal - sRo) / rRo);
-            resRowsSub.textContent = `${rowsReps} ${repLabel} + ${symText} ${sRo}`;
-            const diffRow = rowsCm - desiredRowsCm;
-            let devRowText = `→ ${toDisplayCm(rowsCm).toFixed(1)} ${lengthUnit}`;
-            if (Math.abs(diffRow) < 0.01) devRowText += ` (${isRu ? 'точно' : 'exact'})`;
-            else if (diffRow > 0) devRowText += ` (${isRu ? 'на' : '+'} ${toDisplayCm(diffRow).toFixed(1)} ${lengthUnit} ${isRu ? 'больше' : 'more'})`;
-            else devRowText += ` (${isRu ? 'на' : ''} ${toDisplayCm(Math.abs(diffRow)).toFixed(1)} ${lengthUnit} ${isRu ? 'меньше' : 'less'})`;
-            resRowsDev.textContent = devRowText;
-
-            resYarnTotal.textContent = `${toDisplayM(totalYardage).toFixed(1)} ${yardUnit} / ${toDisplayG(totalWeight).toFixed(1)} ${weightUnit}`;
-            let skeinText = isRu ? `Потребуется ${skeinsNeeded} мотков` : `${skeinsNeeded} skeins needed`;
-            if (skeinsNeeded > 0) {
-                const buyText = isRu ? 'купить' : 'buy';
-                skeinText += ` (${buyText} ${skeinsNeeded} ${isRu ? 'шт' : 'pcs'})`;
-            }
-            resYarnSkeins.textContent = skeinText;
-
-            const usedPriceStr = isRu ? `${usedCost.toFixed(0)} ${currency}` : `${(usedCost/100).toFixed(2)} ${currency}`;
-            const purchasePriceStr = isRu ? `${purchaseCost.toFixed(0)} ${currency}` : `${(purchaseCost/100).toFixed(2)} ${currency}`;
-            resPriceUsed.textContent = `${isRu ? 'Использовано' : 'Used'}: ${usedPriceStr}`;
-            resPricePurchase.textContent = `${isRu ? 'К покупке' : 'To buy'} (${currentReserve}% ${isRu ? 'запас' : 'reserve'}): ${purchasePriceStr}`;
-        }
-
-        // --- Translations ---
-        const translations = {
-            ru: {
-                logo: 'Хаттер: Дизайнер шарфов',
-                donate: 'Поддержать',
-                densityTitle: 'Плотность (после ВТО)',
-                warning: 'Образец не менее 12×12 см (5×5 in), после ВТО. Измеряйте 10×10 см (4×4 in) в центре.',
-                densityHint: 'Для точного расчёта пряжи укажите вес образца и его фактические размеры (не только 10×10 см).',
-                toolKnit: 'Спицы',
-                toolCrochet: 'Крючок',
-                lblStitch: 'Петель в 10 см',
-                lblRow: 'Рядов в 10 см',
-                rapportTitle: 'Раппорт и симметрия',
-                lblRepSt: 'Раппорт (петли)',
-                lblRepRow: 'Раппорт (ряды)',
-                lblSymSt: 'Симметрия (петли) *общая',
-                symHint: '*общая',
-                symDesc: '* для начала и конца ряда',
-                lblSymRow: 'Симметрия (ряды)',
-                lblEdges: 'Кромочные (к наборному краю)',
-                edgeHint: '(к наборному краю)',
-                edgeDesc: 'не входят в раппорт',
-                dimTitle: 'Размеры и направление',
-                lblDir: 'Направление вязания',
-                dirClassic: 'Классическое (ширина → набор)',
-                dirCross: 'Поперечное (длина → набор)',
-                lblWidth: 'Ширина',
-                lblWidthRep: 'Ширина (в раппортах)',
-                lblLength: 'Длина',
-                lblLengthRep: 'Длина (в раппортах)',
-                yarnTitle: 'Калькулятор пряжи',
-                lblSwatch: 'Вес образца',
-                lblSwatchW: 'Ширина образца',
-                lblSwatchH: 'Высота образца',
-                lblSkeinW: 'Вес мотка',
-                lblSkeinY: 'Метраж мотка',
-                lblSkeinP: 'Цена мотка',
-                lblReserve: 'Запас пряжи (%)',
-                resultTitle: 'Результат расчета',
-                resLabelCastOn: 'Наборный край',
-                resLabelRows: 'Ряды',
-                resLabelYarn: 'Расход пряжи',
-                resLabelPrice: 'Цена',
-                printBtnText: 'Печать / PDF'
-            },
-            us: {
-                logo: 'The Hatter: Scarf Studio',
-                donate: 'Support',
-                densityTitle: 'Gauge (after blocking)',
-                warning: 'Swatch at least 5×5 in (12×12 cm), after blocking. Measure 4×4 in (10×10 cm) in the center.',
-                densityHint: 'For accurate yarn calculation, enter the swatch weight and its actual dimensions (not just 4×4 in).',
-                toolKnit: 'Knit',
-                toolCrochet: 'Crochet',
-                lblStitch: 'Sts per 4 in',
-                lblRow: 'Rows per 4 in',
-                rapportTitle: 'Pattern repeat & symmetry',
-                lblRepSt: 'Repeat (sts)',
-                lblRepRow: 'Repeat (rows)',
-                lblSymSt: 'Symmetry (sts) *total',
-                symHint: '*total',
-                symDesc: '* for beginning and end',
-                lblSymRow: 'Symmetry (rows)',
-                lblEdges: 'Edge stitches (to cast-on)',
-                edgeHint: '(to cast-on)',
-                edgeDesc: 'not part of repeat',
-                dimTitle: 'Size & direction',
-                lblDir: 'Knitting direction',
-                dirClassic: 'Classic (width → cast on)',
-                dirCross: 'Crosswise (length → cast on)',
-                lblWidth: 'Width',
-                lblWidthRep: 'Width (in repeats)',
-                lblLength: 'Length',
-                lblLengthRep: 'Length (in repeats)',
-                yarnTitle: 'Yarn calculator',
-                lblSwatch: 'Swatch weight',
-                lblSwatchW: 'Swatch width',
-                lblSwatchH: 'Swatch height',
-                lblSkeinW: 'Skein weight',
-                lblSkeinY: 'Skein yardage',
-                lblSkeinP: 'Skein price',
-                lblReserve: 'Yarn reserve (%)',
-                resultTitle: 'Results',
-                resLabelCastOn: 'Cast on',
-                resLabelRows: 'Rows',
-                resLabelYarn: 'Yarn usage',
-                resLabelPrice: 'Price',
-                printBtnText: 'Print / PDF'
-            },
-            uk: {
-                logo: 'The Hatter: Scarf Studio',
-                donate: 'Support',
-                densityTitle: 'Tension (after blocking)',
-                warning: 'Tension square at least 5×5 in (12×12 cm), after blocking. Measure 4×4 in (10×10 cm) in the centre.',
-                densityHint: 'For accurate yarn calculation, enter the tension square weight and its actual dimensions (not just 4×4 in).',
-                toolKnit: 'Knit',
-                toolCrochet: 'Crochet',
-                lblStitch: 'Sts per 4 in',
-                lblRow: 'Rows per 4 in',
-                rapportTitle: 'Pattern repeat & symmetry',
-                lblRepSt: 'Repeat (sts)',
-                lblRepRow: 'Repeat (rows)',
-                lblSymSt: 'Symmetry (sts) *total',
-                symHint: '*total',
-                symDesc: '* for beginning and end',
-                lblSymRow: 'Symmetry (rows)',
-                lblEdges: 'Edge stitches (to cast-on)',
-                edgeHint: '(to cast-on)',
-                edgeDesc: 'not part of repeat',
-                dimTitle: 'Size & direction',
-                lblDir: 'Knitting direction',
-                dirClassic: 'Classic (width → cast on)',
-                dirCross: 'Crosswise (length → cast on)',
-                lblWidth: 'Width',
-                lblWidthRep: 'Width (in repeats)',
-                lblLength: 'Length',
-                lblLengthRep: 'Length (in repeats)',
-                yarnTitle: 'Yarn calculator',
-                lblSwatch: 'Swatch weight',
-                lblSwatchW: 'Swatch width',
-                lblSwatchH: 'Swatch height',
-                lblSkeinW: 'Skein weight',
-                lblSkeinY: 'Skein yardage',
-                lblSkeinP: 'Skein price',
-                lblReserve: 'Yarn reserve (%)',
-                resultTitle: 'Results',
-                resLabelCastOn: 'Cast on',
-                resLabelRows: 'Rows',
-                resLabelYarn: 'Yarn usage',
-                resLabelPrice: 'Price',
-                printBtnText: 'Print / PDF'
-            }
-        };
-
-        function updateLanguage() {
-            const lang = currentLang;
-            const t = translations[lang] || translations.ru;
-
-            document.getElementById('logoText').textContent = t.logo;
-            document.getElementById('donateText').textContent = t.donate;
-            document.getElementById('densityTitle').textContent = t.densityTitle;
-            document.getElementById('warningText').textContent = t.warning;
-            document.getElementById('densityHintText').textContent = t.densityHint;
-            document.getElementById('toolKnit').textContent = t.toolKnit;
-            document.getElementById('toolCrochet').textContent = t.toolCrochet;
-            document.getElementById('lblStitch').textContent = t.lblStitch;
-            document.getElementById('lblRow').textContent = t.lblRow;
-            document.getElementById('rapportTitle').textContent = t.rapportTitle;
-            document.getElementById('lblRepSt').textContent = t.lblRepSt;
-            document.getElementById('lblRepRow').textContent = t.lblRepRow;
-            document.getElementById('lblSymSt').innerHTML = t.lblSymSt + ' <span class="label-hint">' + t.symHint + '</span>';
-            document.getElementById('symDesc').textContent = t.symDesc;
-            document.getElementById('lblSymRow').textContent = t.lblSymRow;
-            document.getElementById('lblEdges').innerHTML = t.lblEdges + ' <span class="label-hint">' + t.edgeHint + '</span>';
-            document.getElementById('edgeDesc').textContent = t.edgeDesc;
-            document.getElementById('dimTitle').textContent = t.dimTitle;
-            document.getElementById('lblDir').textContent = t.lblDir;
-            document.getElementById('dirClassic').textContent = t.dirClassic;
-            document.getElementById('dirCross').textContent = t.dirCross;
-            document.getElementById('lblWidth').textContent = t.lblWidth;
-            document.getElementById('lblWidthRep').textContent = t.lblWidthRep;
-            document.getElementById('lblLength').textContent = t.lblLength;
-            document.getElementById('lblLengthRep').textContent = t.lblLengthRep;
-            document.getElementById('yarnTitle').textContent = t.yarnTitle;
-            document.getElementById('lblSwatch').textContent = t.lblSwatch;
-            document.getElementById('lblSwatchW').textContent = t.lblSwatchW;
-            document.getElementById('lblSwatchH').textContent = t.lblSwatchH;
-            document.getElementById('lblSkeinW').textContent = t.lblSkeinW;
-            document.getElementById('lblSkeinY').textContent = t.lblSkeinY;
-            document.getElementById('lblSkeinP').textContent = t.lblSkeinP;
-            document.getElementById('lblReserve').textContent = t.lblReserve;
-            document.getElementById('resultTitle').textContent = t.resultTitle;
-            document.getElementById('resLabelCastOn').textContent = t.resLabelCastOn;
-            document.getElementById('resLabelRows').textContent = t.resLabelRows;
-            document.getElementById('resLabelYarn').textContent = t.resLabelYarn;
-            document.getElementById('resLabelPrice').textContent = t.resLabelPrice;
-            document.getElementById('printBtnText').textContent = t.printBtnText;
-
-            document.getElementById('pageTitle').textContent = t.logo + ' — ' + (lang === 'ru' ? 'Шарфы спицами и крючком' : 'Crochet & Knit Scarves');
-
-            updateUnitSymbols();
-            calculate();
-        }
-
-        function updateUnitSymbols() {
-            const isMetric = currentUnits === 'metric';
-            const lengthSym = isMetric ? 'см' : 'in';
-            const weightSym = isMetric ? 'г' : 'oz';
-            const yardSym = isMetric ? 'м' : 'yd';
-            const currencySym = currentLang === 'ru' ? '₽' : '$';
-
-            document.querySelectorAll('.unit').forEach(el => {
-                if (el.id === 'unitCm' || el.id === 'unitCm2' || el.id === 'unitSwatchW' || el.id === 'unitSwatchH') 
-                    el.textContent = lengthSym;
-                if (el.id === 'unitWeight' || el.id === 'unitWeight2') el.textContent = weightSym;
-                if (el.id === 'unitLength') el.textContent = yardSym;
-                if (el.id === 'unitCurrency') el.textContent = currencySym;
-            });
-        }
-
-        function toggleUnits(newUnits) {
-            if (newUnits === currentUnits) return;
-            const fromMetric = currentUnits === 'metric';
-            const toMetric = newUnits === 'metric';
-
-            function convertField(el, convFn) {
-                if (el) {
-                    const val = parseFloat(el.value);
-                    if (!isNaN(val)) {
-                        el.value = convFn(val).toFixed(el.step && el.step.includes('.') ? 2 : 0);
-                    }
-                }
-            }
-
-            if (fromMetric !== toMetric) {
-                convertField(densitySt, v => fromMetric ? v / 2.54 : v * 2.54);
-                convertField(densityRow, v => fromMetric ? v / 2.54 : v * 2.54);
-                convertField(widthCm, v => fromMetric ? v / 2.54 : v * 2.54);
-                convertField(lengthCm, v => fromMetric ? v / 2.54 : v * 2.54);
-                convertField(swatchWeight, v => fromMetric ? v * 0.035274 : v / 0.035274);
-                convertField(swatchWidth, v => fromMetric ? v / 2.54 : v * 2.54);
-                convertField(swatchHeight, v => fromMetric ? v / 2.54 : v * 2.54);
-                convertField(skeinW, v => fromMetric ? v * 0.035274 : v / 0.035274);
-                convertField(skeinY, v => fromMetric ? v * 1.09361 : v / 1.09361);
-            }
-
-            currentUnits = newUnits;
-            document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
-                el.classList.toggle('active', el.dataset.unit === newUnits);
-            });
-            updateUnitSymbols();
-            calculate();
-        }
-
-        function toggleTheme() {
-            const body = document.body;
-            if (body.classList.contains('light-theme')) {
-                body.classList.remove('light-theme');
-                body.classList.add('dark-theme');
-                currentTheme = 'dark';
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1a1a1a');
-            } else {
-                body.classList.remove('dark-theme');
-                body.classList.add('light-theme');
-                currentTheme = 'light';
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#faf7f2');
-            }
-            localStorage.setItem('theme', currentTheme);
-        }
-
-        function initTheme() {
-            const saved = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const theme = saved || (prefersDark ? 'dark' : 'light');
-            document.body.classList.add(theme === 'dark' ? 'dark-theme' : 'light-theme');
-            document.body.classList.remove(theme === 'dark' ? 'light-theme' : 'dark-theme');
-            currentTheme = theme;
-            document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#1a1a1a' : '#faf7f2');
-        }
-
-        function setupToggles() {
-            document.querySelectorAll('#toolToggle .toggle-option').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('#toolToggle .toggle-option').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentTool = this.dataset.tool;
-                    calculate();
-                });
-            });
-            document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('#directionToggle .toggle-option').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentDir = this.dataset.dir;
-                    calculate();
-                });
-            });
-        }
-
-        function setupInputs() {
-            const inputs = [densitySt, densityRow, repSt, repRow, symSt, symRow, edges, 
-                            widthCm, lengthCm, widthRep, lengthRep, 
-                            swatchWeight, swatchWidth, swatchHeight, skeinW, skeinY, skeinP];
-            inputs.forEach(inp => {
-                inp.addEventListener('input', calculate);
-                inp.addEventListener('change', calculate);
-            });
-        }
-
-        function setupReserve() {
-            document.querySelectorAll('.reserve-option').forEach(el => {
-                el.addEventListener('click', function() {
-                    document.querySelectorAll('.reserve-option').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentReserve = parseInt(this.dataset.reserve, 10);
-                    calculate();
-                });
-            });
-        }
-
-        // --- Init ---
-        initTheme();
-        setupToggles();
-        setupInputs();
-        setupReserve();
-
-        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-        document.getElementById('langSelect').addEventListener('change', function(e) {
-            const newLang = e.target.value;
-            if (newLang !== currentLang) {
-                currentLang = newLang;
-                updateLanguage();
-                calculate();
-            }
-        });
-
-        document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
-            el.addEventListener('click', function() {
-                toggleUnits(this.dataset.unit);
-            });
-        });
-
-        // Set initial units to metric
-        currentUnits = 'metric';
-        document.querySelector('#unitToggle .unit-opt[data-unit="metric"]').classList.add('active');
-        updateUnitSymbols();
-
-        // Set initial language
-        currentLang = 'ru';
-        document.getElementById('langSelect').value = 'ru';
-        updateLanguage();
-
-        // Set donate link
-        document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
-
-        calculate();
-
-        window.addEventListener('resize', calculate);
-        console.log('🧶 The Hatter: Scarf Studio loaded!');
-    })();
-</script>
+<script src="script.js"></script>
 </body>
 </html>

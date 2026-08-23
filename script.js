@@ -187,8 +187,6 @@
       warningCrochet: 'Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 in), не включая петли подъёма.',
       toolKnit: 'Спицы',
       toolCrochet: 'Крючок',
-      lblStitch: 'Петель в 10 см',
-      lblRow: 'Рядов в 10 см',
       lblRepSt: 'Раппорт (петли)',
       lblRepRow: 'Раппорт (ряды)',
       lblSymSt: 'Симметрия (петли)',
@@ -213,8 +211,6 @@
       warningCrochet: 'Swatch must be at least 5×5 in (12×12 cm) after blocking. Measure gauge strictly in the center of the swatch, on a 4×4 in (10×10 cm) area, excluding turning chains.',
       toolKnit: 'Knit',
       toolCrochet: 'Crochet',
-      lblStitch: 'Sts per 4 in',
-      lblRow: 'Rows per 4 in',
       lblRepSt: 'Repeat (sts)',
       lblRepRow: 'Repeat (rows)',
       lblSymSt: 'Symmetry (sts)',
@@ -239,8 +235,6 @@
       warningCrochet: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure tension strictly in the centre of the square, on a 4×4 in (10×10 cm) area, excluding turning chains.',
       toolKnit: 'Knit',
       toolCrochet: 'Crochet',
-      lblStitch: 'Sts per 4 in',
-      lblRow: 'Rows per 4 in',
       lblRepSt: 'Repeat (sts)',
       lblRepRow: 'Repeat (rows)',
       lblSymSt: 'Symmetry (sts)',
@@ -260,7 +254,21 @@
     }
   };
 
-  // ---------- Обновление UI ----------
+  // ---------- Обновление подписей полей плотности в зависимости от единиц ----------
+  function updateDensityLabels() {
+    const isRu = currentLang === 'ru';
+    const isMetric = currentUnits === 'metric';
+    const number = isMetric ? '10' : '4';
+    const unit = isMetric ? (isRu ? 'см' : 'cm') : (isRu ? 'дюймах' : 'in');
+
+    const stitchLabel = isRu ? `Петель в ${number} ${unit}` : `Sts per ${number} ${unit}`;
+    const rowLabel = isRu ? `Рядов в ${number} ${unit}` : `Rows per ${number} ${unit}`;
+
+    document.getElementById('lblStitch').textContent = stitchLabel;
+    document.getElementById('lblRow').textContent = rowLabel;
+  }
+
+  // ---------- Обновление всего UI ----------
   function updateLanguage() {
     const lang = currentLang;
     const t = translations[lang] || translations.ru;
@@ -271,8 +279,7 @@
     document.getElementById('calculateBtnText').textContent = t.calculateBtn;
     document.getElementById('toolKnit').textContent = t.toolKnit;
     document.getElementById('toolCrochet').textContent = t.toolCrochet;
-    document.getElementById('lblStitch').textContent = t.lblStitch;
-    document.getElementById('lblRow').textContent = t.lblRow;
+    // Поля плотности обновляем через отдельную функцию
     document.getElementById('lblRepRow').textContent = t.lblRepRow;
     document.getElementById('lblSymRow').textContent = t.lblSymRow;
     document.getElementById('symDesc').textContent = t.symDesc;
@@ -292,6 +299,7 @@
 
     updateToolSpecificUI();
     updateWarningText();
+    updateDensityLabels();
     updateUnitSymbols();
   }
 
@@ -351,7 +359,8 @@
       el.classList.toggle('active', el.dataset.unit === newUnits);
     });
     updateUnitSymbols();
-    // НЕ вызываем calculate() – только меняем отображение
+    updateDensityLabels(); // обновляем подписи плотности
+    // НЕ вызываем calculate()
   }
 
   // ---------- Тема ----------
@@ -394,9 +403,7 @@
 
   // ---------- Настройка полей (без автоматического calculate) ----------
   function setupInputs() {
-    // Только синхронизация полей (см ↔ раппорты) без вызова calculate
-    // Можно оставить пустым или добавить логику, но без calculate.
-    // Никаких слушателей input/change, которые вызывают calculate.
+    // Никаких слушателей, которые вызывают calculate
   }
 
   // ---------- Init ----------
@@ -432,8 +439,9 @@
 
   updateToolSpecificUI();
   updateWarningText();
+  updateDensityLabels();
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (no auto-calculate)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (fixed density labels)');
 })();

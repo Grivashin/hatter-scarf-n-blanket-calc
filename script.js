@@ -358,9 +358,6 @@
       el.classList.toggle('active', el.dataset.unit === newUnits);
     });
     updateUnitSymbols();
-
-    // Пересчитываем результаты с новыми единицами
-    calculate();
   }
 
   // ---------- Тема ----------

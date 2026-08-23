@@ -42,23 +42,42 @@
 
   // ---------- Основной расчёт ----------
   function calculate() {
+    const isRu = currentLang === 'ru';
+
+    // 1. Проверяем плотность
     const dSt = getVal(densitySt);
     const dRo = getVal(densityRow);
     if (dSt <= 0 || dRo <= 0) {
-      alert('Пожалуйста, введите плотность (петли и ряды на 10 см).');
+      alert(isRu ? 'Пожалуйста, введите плотность (петли и ряды на 10 см).' : 'Please enter gauge (stitches and rows per 10 cm / 4 in).');
       return;
     }
 
+    // 2. Проверяем раппорт
     const rSt = getInt(repSt);
     const rRo = getInt(repRow);
+    if (rSt <= 0 || rRo <= 0) {
+      alert(isRu ? 'Пожалуйста, введите раппорт (петли и ряды).' : 'Please enter pattern repeat (stitches and rows).');
+      return;
+    }
+
+    // 3. Проверяем, что заданы размеры (хотя бы одно поле)
+    const wCmVal = getVal(widthCm);
+    const lCmVal = getVal(lengthCm);
+    const wRepVal = getInt(widthRep);
+    const lRepVal = getInt(lengthRep);
+    if (wCmVal <= 0 && lCmVal <= 0 && wRepVal <= 0 && lRepVal <= 0) {
+      alert(isRu ? 'Пожалуйста, укажите хотя бы один размер (ширину или длину) в см или в раппортах.' : 'Please enter at least one dimension (width or length) in cm or repeats.');
+      return;
+    }
+
     const sSt = getInt(symSt);
     const sRo = getInt(symRow);
     const e = currentTool === 'knit' ? parseInt(edges.value) : 0;
 
-    let wCm = fromDisplayCm(getVal(widthCm));
-    let lCm = fromDisplayCm(getVal(lengthCm));
-    let wRep = getInt(widthRep);
-    let lRep = getInt(lengthRep);
+    let wCm = fromDisplayCm(wCmVal);
+    let lCm = fromDisplayCm(lCmVal);
+    let wRep = wRepVal;
+    let lRep = lRepVal;
 
     // Синхронизация ширины
     if (wRep > 0 && rSt > 0) {
@@ -129,7 +148,6 @@
     }
 
     // Отображение результатов
-    const isRu = currentLang === 'ru';
     const isKnit = currentTool === 'knit';
     const stLabel = isKnit ? (isRu ? 'петель' : 'sts') : (isRu ? 'столбиков' : 'sts');
     const rowLabel = isRu ? 'рядов' : 'rows';
@@ -282,12 +300,10 @@
     const isKnit = currentTool === 'knit';
     const isRu = currentLang === 'ru';
 
-    // Показываем/скрываем поле "Кромочные"
     if (edgesGroup) {
       edgesGroup.classList.toggle('hidden', !isKnit);
     }
 
-    // Меняем подписи "петли" ↔ "столбики"
     const stWord = isKnit ? (isRu ? 'петли' : 'sts') : (isRu ? 'столбики' : 'sts');
     const lblRepSt = document.getElementById('lblRepSt');
     const lblSymSt = document.getElementById('lblSymSt');
@@ -365,7 +381,6 @@
         currentTool = this.dataset.tool;
         updateToolSpecificUI();
         updateWarningText();
-        // Не пересчитываем автоматически
       });
     });
     document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {
@@ -407,12 +422,10 @@
   document.getElementById('langSelect').value = 'ru';
   updateLanguage();
 
-  // Явно вызываем обновление UI для начального состояния
   updateToolSpecificUI();
   updateWarningText();
 
-  // Ссылка на Boosty
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (final version)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (with validation)');
 })();

@@ -23,8 +23,6 @@
   const resRowsDev = $('resRowsDev');
 
   const edgesGroup = $('edgesGroup');
-  const lblEdges = $('lblEdges');
-  const edgeDesc = $('edgeDesc');
 
   // State
   let currentLang = 'ru';
@@ -40,33 +38,30 @@
   function toDisplayCm(val) { return currentUnits === 'metric' ? val : val / 2.54; }
   function fromDisplayCm(val) { return currentUnits === 'metric' ? val : val * 2.54; }
 
-  // ---------- Основной расчёт ----------
+  // ---------- Основной расчёт (только по кнопке) ----------
   function calculate() {
     const isRu = currentLang === 'ru';
 
-    // 1. Проверяем плотность
     const dSt = getVal(densitySt);
     const dRo = getVal(densityRow);
     if (dSt <= 0 || dRo <= 0) {
-      alert(isRu ? 'Пожалуйста, введите плотность (петли и ряды на 10 см).' : 'Please enter gauge (stitches and rows per 10 cm / 4 in).');
+      alert(isRu ? 'Пожалуйста, введите плотность (петли и ряды на 10 см).' : 'Please enter gauge.');
       return;
     }
 
-    // 2. Проверяем раппорт
     const rSt = getInt(repSt);
     const rRo = getInt(repRow);
     if (rSt <= 0 || rRo <= 0) {
-      alert(isRu ? 'Пожалуйста, введите раппорт (петли и ряды).' : 'Please enter pattern repeat (stitches and rows).');
+      alert(isRu ? 'Пожалуйста, введите раппорт (петли и ряды).' : 'Please enter pattern repeat.');
       return;
     }
 
-    // 3. Проверяем, что заданы размеры (хотя бы одно поле)
     const wCmVal = getVal(widthCm);
     const lCmVal = getVal(lengthCm);
     const wRepVal = getInt(widthRep);
     const lRepVal = getInt(lengthRep);
     if (wCmVal <= 0 && lCmVal <= 0 && wRepVal <= 0 && lRepVal <= 0) {
-      alert(isRu ? 'Пожалуйста, укажите хотя бы один размер (ширину или длину) в см или в раппортах.' : 'Please enter at least one dimension (width or length) in cm or repeats.');
+      alert(isRu ? 'Укажите хотя бы один размер (ширину или длину).' : 'Enter at least one dimension.');
       return;
     }
 
@@ -147,16 +142,16 @@
       rowsCm = (rowsTotal / dRo) * 10;
     }
 
-    // Отображение результатов
     const isKnit = currentTool === 'knit';
-    const stLabel = isKnit ? (isRu ? 'петель' : 'sts') : (isRu ? 'столбиков' : 'sts');
-    const rowLabel = isRu ? 'рядов' : 'rows';
-    const repLabel = isRu ? 'рапп.' : 'rep.';
-    const lengthUnit = currentUnits === 'metric' ? (isRu ? 'см' : 'cm') : 'in';
+    const isRuText = currentLang === 'ru';
+    const stLabel = isKnit ? (isRuText ? 'петель' : 'sts') : (isRuText ? 'столбиков' : 'sts');
+    const rowLabel = isRuText ? 'рядов' : 'rows';
+    const repLabel = isRuText ? 'рапп.' : 'rep.';
+    const lengthUnit = currentUnits === 'metric' ? (isRuText ? 'см' : 'cm') : 'in';
 
     const castOnReps = Math.floor((castOnTotal - sSt - e) / rSt);
-    const symText = isRu ? 'сим.' : 'sym';
-    const edgeText = isRu ? 'кром.' : 'edge';
+    const symText = isRuText ? 'сим.' : 'sym';
+    const edgeText = isRuText ? 'кром.' : 'edge';
     resCastOn.textContent = `${castOnTotal} ${stLabel}`;
     resCastOnSub.textContent = isKnit ? 
       `${castOnReps} ${repLabel} + ${symText} ${sSt} + ${edgeText} ${e}` :
@@ -165,9 +160,9 @@
     const desiredCastOnCm = currentDir === 'classic' ? wCm : lCm;
     const diffCast = castOnCm - desiredCastOnCm;
     let devCastText = `→ ${toDisplayCm(castOnCm).toFixed(1)} ${lengthUnit}`;
-    if (Math.abs(diffCast) < 0.01) devCastText += ` (${isRu ? 'точно' : 'exact'})`;
-    else if (diffCast > 0) devCastText += ` (${isRu ? 'на' : '+'} ${toDisplayCm(diffCast).toFixed(1)} ${lengthUnit} ${isRu ? 'больше' : 'more'})`;
-    else devCastText += ` (${isRu ? 'на' : ''} ${toDisplayCm(Math.abs(diffCast)).toFixed(1)} ${lengthUnit} ${isRu ? 'меньше' : 'less'})`;
+    if (Math.abs(diffCast) < 0.01) devCastText += ` (${isRuText ? 'точно' : 'exact'})`;
+    else if (diffCast > 0) devCastText += ` (${isRuText ? 'на' : '+'} ${toDisplayCm(diffCast).toFixed(1)} ${lengthUnit} ${isRuText ? 'больше' : 'more'})`;
+    else devCastText += ` (${isRuText ? 'на' : ''} ${toDisplayCm(Math.abs(diffCast)).toFixed(1)} ${lengthUnit} ${isRuText ? 'меньше' : 'less'})`;
     resCastOnDev.textContent = devCastText;
 
     const rowsReps = Math.floor((rowsTotal - sRo) / rRo);
@@ -177,9 +172,9 @@
     const desiredRowsCm = currentDir === 'classic' ? lCm : wCm;
     const diffRow = rowsCm - desiredRowsCm;
     let devRowText = `→ ${toDisplayCm(rowsCm).toFixed(1)} ${lengthUnit}`;
-    if (Math.abs(diffRow) < 0.01) devRowText += ` (${isRu ? 'точно' : 'exact'})`;
-    else if (diffRow > 0) devRowText += ` (${isRu ? 'на' : '+'} ${toDisplayCm(diffRow).toFixed(1)} ${lengthUnit} ${isRu ? 'больше' : 'more'})`;
-    else devRowText += ` (${isRu ? 'на' : ''} ${toDisplayCm(Math.abs(diffRow)).toFixed(1)} ${lengthUnit} ${isRu ? 'меньше' : 'less'})`;
+    if (Math.abs(diffRow) < 0.01) devRowText += ` (${isRuText ? 'точно' : 'exact'})`;
+    else if (diffRow > 0) devRowText += ` (${isRuText ? 'на' : '+'} ${toDisplayCm(diffRow).toFixed(1)} ${lengthUnit} ${isRuText ? 'больше' : 'more'})`;
+    else devRowText += ` (${isRuText ? 'на' : ''} ${toDisplayCm(Math.abs(diffRow)).toFixed(1)} ${lengthUnit} ${isRuText ? 'меньше' : 'less'})`;
     resRowsDev.textContent = devRowText;
   }
 
@@ -265,7 +260,7 @@
     }
   };
 
-  // ---------- Обновление UI в зависимости от языка и инструмента ----------
+  // ---------- Обновление UI ----------
   function updateLanguage() {
     const lang = currentLang;
     const t = translations[lang] || translations.ru;
@@ -331,7 +326,7 @@
     });
   }
 
-  // ---------- Переключение единиц ----------
+  // ---------- Переключение единиц (без вызова calculate) ----------
   function toggleUnits(newUnits) {
     if (newUnits === currentUnits) return;
     const fromMetric = currentUnits === 'metric';
@@ -347,10 +342,8 @@
     }
 
     if (fromMetric !== toMetric) {
-      // Конвертируем только поля ширины и длины (в см)
       convertField(widthCm, v => fromMetric ? v / 2.54 : v * 2.54);
       convertField(lengthCm, v => fromMetric ? v / 2.54 : v * 2.54);
-      // Плотность не трогаем
     }
 
     currentUnits = newUnits;
@@ -358,6 +351,7 @@
       el.classList.toggle('active', el.dataset.unit === newUnits);
     });
     updateUnitSymbols();
+    // НЕ вызываем calculate() – только меняем отображение
   }
 
   // ---------- Тема ----------
@@ -398,9 +392,17 @@
     });
   }
 
+  // ---------- Настройка полей (без автоматического calculate) ----------
+  function setupInputs() {
+    // Только синхронизация полей (см ↔ раппорты) без вызова calculate
+    // Можно оставить пустым или добавить логику, но без calculate.
+    // Никаких слушателей input/change, которые вызывают calculate.
+  }
+
   // ---------- Init ----------
   initTheme();
   setupToggles();
+  setupInputs();
 
   document.getElementById('themeToggle').addEventListener('click', toggleTheme);
   document.getElementById('langSelect').addEventListener('change', function(e) {
@@ -433,5 +435,5 @@
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (with unit toggle fix)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (no auto-calculate)');
 })();

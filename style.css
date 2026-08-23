@@ -13,6 +13,7 @@
   --radius-sm: 16px;
   --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --transition: 0.3s ease;
+  --btn-text: var(--text); /* в светлой теме текст на кнопках тёмный */
 }
 
 [data-theme="dark"] {
@@ -25,6 +26,7 @@
   --error: #E06B5A;
   --border: #5C524A;
   --shadow: rgba(0,0,0,0.3);
+  --btn-text: white; /* в тёмной теме текст на кнопках белый */
 }
 
 /* ---------- Глобальные сбросы ---------- */
@@ -190,7 +192,7 @@ body {
 .btn-donate {
   background: var(--accent);
   border: none;
-  color: white !important;
+  color: var(--btn-text);
   font-weight: 600;
 }
 
@@ -396,7 +398,7 @@ body {
 
 .btn-print {
   background: var(--accent);
-  color: white;
+  color: var(--btn-text);
   border: none;
   padding: 16px 48px;
   border-radius: 40px;

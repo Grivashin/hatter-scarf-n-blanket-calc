@@ -180,8 +180,8 @@
       lblSymSt: 'Симметрия (петли)',
       symDesc: '* общая для начала и конца',
       lblSymRow: 'Симметрия (ряды)',
-      lblEdges: 'Кромочные (к наборному краю)',
-      edgeDesc: 'не входят в раппорт',
+      lblEdges: 'Кромочные',
+      edgeDesc: '0 — круговое, 2 — поворотные ряды',
       lblDir: 'Направление вязания',
       dirClassic: 'Классическое (ширина → набор)',
       dirCross: 'Поперечное (длина → набор)',
@@ -205,8 +205,8 @@
       lblSymSt: 'Symmetry (sts)',
       symDesc: '* total for beginning and end',
       lblSymRow: 'Symmetry (rows)',
-      lblEdges: 'Edge stitches (to cast-on)',
-      edgeDesc: 'not part of repeat',
+      lblEdges: 'Edge stitches',
+      edgeDesc: '0 — circular, 2 — flat knitting',
       lblDir: 'Knitting direction',
       dirClassic: 'Classic (width → cast on)',
       dirCross: 'Crosswise (length → cast on)',
@@ -230,8 +230,8 @@
       lblSymSt: 'Symmetry (sts)',
       symDesc: '* total for beginning and end',
       lblSymRow: 'Symmetry (rows)',
-      lblEdges: 'Edge stitches (to cast-on)',
-      edgeDesc: 'not part of repeat',
+      lblEdges: 'Edge stitches',
+      edgeDesc: '0 — circular, 2 — flat knitting',
       lblDir: 'Knitting direction',
       dirClassic: 'Classic (width → cast on)',
       dirCross: 'Crosswise (length → cast on)',
@@ -407,7 +407,7 @@
   document.getElementById('langSelect').value = 'ru';
   updateLanguage();
 
-  // Явно вызываем обновление UI для начального состояния (на случай, если что-то пропущено)
+  // Явно вызываем обновление UI для начального состояния
   updateToolSpecificUI();
   updateWarningText();
 

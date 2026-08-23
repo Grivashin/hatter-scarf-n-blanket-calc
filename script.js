@@ -347,8 +347,10 @@
     }
 
     if (fromMetric !== toMetric) {
+      // Конвертируем только поля ширины и длины (в см)
       convertField(widthCm, v => fromMetric ? v / 2.54 : v * 2.54);
       convertField(lengthCm, v => fromMetric ? v / 2.54 : v * 2.54);
+      // Плотность не трогаем
     }
 
     currentUnits = newUnits;
@@ -356,6 +358,9 @@
       el.classList.toggle('active', el.dataset.unit === newUnits);
     });
     updateUnitSymbols();
+
+    // Пересчитываем результаты с новыми единицами
+    calculate();
   }
 
   // ---------- Тема ----------
@@ -431,5 +436,5 @@
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (with validation)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (with unit toggle fix)');
 })();

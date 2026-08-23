@@ -279,7 +279,6 @@
     document.getElementById('calculateBtnText').textContent = t.calculateBtn;
     document.getElementById('toolKnit').textContent = t.toolKnit;
     document.getElementById('toolCrochet').textContent = t.toolCrochet;
-    // Поля плотности обновляем через отдельную функцию
     document.getElementById('lblRepRow').textContent = t.lblRepRow;
     document.getElementById('lblSymRow').textContent = t.lblSymRow;
     document.getElementById('symDesc').textContent = t.symDesc;

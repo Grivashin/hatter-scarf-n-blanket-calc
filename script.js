@@ -187,6 +187,7 @@
   const translations = {
     ru: {
       donate: 'Поддержать',
+      calculateBtn: 'Рассчитать',
       warningKnit: 'Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 in), не включая кромочные и края.',
       warningCrochet: 'Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 in), не включая петли подъёма.',
       toolKnit: 'Спицы',
@@ -212,6 +213,7 @@
     },
     us: {
       donate: 'Support',
+      calculateBtn: 'Calculate',
       warningKnit: 'Swatch must be at least 5×5 in (12×12 cm) after blocking. Measure gauge strictly in the center of the swatch, on a 4×4 in (10×10 cm) area, excluding edge stitches and borders.',
       warningCrochet: 'Swatch must be at least 5×5 in (12×12 cm) after blocking. Measure gauge strictly in the center of the swatch, on a 4×4 in (10×10 cm) area, excluding turning chains.',
       toolKnit: 'Knit',
@@ -237,6 +239,7 @@
     },
     uk: {
       donate: 'Support',
+      calculateBtn: 'Calculate',
       warningKnit: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure tension strictly in the centre of the square, on a 4×4 in (10×10 cm) area, excluding edge stitches and borders.',
       warningCrochet: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure tension strictly in the centre of the square, on a 4×4 in (10×10 cm) area, excluding turning chains.',
       toolKnit: 'Knit',
@@ -270,6 +273,7 @@
     document.querySelector('.logo-text').textContent = (lang === 'ru' ? 'Хаттер' : 'The Hatter');
     document.querySelector('.logo-sub').textContent = (lang === 'ru' ? 'Дизайнер шарфов' : 'Scarf Studio');
     document.getElementById('donateText').textContent = t.donate;
+    document.getElementById('calculateBtnText').textContent = t.calculateBtn;
     document.getElementById('toolKnit').textContent = t.toolKnit;
     document.getElementById('toolCrochet').textContent = t.toolCrochet;
     document.getElementById('lblStitch').textContent = t.lblStitch;

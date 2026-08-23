@@ -54,11 +54,11 @@
       </div>
       <div class="field-group">
         <label id="lblStitch">Петель в 10 см</label>
-        <input type="number" id="densityStitches" value="22" step="0.5">
+        <input type="number" id="densityStitches" value="" placeholder="0" step="0.5">
       </div>
       <div class="field-group">
         <label id="lblRow">Рядов в 10 см</label>
-        <input type="number" id="densityRows" value="30" step="0.5">
+        <input type="number" id="densityRows" value="" placeholder="0" step="0.5">
       </div>
     </div>
   </section>
@@ -69,20 +69,20 @@
     <div class="grid-3">
       <div class="field-group">
         <label id="lblRepSt">Раппорт (петли)</label>
-        <input type="number" id="repStitch" value="4" step="1" min="1">
+        <input type="number" id="repStitch" value="" placeholder="1" step="1" min="1">
       </div>
       <div class="field-group">
         <label id="lblRepRow">Раппорт (ряды)</label>
-        <input type="number" id="repRow" value="2" step="1" min="1">
+        <input type="number" id="repRow" value="" placeholder="1" step="1" min="1">
       </div>
       <div class="field-group">
         <label id="lblSymSt">Симметрия (петли)</label>
-        <input type="number" id="symStitch" value="0" step="1" min="0">
+        <input type="number" id="symStitch" value="0" placeholder="0" step="1" min="0">
         <span style="font-size:0.7rem; opacity:0.6;" id="symDesc">* общая для начала и конца</span>
       </div>
       <div class="field-group">
         <label id="lblSymRow">Симметрия (ряды)</label>
-        <input type="number" id="symRow" value="0" step="1" min="0">
+        <input type="number" id="symRow" value="0" placeholder="0" step="1" min="0">
       </div>
       <div class="field-group" id="edgesGroup">
         <label id="lblEdges">Кромочные</label>
@@ -109,24 +109,24 @@
       <div class="field-group">
         <label id="lblWidth">Ширина</label>
         <div class="input-with-unit">
-          <input type="number" id="widthCm" value="30" step="0.1">
+          <input type="number" id="widthCm" value="" placeholder="0" step="0.1">
           <span class="unit" data-unit="length">см</span>
         </div>
       </div>
       <div class="field-group">
         <label id="lblWidthRep">Ширина (в раппортах)</label>
-        <input type="number" id="widthRep" value="7" step="1" min="1">
+        <input type="number" id="widthRep" value="" placeholder="0" step="1" min="0">
       </div>
       <div class="field-group">
         <label id="lblLength">Длина</label>
         <div class="input-with-unit">
-          <input type="number" id="lengthCm" value="180" step="0.1">
+          <input type="number" id="lengthCm" value="" placeholder="0" step="0.1">
           <span class="unit" data-unit="length">см</span>
         </div>
       </div>
       <div class="field-group">
         <label id="lblLengthRep">Длина (в раппортах)</label>
-        <input type="number" id="lengthRep" value="45" step="1" min="1">
+        <input type="number" id="lengthRep" value="" placeholder="0" step="1" min="0">
       </div>
     </div>
   </section>

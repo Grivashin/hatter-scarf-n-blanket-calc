@@ -181,6 +181,8 @@
   // ---------- Переводы ----------
   const translations = {
     ru: {
+      resLabelCastOnKnit: 'Наборный край',
+      resLabelCastOnCrochet: 'Наборный ряд',
       resultTitle: 'Результаты',
       dimTitle: 'Размеры и направление',
       rapportTitle: 'Раппорт и симметрия',
@@ -210,6 +212,8 @@
       resLabelRows: 'Ряды',
     },
     us: {
+      resLabelCastOnKnit: 'Cast on',
+      resLabelCastOnCrochet: 'Foundation Chain',
       resultTitle: 'Results',
       dimTitle: 'Size & direction',
       lblEdges: 'Edge stitches',
@@ -241,6 +245,8 @@
       resLabelRows: 'Rows',
     },
     uk: {
+      resLabelCastOnKnit: 'Cast on',
+      resLabelCastOnCrochet: 'Foundation Chain',
       resultTitle: 'Results',
       dimTitle: 'Size & direction',
       lblEdges: 'Edge stitches',

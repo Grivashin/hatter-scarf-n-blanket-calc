@@ -335,6 +335,10 @@
   function updateToolSpecificUI() {
     const isKnit = currentTool === 'knit';
     const isRu = currentLang === 'ru';
+    const castOnLabel = isKnit ? 
+      (isRu ? 'Наборный край' : 'Cast on') : 
+      (isRu ? 'Наборный ряд' : 'Foundation Chain');
+    document.getElementById('resLabelCastOn').textContent = castOnLabel;
 
     if (edgesGroup) {
       edgesGroup.classList.toggle('hidden', !isKnit);

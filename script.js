@@ -181,6 +181,7 @@
   // ---------- Переводы ----------
   const translations = {
     ru: {
+      logoSub: 'Дизайнер шарфов и пледов',
       resLabelCastOnKnit: 'Наборный край',
       resLabelCastOnCrochet: 'Наборный ряд',
       resultTitle: 'Результаты',
@@ -212,6 +213,7 @@
       resLabelRows: 'Ряды',
     },
     us: {
+      logoSub: 'Scarf & Blanket Designer',
       resLabelCastOnKnit: 'Cast on',
       resLabelCastOnCrochet: 'Foundation Chain',
       resultTitle: 'Results',
@@ -245,6 +247,7 @@
       resLabelRows: 'Rows',
     },
     uk: {
+      logoSub: 'Scarf & Blanket Designer',
       resLabelCastOnKnit: 'Cast on',
       resLabelCastOnCrochet: 'Foundation Chain',
       resultTitle: 'Results',
@@ -335,20 +338,20 @@
   function updateToolSpecificUI() {
     const isKnit = currentTool === 'knit';
     const isRu = currentLang === 'ru';
-    const castOnLabel = isKnit ? 
-      (isRu ? 'Наборный край' : 'Cast on') : 
-      (isRu ? 'Наборный ряд' : 'Foundation Chain');
-    document.getElementById('resLabelCastOn').textContent = castOnLabel;
 
     if (edgesGroup) {
-      edgesGroup.classList.toggle('hidden', !isKnit);
-    }
+    edgesGroup.classList.toggle('hidden', !isKnit);
+  }
 
     const stWord = isKnit ? (isRu ? 'петли' : 'sts') : (isRu ? 'столбики' : 'sts');
     const lblRepSt = document.getElementById('lblRepSt');
     const lblSymSt = document.getElementById('lblSymSt');
     if (lblRepSt) lblRepSt.textContent = isRu ? `Раппорт (${stWord})` : `Repeat (${stWord})`;
     if (lblSymSt) lblSymSt.textContent = isRu ? `Симметрия (${stWord})` : `Symmetry (${stWord})`;
+
+    // Обновление подписи "Наборный ряд" / "Cast on" / "Foundation Chain"
+    const castOnLabel = isRu ? 'Наборный ряд' : (isKnit ? 'Cast on' : 'Foundation Chain');
+    document.getElementById('resLabelCastOn').textContent = castOnLabel;
   }
 
   function updateWarningText() {

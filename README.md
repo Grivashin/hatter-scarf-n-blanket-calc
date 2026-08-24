@@ -30,7 +30,7 @@
 
 ---
 
-# hatter-scarf-calc
+# hatter-scarf-n-blanket-calc
 
 **English version**
 

@@ -264,7 +264,7 @@
       calculateBtn: 'Calculate',
       warningKnit: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure tension strictly in the centre of the square, on a 4×4 in (10×10 cm) area, excluding edge stitches and borders.',
       warningCrochet: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure tension strictly in the centre of the square, on a 4×4 in (10×10 cm) area, excluding turning chains.',
-      toolKnit: 'Knit',
+      toolKnit: 'Knitting',
       toolCrochet: 'Crochet',
       lblRepSt: 'Repeat (sts)',
       lblRepRow: 'Repeat (rows)',

@@ -27,9 +27,9 @@
         <span class="unit-opt" data-unit="imperial">in</span>
       </div>
       <select class="lang-select" id="langSelect">
-        <option value="ru">🇷🇺 RU</option>
-        <option value="us">🇺🇸 US</option>
-        <option value="uk">🇬🇧 UK</option>
+        <option value="ru">RU</option>
+        <option value="us">US</option>
+        <option value="uk">UK</option>
       </select>
       <a href="#" target="_blank" class="btn-donate" id="donateBoosty">
         ☕ <span id="donateText">Поддержать</span>
@@ -39,14 +39,14 @@
 
   <!-- 1. Плотность -->
   <section class="card">
-    <div class="card-title">Плотность (после ВТО)</div>
+    <div class="card-title" id="densityTitle">Плотность (после ВТО)</div>
     <div class="warning">
       <span class="icon">⚠️</span>
       <span id="warningText">Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 in), не включая кромочные и края.</span>
     </div>
     <div class="grid-2">
       <div class="field-group">
-        <label>Инструмент</label>
+        <label id="toolLabel">Способ вязания</label>
         <div class="toggle-group" id="toolToggle">
           <button class="toggle-option active" data-tool="knit"><span id="toolKnit">Спицы</span></button>
           <button class="toggle-option" data-tool="crochet"><span id="toolCrochet">Крючок</span></button>
@@ -65,7 +65,7 @@
 
   <!-- 2. Раппорт и симметрия -->
   <section class="card">
-    <div class="card-title">Раппорт и симметрия</div>
+    <div class="card-title" id="rapportTitle">Раппорт и симметрия</div>
     <div class="grid-3">
       <div class="field-group">
         <label id="lblRepSt">Раппорт (петли)</label>
@@ -97,7 +97,7 @@
 
   <!-- 3. Размеры и направление -->
   <section class="card">
-    <div class="card-title">Размеры и направление</div>
+    <div class="card-title" id="dimTitle">Размеры и направление</div>
     <div class="field-group" style="margin-bottom:16px;">
       <label id="lblDir">Направление вязания</label>
       <div class="toggle-group" id="directionToggle">
@@ -138,7 +138,7 @@
 
   <!-- 5. Результаты -->
   <section class="card" id="resultCard">
-    <div class="card-title">Результаты</div>
+    <div class="card-title" id="resultTitle">Результаты</div>
     <div class="result-grid" id="resultGrid">
       <div class="result-item">
         <div class="label" id="resLabelCastOn">Наборный край</div>

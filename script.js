@@ -181,6 +181,7 @@
   // ---------- Переводы ----------
   const translations = {
     ru: {
+      logo: 'Хаттер',
       logoSub: 'Дизайнер шарфов и пледов',
       resLabelCastOnKnit: 'Наборный край',
       resLabelCastOnCrochet: 'Наборный ряд',
@@ -213,6 +214,7 @@
       resLabelRows: 'Ряды',
     },
     us: {
+      logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
       resLabelCastOnKnit: 'Cast on',
       resLabelCastOnCrochet: 'Foundation Chain',
@@ -247,6 +249,7 @@
       resLabelRows: 'Rows',
     },
     uk: {
+      logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
       resLabelCastOnKnit: 'Cast on',
       resLabelCastOnCrochet: 'Foundation Chain',
@@ -301,8 +304,8 @@
     const lang = currentLang;
     const t = translations[lang] || translations.ru;
 
-    document.querySelector('.logo-text').textContent = (lang === 'ru' ? 'Хаттер' : 'The Hatter');
-    document.querySelector('.logo-sub').textContent = (lang === 'ru' ? 'Дизайнер шарфов' : 'Scarf Studio');
+    document.querySelector('.logo-text').textContent = t.logo;
+    document.querySelector('.logo-sub').textContent = t.logoSub;
     document.getElementById('donateText').textContent = t.donate;
     document.getElementById('densityTitle').textContent = t.densityTitle;
     document.getElementById('toolLabel').textContent = t.toolLabel;

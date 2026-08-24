@@ -371,12 +371,18 @@
   }
 
   function updateUnitSymbols() {
-    const isMetric = currentUnits === 'metric';
-    const lengthSym = isMetric ? 'см' : 'in';
-    document.querySelectorAll('.unit').forEach(el => {
-      if (el.dataset.unit === 'length') el.textContent = lengthSym;
-    });
+  const isMetric = currentUnits === 'metric';
+  const isRu = currentLang === 'ru';
+  let lengthSym;
+  if (isMetric) {
+    lengthSym = isRu ? 'см' : 'cm';
+  } else {
+    lengthSym = 'in'; // для имперской системы оставляем 'in' для всех языков
   }
+  document.querySelectorAll('.unit').forEach(el => {
+    if (el.dataset.unit === 'length') el.textContent = lengthSym;
+  });
+}
 
   // ---------- Переключение единиц (без вызова calculate) ----------
   function toggleUnits(newUnits) {

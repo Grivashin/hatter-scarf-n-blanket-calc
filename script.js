@@ -287,17 +287,22 @@
 
   // ---------- Обновление подписей полей плотности в зависимости от единиц ----------
   function updateDensityLabels() {
-    const isRu = currentLang === 'ru';
-    const isMetric = currentUnits === 'metric';
-    const number = isMetric ? '10' : '4';
-    const unit = isMetric ? (isRu ? 'см' : 'cm') : (isRu ? 'дюймах' : 'in');
+  const isRu = currentLang === 'ru';
+  const isMetric = currentUnits === 'metric';
+  const isKnit = currentTool === 'knit';
+  
+  const number = isMetric ? '10' : '4';
+  const unit = isMetric ? (isRu ? 'см' : 'cm') : (isRu ? 'дюймах' : 'in');
+  
+  // Выбираем слово "петель" или "столбиков" для русского
+  const stWord = isKnit ? (isRu ? 'петель' : 'sts') : (isRu ? 'столбиков' : 'sts');
+  
+  const stitchLabel = isRu ? `${stWord} в ${number} ${unit}` : `Sts per ${number} ${unit}`;
+  const rowLabel = isRu ? `Рядов в ${number} ${unit}` : `Rows per ${number} ${unit}`;
 
-    const stitchLabel = isRu ? `Петель в ${number} ${unit}` : `Sts per ${number} ${unit}`;
-    const rowLabel = isRu ? `Рядов в ${number} ${unit}` : `Rows per ${number} ${unit}`;
-
-    document.getElementById('lblStitch').textContent = stitchLabel;
-    document.getElementById('lblRow').textContent = rowLabel;
-  }
+  document.getElementById('lblStitch').textContent = stitchLabel;
+  document.getElementById('lblRow').textContent = rowLabel;
+}
 
   // ---------- Обновление всего UI ----------
   function updateLanguage() {
@@ -429,6 +434,7 @@
         currentTool = this.dataset.tool;
         updateToolSpecificUI();
         updateWarningText();
+        updateDensityLabels();
       });
     });
     document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {

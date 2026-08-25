@@ -293,6 +293,23 @@
     document.getElementById('lblRow').textContent = rowLabel;
   }
 
+  // ---------- Обновление единиц измерения (гарантированно работает) ----------
+  function updateUnitSymbols() {
+    const isMetric = currentUnits === 'metric';
+    const isRu = currentLang === 'ru';
+    let lengthSym;
+    if (isMetric) {
+      lengthSym = isRu ? 'см' : 'cm';
+    } else {
+      lengthSym = isRu ? 'дюймы' : 'in';
+    }
+    document.querySelectorAll('.unit').forEach(el => {
+      el.textContent = lengthSym;
+    });
+    // Дополнительно обновляем единицы в результатах, если они есть (см. lengthUnit в calculate)
+    // Но они обновляются при пересчёте.
+  }
+
   // ---------- Обновление всего UI ----------
   function updateLanguage() {
     const lang = currentLang;
@@ -329,7 +346,7 @@
     updateToolSpecificUI();
     updateWarningText();
     updateDensityLabels();
-    updateUnitSymbols();
+    updateUnitSymbols(); // <-- ВАЖНО: здесь обновляем единицы при смене языка
   }
 
   function updateToolSpecificUI() {
@@ -353,21 +370,6 @@
     const key = currentTool === 'knit' ? 'warningKnit' : 'warningCrochet';
     const warningEl = document.getElementById('warningText');
     if (warningEl) warningEl.textContent = t[key];
-  }
-
-  // ---------- Обновление единиц измерения ----------
-  function updateUnitSymbols() {
-    const isMetric = currentUnits === 'metric';
-    const isRu = currentLang === 'ru';
-    let lengthSym;
-    if (isMetric) {
-      lengthSym = isRu ? 'см' : 'cm';
-    } else {
-      lengthSym = isRu ? 'дюймы' : 'in';
-    }
-    document.querySelectorAll('.unit').forEach(el => {
-      el.textContent = lengthSym;
-    });
   }
 
   // ---------- Переключение единиц (без вызова calculate) ----------
@@ -394,7 +396,7 @@
     document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
       el.classList.toggle('active', el.dataset.unit === newUnits);
     });
-    updateUnitSymbols();
+    updateUnitSymbols(); // <-- ВАЖНО: обновляем единицы при смене единиц
     updateDensityLabels(); // обновляем подписи плотности
     // НЕ вызываем calculate()
   }
@@ -427,6 +429,8 @@
         updateToolSpecificUI();
         updateWarningText();
         updateDensityLabels();
+        // единицы при смене инструмента не меняются, но обновим на всякий случай
+        updateUnitSymbols();
       });
     });
     document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {

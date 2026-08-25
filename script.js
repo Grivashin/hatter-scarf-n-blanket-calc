@@ -190,6 +190,8 @@
       toolLabel: 'Способ вязания',
       donate: 'Поддержать',
       calculateBtn: 'Рассчитать',
+      unitMetric: 'см',
+      unitImperial: 'дюймы',
       warningKnit: 'Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 in), не включая кромочные и края.',
       warningCrochet: 'Образец должен быть не менее 12×12 см (5×5 in) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 in), не включая петли подъёма.',
       toolKnit: 'Спицы',
@@ -221,6 +223,8 @@
       toolLabel: 'Method',
       donate: 'Support',
       calculateBtn: 'Calculate',
+      unitMetric: 'cm',
+      unitImperial: 'in',
       warningKnit: 'Swatch must be at least 5×5 in (12×12 cm) after blocking. Measure gauge strictly in the center of the swatch, on a 4×4 in (10×10 cm) area, excluding edge stitches and borders.',
       warningCrochet: 'Swatch must be at least 5×5 in (12×12 cm) after blocking. Measure gauge strictly in the center of the swatch, on a 4×4 in (10×10 cm) area, excluding turning chains.',
       toolKnit: 'Knitting',
@@ -252,6 +256,8 @@
       toolLabel: 'Method',
       donate: 'Support',
       calculateBtn: 'Calculate',
+      unitMetric: 'cm',
+      unitImperial: 'in',
       warningKnit: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure tension strictly in the centre of the square, on a 4×4 in (10×10 cm) area, excluding edge stitches and borders.',
       warningCrochet: 'Tension square must be at least 5×5 in (12×12 cm) after blocking. Measure tension strictly in the centre of the square, on a 4×4 in (10×10 cm) area, excluding turning chains.',
       toolKnit: 'Knitting',
@@ -293,7 +299,15 @@
     document.getElementById('lblRow').textContent = rowLabel;
   }
 
-  // ---------- Обновление единиц измерения (включая подписи) ----------
+  // ---------- Обновление текста кнопок переключателя единиц ----------
+  function updateUnitToggleLabels() {
+    const lang = currentLang;
+    const t = translations[lang] || translations.ru;
+    document.getElementById('unitMetric').textContent = t.unitMetric;
+    document.getElementById('unitImperial').textContent = t.unitImperial;
+  }
+
+  // ---------- Обновление единиц измерения (поля и подписи) ----------
   function updateUnitSymbols() {
     const isMetric = currentUnits === 'metric';
     const isRu = currentLang === 'ru';
@@ -303,12 +317,11 @@
     } else {
       lengthSym = isRu ? 'дюймы' : 'in';
     }
-    // Обновляем единицы в полях ширины/длины
     document.querySelectorAll('.unit').forEach(el => {
       el.textContent = lengthSym;
     });
-    // Обновляем подписи плотности (чтобы они тоже менялись)
     updateDensityLabels();
+    updateUnitToggleLabels(); // обновляем и сами кнопки переключателя
   }
 
   // ---------- Обновление всего UI ----------
@@ -346,8 +359,7 @@
 
     updateToolSpecificUI();
     updateWarningText();
-    // Обновляем всё, что связано с единицами (поля + подписи)
-    updateUnitSymbols();
+    updateUnitSymbols(); // обновляет всё: поля, подписи, кнопки переключателя
   }
 
   function updateToolSpecificUI() {
@@ -397,8 +409,7 @@
     document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
       el.classList.toggle('active', el.dataset.unit === newUnits);
     });
-    // Обновляем единицы и подписи плотности
-    updateUnitSymbols();
+    updateUnitSymbols(); // обновляет все единицы
   }
 
   // ---------- Тема ----------
@@ -428,7 +439,7 @@
         currentTool = this.dataset.tool;
         updateToolSpecificUI();
         updateWarningText();
-        updateUnitSymbols(); // обновляем подписи плотности при смене инструмента
+        updateUnitSymbols();
       });
     });
     document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {
@@ -482,5 +493,5 @@
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (fully fixed units)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (full unit toggle labels)');
 })();

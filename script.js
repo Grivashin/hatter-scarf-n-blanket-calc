@@ -218,6 +218,9 @@
       resLabelRows: 'Ряды',
     },
     us: {
+      lblSymStart: 'Symmetry (beginning of row)',
+      lblSymEnd: 'Symmetry (end of row)',
+      lblSymRow: 'Symmetry (rows)',
       logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
       resultTitle: 'Results',
@@ -251,6 +254,9 @@
       resLabelRows: 'Rows',
     },
     uk: {
+      lblSymStart: 'Symmetry (beginning of row)',
+      lblSymEnd: 'Symmetry (end of row)',
+      lblSymRow: 'Symmetry (rows)',
       logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
       resultTitle: 'Results',

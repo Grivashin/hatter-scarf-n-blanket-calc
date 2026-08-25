@@ -367,7 +367,8 @@
       lengthSym = 'in';
     }
     console.log('Устанавливаем единицу:', lengthSym);
-    document.querySelectorAll('.unit[data-unit="length"]').forEach(el => {
+    // Обновляем все элементы с классом unit
+    document.querySelectorAll('.unit').forEach(el => {
       el.textContent = lengthSym;
     });
   }

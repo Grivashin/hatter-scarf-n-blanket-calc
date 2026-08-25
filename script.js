@@ -7,7 +7,8 @@
   const densityRow = $('densityRows');
   const repSt = $('repStitch');
   const repRow = $('repRow');
-  const symSt = $('symStitch');
+  const symStart = $('symStart');
+  const symEnd = $('symEnd');
   const symRow = $('symRow');
   const edges = $('edges');
   const widthCm = $('widthCm');
@@ -65,7 +66,7 @@
       return;
     }
 
-    const sSt = getInt(symSt);
+    const sSt = getInt(symStart) + getInt(symEnd); // общая симметрия
     const sRo = getInt(symRow);
     const e = currentTool === 'knit' ? parseInt(edges.value) : 0;
 
@@ -154,8 +155,8 @@
     const edgeText = isRuText ? 'кром.' : 'edge';
     resCastOn.textContent = `${castOnTotal} ${stLabel}`;
     resCastOnSub.textContent = isKnit ? 
-      `${castOnReps} ${repLabel} + ${symText} ${sSt} + ${edgeText} ${e}` :
-      `${castOnReps} ${repLabel} + ${symText} ${sSt}`;
+      `${castOnReps} ${repLabel} + ${symText} (нач. ${getInt(symStart)} + кон. ${getInt(symEnd)}) + ${edgeText} ${e}` :
+      `${castOnReps} ${repLabel} + ${symText} (нач. ${getInt(symStart)} + кон. ${getInt(symEnd)})`;
 
     const desiredCastOnCm = currentDir === 'classic' ? wCm : lCm;
     const diffCast = castOnCm - desiredCastOnCm;
@@ -181,6 +182,8 @@
   // ---------- Переводы ----------
   const translations = {
     ru: {
+      lblSymStart: 'Симметрия (начало ряда)',
+      lblSymEnd: 'Симметрия (конец ряда)',
       logo: 'Хаттер',
       logoSub: 'Дизайнер шарфов и пледов',
       resultTitle: 'Результаты',
@@ -198,7 +201,6 @@
       toolCrochet: 'Крючок',
       lblRepSt: 'Раппорт (петли)',
       lblRepRow: 'Раппорт (ряды)',
-      lblSymSt: 'Симметрия (петли)',
       symDesc: '* общая для начала и конца',
       lblSymRow: 'Симметрия (ряды)',
       lblEdges: 'Кромочные',
@@ -214,6 +216,8 @@
       resLabelRows: 'Ряды',
     },
     us: {
+      lblSymStart: 'Симметрия (начало ряда)',
+      lblSymEnd: 'Симметрия (конец ряда)',
       logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
       resultTitle: 'Results',
@@ -231,7 +235,6 @@
       toolCrochet: 'Crochet',
       lblRepSt: 'Repeat (sts)',
       lblRepRow: 'Repeat (rows)',
-      lblSymSt: 'Symmetry (sts)',
       symDesc: '* total for beginning and end',
       lblSymRow: 'Symmetry (rows)',
       lblEdges: 'Edge stitches',
@@ -247,6 +250,8 @@
       resLabelRows: 'Rows',
     },
     uk: {
+      lblSymStart: 'Симметрия (начало ряда)',
+      lblSymEnd: 'Симметрия (конец ряда)',
       logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
       resultTitle: 'Results',
@@ -264,7 +269,6 @@
       toolCrochet: 'Crochet',
       lblRepSt: 'Repeat (sts)',
       lblRepRow: 'Repeat (rows)',
-      lblSymSt: 'Symmetry (sts)',
       symDesc: '* total for beginning and end',
       lblSymRow: 'Symmetry (rows)',
       lblEdges: 'Edge stitches',
@@ -343,8 +347,8 @@
     document.getElementById('toolKnit').textContent = t.toolKnit;
     document.getElementById('toolCrochet').textContent = t.toolCrochet;
     document.getElementById('lblRepRow').textContent = t.lblRepRow;
-    document.getElementById('lblSymRow').textContent = t.lblSymRow;
-    document.getElementById('symDesc').textContent = t.symDesc;
+    document.getElementById('lblSymStart').textContent = t.lblSymStart;
+    document.getElementById('lblSymEnd').textContent = t.lblSymEnd;
     document.getElementById('lblEdges').textContent = t.lblEdges;
     document.getElementById('edgeDesc').textContent = t.edgeDesc;
     document.getElementById('lblDir').textContent = t.lblDir;

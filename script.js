@@ -183,8 +183,6 @@
     ru: {
       logo: 'Хаттер',
       logoSub: 'Дизайнер шарфов и пледов',
-      resLabelCastOnKnit: 'Наборный край',
-      resLabelCastOnCrochet: 'Наборный ряд',
       resultTitle: 'Результаты',
       dimTitle: 'Размеры и направление',
       rapportTitle: 'Раппорт и симметрия',
@@ -210,18 +208,14 @@
       lblWidthRep: 'Ширина (в раппортах)',
       lblLength: 'Длина',
       lblLengthRep: 'Длина (в раппортах)',
-      resLabelCastOn: 'Наборный край',
+      resLabelCastOn: 'Наборный ряд',
       resLabelRows: 'Ряды',
     },
     us: {
       logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
-      resLabelCastOnKnit: 'Cast on',
-      resLabelCastOnCrochet: 'Foundation Chain',
       resultTitle: 'Results',
       dimTitle: 'Size & direction',
-      lblEdges: 'Edge stitches',
-      edgeDesc: '0 — circular, 2 — flat knitting',
       rapportTitle: 'Pattern repeat & symmetry',
       densityTitle: 'Gauge (after blocking)',
       toolLabel: 'Method',
@@ -251,12 +245,8 @@
     uk: {
       logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
-      resLabelCastOnKnit: 'Cast on',
-      resLabelCastOnCrochet: 'Foundation Chain',
       resultTitle: 'Results',
       dimTitle: 'Size & direction',
-      lblEdges: 'Edge stitches',
-      edgeDesc: '0 — circular, 2 — flat knitting',
       rapportTitle: 'Pattern repeat & symmetry',
       densityTitle: 'Tension (after blocking)',
       toolLabel: 'Method',
@@ -287,22 +277,21 @@
 
   // ---------- Обновление подписей полей плотности в зависимости от единиц ----------
   function updateDensityLabels() {
-  const isRu = currentLang === 'ru';
-  const isMetric = currentUnits === 'metric';
-  const isKnit = currentTool === 'knit';
-  
-  const number = isMetric ? '10' : '4';
-  const unit = isMetric ? (isRu ? 'см' : 'cm') : (isRu ? 'дюймах' : 'in');
-  
-  // Выбираем слово "петель" или "столбиков" для русского
-  const stWord = isKnit ? (isRu ? 'петель' : 'sts') : (isRu ? 'столбиков' : 'sts');
-  
-  const stitchLabel = isRu ? `${stWord} в ${number} ${unit}` : `Sts per ${number} ${unit}`;
-  const rowLabel = isRu ? `Рядов в ${number} ${unit}` : `Rows per ${number} ${unit}`;
+    const isRu = currentLang === 'ru';
+    const isMetric = currentUnits === 'metric';
+    const isKnit = currentTool === 'knit';
+    
+    const number = isMetric ? '10' : '4';
+    const unit = isMetric ? (isRu ? 'см' : 'cm') : (isRu ? 'дюймах' : 'in');
+    
+    const stWord = isKnit ? (isRu ? 'петель' : 'sts') : (isRu ? 'столбиков' : 'sts');
+    
+    const stitchLabel = isRu ? `${stWord} в ${number} ${unit}` : `Sts per ${number} ${unit}`;
+    const rowLabel = isRu ? `Рядов в ${number} ${unit}` : `Rows per ${number} ${unit}`;
 
-  document.getElementById('lblStitch').textContent = stitchLabel;
-  document.getElementById('lblRow').textContent = rowLabel;
-}
+    document.getElementById('lblStitch').textContent = stitchLabel;
+    document.getElementById('lblRow').textContent = rowLabel;
+  }
 
   // ---------- Обновление всего UI ----------
   function updateLanguage() {
@@ -348,18 +337,14 @@
     const isRu = currentLang === 'ru';
 
     if (edgesGroup) {
-    edgesGroup.classList.toggle('hidden', !isKnit);
-  }
+      edgesGroup.classList.toggle('hidden', !isKnit);
+    }
 
     const stWord = isKnit ? (isRu ? 'петли' : 'sts') : (isRu ? 'столбики' : 'sts');
     const lblRepSt = document.getElementById('lblRepSt');
     const lblSymSt = document.getElementById('lblSymSt');
     if (lblRepSt) lblRepSt.textContent = isRu ? `Раппорт (${stWord})` : `Repeat (${stWord})`;
     if (lblSymSt) lblSymSt.textContent = isRu ? `Симметрия (${stWord})` : `Symmetry (${stWord})`;
-
-    // Обновление подписи "Наборный ряд" / "Cast on" / "Foundation Chain"
-    const castOnLabel = isRu ? 'Наборный ряд' : (isKnit ? 'Cast on' : 'Foundation Chain');
-    document.getElementById('resLabelCastOn').textContent = castOnLabel;
   }
 
   function updateWarningText() {
@@ -370,19 +355,22 @@
     if (warningEl) warningEl.textContent = t[key];
   }
 
+  // ---------- Обновление единиц измерения ----------
   function updateUnitSymbols() {
-  const isMetric = currentUnits === 'metric';
-  const isRu = currentLang === 'ru';
-  let lengthSym;
-  if (isMetric) {
-    lengthSym = isRu ? 'см' : 'cm';
-  } else {
-    lengthSym = 'in'; // для имперской системы оставляем 'in' для всех языков
+    console.log('updateUnitSymbols вызвана. currentLang:', currentLang, 'currentUnits:', currentUnits);
+    const isMetric = currentUnits === 'metric';
+    const isRu = currentLang === 'ru';
+    let lengthSym;
+    if (isMetric) {
+      lengthSym = isRu ? 'см' : 'cm';
+    } else {
+      lengthSym = 'in';
+    }
+    console.log('Устанавливаем единицу:', lengthSym);
+    document.querySelectorAll('.unit[data-unit="length"]').forEach(el => {
+      el.textContent = lengthSym;
+    });
   }
-  document.querySelectorAll('.unit').forEach(el => {
-    if (el.dataset.unit === 'length') el.textContent = lengthSym;
-  });
-}
 
   // ---------- Переключение единиц (без вызова calculate) ----------
   function toggleUnits(newUnits) {

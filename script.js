@@ -303,8 +303,10 @@
   function updateUnitToggleLabels() {
     const lang = currentLang;
     const t = translations[lang] || translations.ru;
-    document.getElementById('unitMetric').textContent = t.unitMetric;
-    document.getElementById('unitImperial').textContent = t.unitImperial;
+    const metricSpan = document.querySelector('#unitToggle .unit-opt[data-unit="metric"]');
+    const imperialSpan = document.querySelector('#unitToggle .unit-opt[data-unit="imperial"]');
+    if (metricSpan) metricSpan.textContent = t.unitMetric;
+    if (imperialSpan) imperialSpan.textContent = t.unitImperial;
   }
 
   // ---------- Обновление единиц измерения (поля и подписи) ----------
@@ -321,7 +323,7 @@
       el.textContent = lengthSym;
     });
     updateDensityLabels();
-    updateUnitToggleLabels(); // обновляем и сами кнопки переключателя
+    updateUnitToggleLabels();
   }
 
   // ---------- Обновление всего UI ----------
@@ -359,7 +361,7 @@
 
     updateToolSpecificUI();
     updateWarningText();
-    updateUnitSymbols(); // обновляет всё: поля, подписи, кнопки переключателя
+    updateUnitSymbols();
   }
 
   function updateToolSpecificUI() {
@@ -409,7 +411,7 @@
     document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
       el.classList.toggle('active', el.dataset.unit === newUnits);
     });
-    updateUnitSymbols(); // обновляет все единицы
+    updateUnitSymbols();
   }
 
   // ---------- Тема ----------

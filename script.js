@@ -66,7 +66,9 @@
       return;
     }
 
-    const sSt = getInt(symStart) + getInt(symEnd); // общая симметрия
+    const sStart = getInt(symStart);
+    const sEnd = getInt(symEnd);
+    const sSt = sStart + sEnd; // общая симметрия
     const sRo = getInt(symRow);
     const e = currentTool === 'knit' ? parseInt(edges.value) : 0;
 
@@ -154,9 +156,10 @@
     const symText = isRuText ? 'сим.' : 'sym';
     const edgeText = isRuText ? 'кром.' : 'edge';
     resCastOn.textContent = `${castOnTotal} ${stLabel}`;
+    // Отображаем симметрию как начало+конец
     resCastOnSub.textContent = isKnit ? 
-      `${castOnReps} ${repLabel} + ${symText} (нач. ${getInt(symStart)} + кон. ${getInt(symEnd)}) + ${edgeText} ${e}` :
-      `${castOnReps} ${repLabel} + ${symText} (нач. ${getInt(symStart)} + кон. ${getInt(symEnd)})`;
+      `${castOnReps} ${repLabel} + ${symText} (нач. ${sStart} + кон. ${sEnd}) + ${edgeText} ${e}` :
+      `${castOnReps} ${repLabel} + ${symText} (нач. ${sStart} + кон. ${sEnd})`;
 
     const desiredCastOnCm = currentDir === 'classic' ? wCm : lCm;
     const diffCast = castOnCm - desiredCastOnCm;
@@ -182,8 +185,6 @@
   // ---------- Переводы ----------
   const translations = {
     ru: {
-      lblSymStart: 'Симметрия (начало ряда)',
-      lblSymEnd: 'Симметрия (конец ряда)',
       logo: 'Хаттер',
       logoSub: 'Дизайнер шарфов и пледов',
       resultTitle: 'Результаты',
@@ -201,7 +202,8 @@
       toolCrochet: 'Крючок',
       lblRepSt: 'Раппорт (петли)',
       lblRepRow: 'Раппорт (ряды)',
-      symDesc: '* общая для начала и конца',
+      lblSymStart: 'Симметрия (начало ряда)',
+      lblSymEnd: 'Симметрия (конец ряда)',
       lblSymRow: 'Симметрия (ряды)',
       lblEdges: 'Кромочные',
       edgeDesc: '0 — круговое, 2 — поворотные ряды',
@@ -216,8 +218,6 @@
       resLabelRows: 'Ряды',
     },
     us: {
-      lblSymStart: 'Симметрия (начало ряда)',
-      lblSymEnd: 'Симметрия (конец ряда)',
       logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
       resultTitle: 'Results',
@@ -235,7 +235,8 @@
       toolCrochet: 'Crochet',
       lblRepSt: 'Repeat (sts)',
       lblRepRow: 'Repeat (rows)',
-      symDesc: '* total for beginning and end',
+      lblSymStart: 'Symmetry (beginning of row)',
+      lblSymEnd: 'Symmetry (end of row)',
       lblSymRow: 'Symmetry (rows)',
       lblEdges: 'Edge stitches',
       edgeDesc: '0 — circular, 2 — flat knitting',
@@ -250,8 +251,6 @@
       resLabelRows: 'Rows',
     },
     uk: {
-      lblSymStart: 'Симметрия (начало ряда)',
-      lblSymEnd: 'Симметрия (конец ряда)',
       logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
       resultTitle: 'Results',
@@ -269,7 +268,8 @@
       toolCrochet: 'Crochet',
       lblRepSt: 'Repeat (sts)',
       lblRepRow: 'Repeat (rows)',
-      symDesc: '* total for beginning and end',
+      lblSymStart: 'Symmetry (beginning of row)',
+      lblSymEnd: 'Symmetry (end of row)',
       lblSymRow: 'Symmetry (rows)',
       lblEdges: 'Edge stitches',
       edgeDesc: '0 — circular, 2 — flat knitting',
@@ -349,6 +349,7 @@
     document.getElementById('lblRepRow').textContent = t.lblRepRow;
     document.getElementById('lblSymStart').textContent = t.lblSymStart;
     document.getElementById('lblSymEnd').textContent = t.lblSymEnd;
+    document.getElementById('lblSymRow').textContent = t.lblSymRow;
     document.getElementById('lblEdges').textContent = t.lblEdges;
     document.getElementById('edgeDesc').textContent = t.edgeDesc;
     document.getElementById('lblDir').textContent = t.lblDir;
@@ -378,9 +379,8 @@
 
     const stWord = isKnit ? (isRu ? 'петли' : 'sts') : (isRu ? 'столбики' : 'sts');
     const lblRepSt = document.getElementById('lblRepSt');
-    const lblSymSt = document.getElementById('lblSymSt');
     if (lblRepSt) lblRepSt.textContent = isRu ? `Раппорт (${stWord})` : `Repeat (${stWord})`;
-    if (lblSymSt) lblSymSt.textContent = isRu ? `Симметрия (${stWord})` : `Symmetry (${stWord})`;
+    // Подписи для симметрии уже обновлены через updateLanguage, ничего дополнительно не нужно
   }
 
   function updateWarningText() {
@@ -499,5 +499,5 @@
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (full unit toggle labels)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (symmetry split, full translations)');
 })();

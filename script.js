@@ -295,6 +295,7 @@
 
   // ---------- Обновление единиц измерения ----------
   function updateUnitSymbols() {
+    console.log('🔥 updateUnitSymbols вызвана');
     const isMetric = currentUnits === 'metric';
     const isRu = currentLang === 'ru';
     let lengthSym;
@@ -303,8 +304,12 @@
     } else {
       lengthSym = isRu ? 'дюймы' : 'in';
     }
-    document.querySelectorAll('.unit').forEach(el => {
+    console.log('✅ Устанавливаемая единица:', lengthSym);
+    const units = document.querySelectorAll('.unit');
+    console.log('📦 Найдено элементов .unit:', units.length);
+    units.forEach((el, index) => {
       el.textContent = lengthSym;
+      console.log(`✏️ Элемент ${index} обновлён:`, el);
     });
   }
 

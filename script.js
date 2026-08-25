@@ -275,7 +275,7 @@
     }
   };
 
-  // ---------- Обновление подписей полей плотности ----------
+  // ---------- Обновление подписей полей плотности в зависимости от единиц ----------
   function updateDensityLabels() {
     const isRu = currentLang === 'ru';
     const isMetric = currentUnits === 'metric';
@@ -293,7 +293,7 @@
     document.getElementById('lblRow').textContent = rowLabel;
   }
 
-  // ---------- Обновление единиц измерения (СИЛЬНО УПРОЩЁННО) ----------
+  // ---------- Обновление единиц измерения ----------
   function updateUnitSymbols() {
     const isMetric = currentUnits === 'metric';
     const isRu = currentLang === 'ru';
@@ -303,7 +303,6 @@
     } else {
       lengthSym = isRu ? 'дюймы' : 'in';
     }
-    // Обновляем все элементы с классом unit
     document.querySelectorAll('.unit').forEach(el => {
       el.textContent = lengthSym;
     });
@@ -345,7 +344,7 @@
     updateToolSpecificUI();
     updateWarningText();
     updateDensityLabels();
-    updateUnitSymbols();
+    updateUnitSymbols();  // <-- ОБЯЗАТЕЛЬНО обновляем единицы при смене языка
   }
 
   function updateToolSpecificUI() {
@@ -371,7 +370,7 @@
     if (warningEl) warningEl.textContent = t[key];
   }
 
-  // ---------- Переключение единиц ----------
+  // ---------- Переключение единиц (без вызова calculate) ----------
   function toggleUnits(newUnits) {
     if (newUnits === currentUnits) return;
     const fromMetric = currentUnits === 'metric';
@@ -397,7 +396,6 @@
     });
     updateUnitSymbols();
     updateDensityLabels();
-    // НЕ вызываем calculate()
   }
 
   // ---------- Тема ----------

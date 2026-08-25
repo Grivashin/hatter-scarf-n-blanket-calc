@@ -503,7 +503,7 @@
   updateWarningText();
   updateUnitSymbols();
 
-  document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
+  document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari?tab=about';
 
   console.log('🧶 The Hatter: Scarf Studio loaded (symmetry split, full translations)');
 })();

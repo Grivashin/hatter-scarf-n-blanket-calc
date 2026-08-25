@@ -275,7 +275,7 @@
     }
   };
 
-  // ---------- Обновление подписей полей плотности в зависимости от единиц ----------
+  // ---------- Обновление подписей полей плотности ----------
   function updateDensityLabels() {
     const isRu = currentLang === 'ru';
     const isMetric = currentUnits === 'metric';
@@ -293,9 +293,8 @@
     document.getElementById('lblRow').textContent = rowLabel;
   }
 
-  // ---------- Обновление единиц измерения ----------
+  // ---------- Обновление единиц измерения (включая подписи) ----------
   function updateUnitSymbols() {
-    console.log('🔥 updateUnitSymbols вызвана');
     const isMetric = currentUnits === 'metric';
     const isRu = currentLang === 'ru';
     let lengthSym;
@@ -304,13 +303,12 @@
     } else {
       lengthSym = isRu ? 'дюймы' : 'in';
     }
-    console.log('✅ Устанавливаемая единица:', lengthSym);
-    const units = document.querySelectorAll('.unit');
-    console.log('📦 Найдено элементов .unit:', units.length);
-    units.forEach((el, index) => {
+    // Обновляем единицы в полях ширины/длины
+    document.querySelectorAll('.unit').forEach(el => {
       el.textContent = lengthSym;
-      console.log(`✏️ Элемент ${index} обновлён:`, el);
     });
+    // Обновляем подписи плотности (чтобы они тоже менялись)
+    updateDensityLabels();
   }
 
   // ---------- Обновление всего UI ----------
@@ -348,8 +346,8 @@
 
     updateToolSpecificUI();
     updateWarningText();
-    updateDensityLabels();
-    updateUnitSymbols();  // <-- ОБЯЗАТЕЛЬНО обновляем единицы при смене языка
+    // Обновляем всё, что связано с единицами (поля + подписи)
+    updateUnitSymbols();
   }
 
   function updateToolSpecificUI() {
@@ -375,7 +373,7 @@
     if (warningEl) warningEl.textContent = t[key];
   }
 
-  // ---------- Переключение единиц (без вызова calculate) ----------
+  // ---------- Переключение единиц ----------
   function toggleUnits(newUnits) {
     if (newUnits === currentUnits) return;
     const fromMetric = currentUnits === 'metric';
@@ -399,8 +397,8 @@
     document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
       el.classList.toggle('active', el.dataset.unit === newUnits);
     });
+    // Обновляем единицы и подписи плотности
     updateUnitSymbols();
-    updateDensityLabels();
   }
 
   // ---------- Тема ----------
@@ -430,7 +428,7 @@
         currentTool = this.dataset.tool;
         updateToolSpecificUI();
         updateWarningText();
-        updateDensityLabels();
+        updateUnitSymbols(); // обновляем подписи плотности при смене инструмента
       });
     });
     document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {
@@ -480,9 +478,9 @@
 
   updateToolSpecificUI();
   updateWarningText();
-  updateDensityLabels();
+  updateUnitSymbols();
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded');
+  console.log('🧶 The Hatter: Scarf Studio loaded (fully fixed units)');
 })();

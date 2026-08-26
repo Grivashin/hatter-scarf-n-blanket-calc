@@ -388,7 +388,6 @@
     document.getElementById('pwaDesc').textContent = t.pwaDesc;
     document.getElementById('pwaBtnText').textContent = t.pwaBtn;
     // Обновляем инструкцию в зависимости от платформы
-    const iosInstructions = document.getElementById('ios-instructions');
     if (window.isIOS) {
       iosInstructions.innerHTML = t.pwaIOS;
     } else {

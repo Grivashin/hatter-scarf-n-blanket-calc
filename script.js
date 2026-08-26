@@ -496,9 +496,26 @@
     });
   });
 
+  // Кнопка "Рассчитать"
   document.getElementById('calculateBtn').addEventListener('click', calculate);
-  document.getElementById('print-btn').addEventListener('click', window.print);
-  document.getElementById('save-pdf-btn').addEventListener('click', window.print);
+
+  // Кнопки печати и PDF с проверкой на наличие
+  const printBtn = document.getElementById('print-btn');
+  const pdfBtn = document.getElementById('save-pdf-btn');
+  if (printBtn) {
+    printBtn.addEventListener('click', function() {
+      window.print();
+    });
+  } else {
+    console.warn('Кнопка печати не найдена в DOM');
+  }
+  if (pdfBtn) {
+    pdfBtn.addEventListener('click', function() {
+      window.print();
+    });
+  } else {
+    console.warn('Кнопка PDF не найдена в DOM');
+  }
 
   // Начальные единицы и язык
   currentUnits = 'metric';

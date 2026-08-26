@@ -580,4 +580,7 @@ body {
   background: var(--text-secondary);
   color: #fff;
 }
+ #print-btn, #save-pdf-btn {
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif;
+} 
 }

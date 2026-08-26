@@ -529,37 +529,27 @@ body {
 
 /* ---------- Печать ---------- */
 @media print {
-  body {
-    background: #fff !important;
-    padding: 0.3in;
-    color: #000 !important;
-  }
-  .card {
-    background: #fff !important;
-    box-shadow: none !important;
-    border: 1px solid #ddd !important;
-  }
-  .controls,
-  .btn-print,
-  .action-bar {
+  /* Скрываем всё на странице */
+  body * {
     display: none !important;
   }
-  .result-item {
-    background: #f9f9f9 !important;
-    border-left-color: #ccc !important;
+  /* Показываем только блок результатов и его содержимое */
+  #resultCard, #resultCard * {
+    display: block !important;
   }
-  .warning,
-  .hint {
-    background: #f9f9f9 !important;
-    border-color: #ccc !important;
+  #resultCard {
+    position: relative;
+    margin: 0;
+    padding: 20px;
+    background: white;
+    color: black;
+    border: none;
+    box-shadow: none;
+    font-size: 12pt;
+    line-height: 1.5;
   }
-  .toggle-group {
-    background: #eee !important;
-  }
-  .toggle-option.active {
-    background: #ddd !important;
-  }
-  #themeToggle {
+  /* Скрываем кнопки действий (если они внутри результата) */
+  #result-actions, #result-actions * {
     display: none !important;
   }
   /* Кнопки действий */

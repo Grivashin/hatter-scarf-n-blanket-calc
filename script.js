@@ -22,6 +22,8 @@
   const resRows = $('resRows');
   const resRowsSub = $('resRowsSub');
   const resRowsDev = $('resRowsDev');
+  const resSize = $('resSize');
+  const resSizeSub = $('resSizeSub');
 
   const edgesGroup = $('edgesGroup');
 
@@ -179,6 +181,12 @@
     else if (diffRow > 0) devRowText += ` (${isRuText ? 'на' : '+'} ${toDisplayCm(diffRow).toFixed(1)} ${lengthUnit} ${isRuText ? 'больше' : 'more'})`;
     else devRowText += ` (${isRuText ? 'на' : ''} ${toDisplayCm(Math.abs(diffRow)).toFixed(1)} ${lengthUnit} ${isRuText ? 'меньше' : 'less'})`;
     resRowsDev.textContent = devRowText;
+
+    // Отображение размера
+    const sizeWidth = toDisplayCm(wCm);
+    const sizeLength = toDisplayCm(lCm);
+    const sizeUnit = currentUnits === 'metric' ? (isRuText ? 'см' : 'cm') : 'in';
+    resSize.textContent = `${sizeWidth.toFixed(1)} × ${sizeLength.toFixed(1)} ${sizeUnit}`;
   }
 
   // ---------- Переводы ----------
@@ -223,6 +231,8 @@
       resLabelCastOnKnit: 'Количество петель для набора',
       resLabelCastOnCrochet: 'Количество воздушных петель для набора',
       resLabelRows: 'Количество рядов',
+      resLabelSize: 'Размер',
+      resSizeSub: 'Ширина × Длина',
     },
     us: {
       pwaAndroid: 'Open browser menu and select «Add to Home Screen» or «Install App».',
@@ -264,6 +274,8 @@
       resLabelCastOnKnit: 'Cast on stitches',
       resLabelCastOnCrochet: 'Foundation chain stitches',
       resLabelRows: 'Number of rows',
+      resLabelSize: 'Size',
+      resSizeSub: 'Width × Length',
     },
     uk: {
       pwaAndroid: 'Open browser menu and select «Add to Home Screen» or «Install App».',
@@ -305,6 +317,8 @@
       resLabelCastOnKnit: 'Cast on stitches',
       resLabelCastOnCrochet: 'Foundation chain stitches',
       resLabelRows: 'Number of rows',
+      resLabelSize: 'Size',
+      resSizeSub: 'Width × Length',
     }
   };
 
@@ -387,6 +401,8 @@
     document.getElementById('pwaTitle').textContent = t.pwaTitle;
     document.getElementById('pwaDesc').textContent = t.pwaDesc;
     document.getElementById('pwaBtnText').textContent = t.pwaBtn;
+    document.getElementById('resLabelSize').textContent = t.resLabelSize;
+    document.getElementById('resSizeSub').textContent = t.resSizeSub;
     // Обновляем инструкцию в зависимости от платформы
     if (window.isIOS) {
       document.getElementById('ios-instructions').innerHTML = t.pwaIOS;
@@ -543,7 +559,7 @@
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari/posts/7731692a-b7c1-4855-83fb-3de72975cfc8';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (priority to repeats)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (priority to repeats, size added)');
 
   // ---------- PWA: Баннер установки ----------
   const pwaBanner = document.getElementById('pwa-install-banner');

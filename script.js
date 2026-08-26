@@ -407,31 +407,36 @@
   }
 
   // ---------- Переключение единиц ----------
-  function toggleUnits(newUnits) {
-    if (newUnits === currentUnits) return;
-    const fromMetric = currentUnits === 'metric';
-    const toMetric = newUnits === 'metric';
+function toggleUnits(newUnits) {
+  if (newUnits === currentUnits) return;
+  const fromMetric = currentUnits === 'metric';
+  const toMetric = newUnits === 'metric';
 
-    function convertField(el, convFn) {
-      if (el) {
-        const val = parseFloat(el.value);
-        if (!isNaN(val)) {
-          el.value = convFn(val).toFixed(el.step && el.step.includes('.') ? 2 : 0);
-        }
+  function convertField(el, convFn) {
+    if (el) {
+      const val = parseFloat(el.value);
+      if (!isNaN(val)) {
+        el.value = convFn(val).toFixed(el.step && el.step.includes('.') ? 2 : 0);
       }
     }
-
-    if (fromMetric !== toMetric) {
-      convertField(widthCm, v => fromMetric ? v / 2.54 : v * 2.54);
-      convertField(lengthCm, v => fromMetric ? v / 2.54 : v * 2.54);
-    }
-
-    currentUnits = newUnits;
-    document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
-      el.classList.toggle('active', el.dataset.unit === newUnits);
-    });
-    updateUnitSymbols();
   }
+
+  if (fromMetric !== toMetric) {
+    convertField(widthCm, v => fromMetric ? v / 2.54 : v * 2.54);
+    convertField(lengthCm, v => fromMetric ? v / 2.54 : v * 2.54);
+  }
+
+  currentUnits = newUnits;
+  document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
+    el.classList.toggle('active', el.dataset.unit === newUnits);
+  });
+  
+  // Очищаем поля раппортов, чтобы избежать конфликтов
+  widthRep.value = '';
+  lengthRep.value = '';
+
+  updateUnitSymbols();
+}
 
   // ---------- Тема ----------
   function toggleTheme() {

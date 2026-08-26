@@ -618,4 +618,62 @@ body {
   #resultCard .btn-print {
     display: none !important;
   }
+  /* ---------- Баннер установки PWA ---------- */
+.pwa-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px var(--shadow);
+  padding: 16px;
+  max-width: 90%;
+  width: 400px;
+  z-index: 9999;
+  font-family: var(--font);
+  color: var(--text);
+}
+.pwa-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pwa-icon { font-size: 24px; }
+.pwa-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+.pwa-text strong { font-size: 15px; margin-bottom: 2px; }
+.pwa-btn {
+  background: var(--accent);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+}
+.pwa-btn:hover { background: var(--accent-hover); }
+.pwa-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0 4px;
+}
+.ios-instructions {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+}
 }

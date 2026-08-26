@@ -13,7 +13,7 @@
   --radius-sm: 16px;
   --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --transition: 0.3s ease;
-  --btn-text: var(--text); /* в светлой теме текст на кнопках тёмный */
+  --btn-text: var(--text);
 }
 
 [data-theme="dark"] {
@@ -26,7 +26,7 @@
   --error: #E06B5A;
   --border: #5C524A;
   --shadow: rgba(0,0,0,0.3);
-  --btn-text: white; /* в тёмной теме текст на кнопках белый */
+  --btn-text: white;
 }
 
 /* ---------- Глобальные сбросы ---------- */
@@ -147,7 +147,6 @@ body {
   text-decoration: none;
   font-family: inherit;
 }
-
 .controls button:hover,
 .controls select:hover {
   background: var(--border);
@@ -159,7 +158,6 @@ body {
   background: var(--border);
   border: none;
 }
-
 .unit-toggle span {
   padding: 4px 12px;
   border-radius: 30px;
@@ -167,7 +165,6 @@ body {
   font-weight: 500;
   color: var(--text-secondary);
 }
-
 .unit-toggle span.active {
   background: var(--surface);
   color: var(--text);
@@ -184,7 +181,6 @@ body {
   background-position: right 12px center;
   padding-right: 36px;
 }
-
 [data-theme="dark"] .lang-select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23B0A59B' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
 }
@@ -195,7 +191,6 @@ body {
   color: var(--btn-text);
   font-weight: 600;
 }
-
 .btn-donate:hover {
   background: var(--accent-hover);
 }
@@ -210,7 +205,6 @@ body {
   border: none;
   transition: background var(--transition), box-shadow var(--transition);
 }
-
 .card-title {
   font-size: 1rem;
   font-weight: 600;
@@ -235,19 +229,16 @@ body {
   align-items: flex-start;
   border-left: 4px solid;
 }
-
 .warning {
   background: var(--surface);
   color: var(--text-secondary);
   border-color: var(--error);
 }
-
 .hint {
   background: var(--surface);
   color: var(--text-secondary);
   border-color: var(--accent);
 }
-
 .warning .icon,
 .hint .icon {
   font-size: 1.2rem;
@@ -276,7 +267,6 @@ body {
   flex-direction: column;
   gap: 4px;
 }
-
 .field-group label {
   font-size: 0.75rem;
   font-weight: 600;
@@ -284,14 +274,12 @@ body {
   letter-spacing: 0.3px;
   text-transform: uppercase;
 }
-
 .field-group .label-hint {
   font-weight: 400;
   text-transform: none;
   font-size: 0.65rem;
   opacity: 0.7;
 }
-
 .field-group input,
 .field-group select {
   width: 100%;
@@ -305,7 +293,6 @@ body {
   height: 52px;
   font-family: inherit;
 }
-
 .field-group input:focus,
 .field-group select:focus {
   border-color: var(--accent);
@@ -313,7 +300,6 @@ body {
   outline: none;
   background: var(--surface);
 }
-
 .field-group input[type="number"] {
   -moz-appearance: textfield;
 }
@@ -332,7 +318,6 @@ body {
   padding-right: 4px;
   transition: border-color var(--transition), box-shadow var(--transition);
 }
-
 .input-with-unit input {
   background: transparent;
   border: none;
@@ -340,13 +325,11 @@ body {
   height: 52px;
   box-shadow: none;
 }
-
 .input-with-unit input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 4px rgba(90, 107, 74, 0.2);
   outline: none;
 }
-
 .input-with-unit .unit {
   font-size: 0.8rem;
   color: var(--text-secondary);
@@ -364,7 +347,6 @@ body {
   gap: 4px;
   flex-wrap: wrap;
 }
-
 .toggle-option {
   padding: 8px 20px;
   border-radius: 30px;
@@ -379,7 +361,6 @@ body {
   flex: 1;
   text-align: center;
 }
-
 .toggle-option.active {
   background: var(--surface);
   color: var(--text);
@@ -411,9 +392,33 @@ body {
   gap: 10px;
   font-family: inherit;
 }
-
 .btn-print:hover {
   background: var(--accent-hover);
+}
+
+/* ---------- Кнопки действий (Печать / PDF) ---------- */
+#result-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+#result-actions .btn-print {
+  min-width: 160px;
+}
+#result-actions .btn-print.secondary {
+  background: var(--border);
+  color: var(--text);
+}
+#result-actions .btn-print.secondary:hover {
+  background: var(--text-secondary);
+  color: #fff;
+}
+
+/* Шрифт для эмодзи на кнопках (чтобы иконки отображались) */
+#print-btn,
+#save-pdf-btn {
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif;
 }
 
 /* ---------- Результаты ---------- */
@@ -422,7 +427,6 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
-
 .result-item {
   background: var(--surface);
   padding: 18px 22px;
@@ -430,7 +434,6 @@ body {
   border-left: 4px solid var(--accent);
   box-shadow: 0 2px 8px var(--shadow);
 }
-
 .result-item .label {
   font-size: 0.7rem;
   text-transform: uppercase;
@@ -439,7 +442,6 @@ body {
   font-weight: 600;
   color: var(--text-secondary);
 }
-
 .result-item .value {
   font-size: 2rem;
   font-weight: 700;
@@ -447,19 +449,16 @@ body {
   margin-top: 4px;
   color: var(--text);
 }
-
 .result-item .sub {
   font-size: 0.85rem;
   opacity: 0.7;
   margin-top: 2px;
   color: var(--text-secondary);
 }
-
 .result-item .deviation {
   font-size: 0.85rem;
   margin-top: 6px;
 }
-
 .deviation.positive {
   color: var(--error);
 }
@@ -469,12 +468,10 @@ body {
 .deviation.zero {
   color: var(--text-secondary);
 }
-
 .result-item-full {
   grid-column: 1 / -1;
   border-left-color: var(--text-secondary);
 }
-
 .result-item-full .value {
   font-size: 1.6rem;
 }
@@ -529,12 +526,12 @@ body {
 
 /* ---------- Печать ---------- */
 @media print {
-  /* Скрываем всё на странице */
+  /* Скрываем всё на странице, кроме карточки результатов */
   body * {
     display: none !important;
   }
-  /* Показываем только блок результатов и его содержимое */
-  #resultCard, #resultCard * {
+  #resultCard,
+  #resultCard * {
     display: block !important;
   }
   #resultCard {
@@ -549,28 +546,8 @@ body {
     line-height: 1.5;
   }
   /* Скрываем кнопки действий (если они внутри результата) */
-  #result-actions, #result-actions * {
+  #result-actions,
+  #result-actions * {
     display: none !important;
   }
-  /* Кнопки действий */
-#result-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-#result-actions .btn-print {
-  min-width: 160px;
-}
-#result-actions .btn-print.secondary {
-  background: var(--border);
-  color: var(--text);
-}
-#result-actions .btn-print.secondary:hover {
-  background: var(--text-secondary);
-  color: #fff;
-}
- #print-btn, #save-pdf-btn {
-  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif;
-} 
 }

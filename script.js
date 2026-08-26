@@ -39,7 +39,7 @@
   function toDisplayCm(val) { return currentUnits === 'metric' ? val : val / 2.54; }
   function fromDisplayCm(val) { return currentUnits === 'metric' ? val : val * 2.54; }
 
-  // ---------- Основной расчёт (только по кнопке) ----------
+  // ---------- Основной расчёт ----------
   function calculate() {
     const isRu = currentLang === 'ru';
 
@@ -68,7 +68,7 @@
 
     const sStart = getInt(symStart);
     const sEnd = getInt(symEnd);
-    const sSt = sStart + sEnd; // общая симметрия
+    const sSt = sStart + sEnd;
     const sRo = getInt(symRow);
     const e = currentTool === 'knit' ? parseInt(edges.value) : 0;
 
@@ -77,7 +77,7 @@
     let wRep = wRepVal;
     let lRep = lRepVal;
 
-    // ---------- Синхронизация ширины (приоритет у раппортов) ----------
+    // Синхронизация ширины (приоритет у раппортов)
     if (wRep > 0 && rSt > 0) {
       const totalSt = wRep * rSt + sSt + e;
       const wCmCalc = (totalSt / dSt) * 10;
@@ -103,7 +103,7 @@
       }
     }
 
-    // ---------- Синхронизация длины (приоритет у раппортов) ----------
+    // Синхронизация длины (приоритет у раппортов)
     if (lRep > 0 && rRo > 0) {
       const totalRo = lRep * rRo + sRo;
       const lCmCalc = (totalRo / dRo) * 10;
@@ -336,7 +336,7 @@
     if (imperialSpan) imperialSpan.textContent = t.unitImperial;
   }
 
-  // ---------- Обновление единиц измерения (поля и подписи) ----------
+  // ---------- Обновление единиц измерения ----------
   function updateUnitSymbols() {
     const isMetric = currentUnits === 'metric';
     const isRu = currentLang === 'ru';
@@ -389,9 +389,9 @@
     document.getElementById('pwaBtnText').textContent = t.pwaBtn;
     // Обновляем инструкцию в зависимости от платформы
     if (window.isIOS) {
-      iosInstructions.innerHTML = t.pwaIOS;
+      document.getElementById('ios-instructions').innerHTML = t.pwaIOS;
     } else {
-      iosInstructions.innerHTML = t.pwaAndroid;
+      document.getElementById('ios-instructions').innerHTML = t.pwaAndroid;
     }
     
     document.title = (lang === 'ru' ? 'Хаттер — Калькулятор шарфов' : 'The Hatter — Scarf Calculator');
@@ -545,19 +545,18 @@
 
   console.log('🧶 The Hatter: Scarf Studio loaded (priority to repeats)');
 
-  // ---------- PWA: Баннер установки (без beforeinstallprompt, только инструкции) ----------
+  // ---------- PWA: Баннер установки ----------
   const pwaBanner = document.getElementById('pwa-install-banner');
   const pwaInstallBtn = document.getElementById('pwa-install-btn');
   const pwaCloseBtn = document.getElementById('pwa-close-btn');
-  const pwaIosInstructions = document.getElementById('ios-instructions');
 
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   window.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
   if (!isStandalone) {
     pwaBanner.style.display = 'block';
-    pwaInstallBtn.style.display = 'none'; // кнопка не нужна, показываем инструкцию
-    pwaIosInstructions.style.display = 'block';
+    pwaInstallBtn.style.display = 'none';
+    document.getElementById('ios-instructions').style.display = 'block';
   }
 
   // Закрытие баннера

@@ -188,6 +188,10 @@
   // ---------- Переводы ----------
   const translations = {
     ru: {
+      pwaTitle: 'Установите «Хаттер»',
+      pwaDesc: 'Добавьте на главный экран для быстрого доступа без браузера.',
+      pwaBtn: 'Установить',
+      pwaIOS: 'Нажмите <strong>«Поделиться»</strong> <span style="font-size:1.2em;">⎋</span> и выберите <strong>«На экран «Домой»</strong>.',
       printBtn: 'Печать',
       pdfBtn: 'Сохранить как PDF',
       logo: 'Хаттер',
@@ -224,6 +228,10 @@
       resLabelRows: 'Количество рядов',
     },
     us: {
+      pwaTitle: 'Install "The Hatter"',
+      pwaDesc: 'Add to Home Screen for quick access without browser.',
+      pwaBtn: 'Install',
+      pwaIOS: 'Tap <strong>«Share»</strong> <span style="font-size:1.2em;">⎋</span> and select <strong>«Add to Home Screen»</strong>.',
       printBtn: 'Print',
       pdfBtn: 'Save as PDF',
       logo: 'The Hatter',
@@ -260,6 +268,10 @@
       resLabelRows: 'Number of rows',
     },
     uk: {
+      pwaTitle: 'Install "The Hatter"',
+      pwaDesc: 'Add to Home Screen for quick access without browser.',
+      pwaBtn: 'Install',
+      pwaIOS: 'Tap <strong>«Share»</strong> <span style="font-size:1.2em;">⎋</span> and select <strong>«Add to Home Screen»</strong>.',
       printBtn: 'Print',
       pdfBtn: 'Save as PDF',
       logo: 'The Hatter',
@@ -373,6 +385,10 @@
     document.getElementById('lblLengthRep').textContent = t.lblLengthRep;
     document.getElementById('printBtnText').textContent = t.printBtn;
     document.getElementById('pdfBtnText').textContent = t.pdfBtn;
+    document.getElementById('pwaTitle').textContent = t.pwaTitle;
+    document.getElementById('pwaDesc').textContent = t.pwaDesc;
+    document.getElementById('pwaBtnText').textContent = t.pwaBtn;
+    document.getElementById('ios-instructions').innerHTML = t.pwaIOS;
 
     document.title = (lang === 'ru' ? 'Хаттер — Калькулятор шарфов' : 'The Hatter — Scarf Calculator');
 
@@ -524,4 +540,48 @@
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari/posts/7731692a-b7c1-4855-83fb-3de72975cfc8';
 
   console.log('🧶 The Hatter: Scarf Studio loaded (priority to repeats)');
+
+    // ---------- PWA: Кнопка установки ----------
+  let deferredPrompt;
+  const pwaBanner = document.getElementById('pwa-install-banner');
+  const pwaInstallBtn = document.getElementById('pwa-install-btn');
+  const pwaCloseBtn = document.getElementById('pwa-close-btn');
+  const pwaIosInstructions = document.getElementById('ios-instructions');
+
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  if (!isStandalone) {
+    if (isIOS) {
+      pwaBanner.style.display = 'block';
+      pwaInstallBtn.style.display = 'none';
+      pwaIosInstructions.style.display = 'block';
+    } else {
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        pwaBanner.style.display = 'block';
+      });
+    }
+  }
+
+  pwaInstallBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        pwaBanner.style.display = 'none';
+      }
+      deferredPrompt = null;
+    }
+  });
+
+  pwaCloseBtn.addEventListener('click', () => {
+    pwaBanner.style.display = 'none';
+    localStorage.setItem('pwaBannerClosed', 'true');
+  });
+
+  if (localStorage.getItem('pwaBannerClosed') === 'true') {
+    pwaBanner.style.display = 'none';
+  }
 })();

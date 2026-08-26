@@ -41,6 +41,17 @@
   function toDisplayCm(val) { return currentUnits === 'metric' ? val : val / 2.54; }
   function fromDisplayCm(val) { return currentUnits === 'metric' ? val : val * 2.54; }
 
+  // ---------- Управление видимостью полей симметрии ----------
+  function updateSymmetryVisibility() {
+    const isKnit = currentTool === 'knit';
+    const e = parseInt(edges.value);
+    const isCircular = (isKnit && e === 0);
+    const startGroup = document.getElementById('symStartGroup');
+    const endGroup = document.getElementById('symEndGroup');
+    if (startGroup) startGroup.style.display = isCircular ? 'none' : 'flex';
+    if (endGroup) endGroup.style.display = isCircular ? 'none' : 'flex';
+  }
+
   // ---------- Основной расчёт ----------
   function calculate() {
     const isRu = currentLang === 'ru';
@@ -68,11 +79,17 @@
       return;
     }
 
-    const sStart = getInt(symStart);
-    const sEnd = getInt(symEnd);
+    const e = currentTool === 'knit' ? parseInt(edges.value) : 0;
+    const isCircular = (currentTool === 'knit' && e === 0);
+
+    // Для кругового вязания симметрия начала и конца не используется
+    let sStart = 0, sEnd = 0;
+    if (!isCircular) {
+      sStart = getInt(symStart);
+      sEnd = getInt(symEnd);
+    }
     const sSt = sStart + sEnd;
     const sRo = getInt(symRow);
-    const e = currentTool === 'knit' ? parseInt(edges.value) : 0;
 
     let wCm = fromDisplayCm(wCmVal);
     let lCm = fromDisplayCm(lCmVal);
@@ -80,32 +97,34 @@
     let lRep = lRepVal;
 
     // Синхронизация ширины (приоритет у раппортов)
+    // При круговом вязании симметрия не учитывается
+    const eUsed = isCircular ? 0 : e;
     if (wRep > 0 && rSt > 0) {
-      const totalSt = wRep * rSt + sSt + e;
+      const totalSt = wRep * rSt + sSt + eUsed;
       const wCmCalc = (totalSt / dSt) * 10;
       widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
       wCm = wCmCalc;
     } else if (wCmVal > 0 && rSt > 0) {
-      const base = (wCmVal / 10) * dSt - sSt - e;
+      const base = (wCmVal / 10) * dSt - sSt - eUsed;
       if (base > 0) {
         const n = Math.round(base / rSt);
         wRep = Math.max(1, n);
         widthRep.value = wRep;
-        const totalSt = wRep * rSt + sSt + e;
+        const totalSt = wRep * rSt + sSt + eUsed;
         const wCmCalc = (totalSt / dSt) * 10;
         widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
         wCm = wCmCalc;
       } else {
         wRep = 1;
         widthRep.value = 1;
-        const totalSt = wRep * rSt + sSt + e;
+        const totalSt = wRep * rSt + sSt + eUsed;
         const wCmCalc = (totalSt / dSt) * 10;
         widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
         wCm = wCmCalc;
       }
     }
 
-    // Синхронизация длины (приоритет у раппортов)
+    // Синхронизация длины (симметрия рядов всегда учитывается)
     if (lRep > 0 && rRo > 0) {
       const totalRo = lRep * rRo + sRo;
       const lCmCalc = (totalRo / dRo) * 10;
@@ -134,14 +153,34 @@
     // Наборный край и ряды
     let castOnTotal, rowsTotal;
     let castOnCm, rowsCm;
+    let castOnReps; // для отображения количества раппортов в наборном крае
 
     if (currentDir === 'classic') {
-      castOnTotal = wRep * rSt + sSt + e;
+      // Ширина → наборный край
+      let wRepForCast = wRep;
+      if (isCircular) {
+        // Удваиваем раппорты, симметрия уже обнулена
+        wRepForCast = wRep * 2;
+        castOnTotal = wRepForCast * rSt + sSt; // e=0, sSt=0
+        castOnReps = wRepForCast;
+      } else {
+        castOnTotal = wRep * rSt + sSt + e;
+        castOnReps = wRep;
+      }
       castOnCm = (castOnTotal / dSt) * 10;
       rowsTotal = lRep * rRo + sRo;
       rowsCm = (rowsTotal / dRo) * 10;
     } else {
-      castOnTotal = lRep * rSt + sSt + e;
+      // Поперечное: длина → наборный край
+      let lRepForCast = lRep;
+      if (isCircular) {
+        lRepForCast = lRep * 2;
+        castOnTotal = lRepForCast * rSt + sSt;
+        castOnReps = lRepForCast;
+      } else {
+        castOnTotal = lRep * rSt + sSt + e;
+        castOnReps = lRep;
+      }
       castOnCm = (castOnTotal / dSt) * 10;
       rowsTotal = wRep * rRo + sRo;
       rowsCm = (rowsTotal / dRo) * 10;
@@ -154,13 +193,18 @@
     const repLabel = isRuText ? 'рапп.' : 'rep.';
     const lengthUnit = currentUnits === 'metric' ? (isRuText ? 'см' : 'cm') : 'in';
 
-    const castOnReps = Math.floor((castOnTotal - sSt - e) / rSt);
     const symText = isRuText ? 'сим.' : 'sym';
     const edgeText = isRuText ? 'кром.' : 'edge';
+
+    // Отображение наборного края
     resCastOn.textContent = `${castOnTotal} ${stLabel}`;
-    resCastOnSub.textContent = isKnit ? 
-      `${castOnReps} ${repLabel} + ${symText} (нач. ${sStart} + кон. ${sEnd}) + ${edgeText} ${e}` :
-      `${castOnReps} ${repLabel} + ${symText} (нач. ${sStart} + кон. ${sEnd})`;
+    let subText = '';
+    if (isCircular) {
+      subText = `${castOnReps} ${repLabel} + ${symText} ${sSt} (для кругового вязания)`;
+    } else {
+      subText = `${castOnReps} ${repLabel} + ${symText} (нач. ${sStart} + кон. ${sEnd}) + ${edgeText} ${e}`;
+    }
+    resCastOnSub.textContent = subText;
 
     const desiredCastOnCm = currentDir === 'classic' ? wCm : lCm;
     const diffCast = castOnCm - desiredCastOnCm;
@@ -182,7 +226,7 @@
     else devRowText += ` (${isRuText ? 'на' : ''} ${toDisplayCm(Math.abs(diffRow)).toFixed(1)} ${lengthUnit} ${isRuText ? 'меньше' : 'less'})`;
     resRowsDev.textContent = devRowText;
 
-    // Отображение размера
+    // Размер
     const sizeWidth = toDisplayCm(wCm);
     const sizeLength = toDisplayCm(lCm);
     const sizeUnit = currentUnits === 'metric' ? (isRuText ? 'см' : 'cm') : 'in';
@@ -434,6 +478,9 @@
     const castOnLabel = isKnit ? t.resLabelCastOnKnit : t.resLabelCastOnCrochet;
     document.getElementById('resLabelCastOn').textContent = castOnLabel;
     document.getElementById('resLabelRows').textContent = t.resLabelRows;
+
+    // Обновляем видимость полей симметрии
+    updateSymmetryVisibility();
   }
 
   function updateWarningText() {
@@ -504,6 +551,7 @@
         updateToolSpecificUI();
         updateWarningText();
         updateUnitSymbols();
+        updateSymmetryVisibility();
       });
     });
     document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {
@@ -517,7 +565,10 @@
 
   // ---------- Настройка полей (без автоматического calculate) ----------
   function setupInputs() {
-    // Никаких слушателей, которые вызывают calculate
+    // Добавляем слушатель на изменение кромочных для обновления видимости симметрии
+    edges.addEventListener('change', function() {
+      updateSymmetryVisibility();
+    });
   }
 
   // ---------- Init ----------
@@ -556,10 +607,11 @@
   updateToolSpecificUI();
   updateWarningText();
   updateUnitSymbols();
+  updateSymmetryVisibility();
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari/posts/7731692a-b7c1-4855-83fb-3de72975cfc8';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (priority to repeats, size added)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (circular knitting support)');
 
   // ---------- PWA: Баннер установки ----------
   const pwaBanner = document.getElementById('pwa-install-banner');

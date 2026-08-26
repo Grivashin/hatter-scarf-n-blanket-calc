@@ -79,7 +79,6 @@
 
     // ---------- Синхронизация ширины (приоритет у см) ----------
     if (wCmVal > 0 && rSt > 0) {
-      // Пользователь задал ширину в см – пересчитываем раппорты
       const base = (wCmVal / 10) * dSt - sSt - e;
       if (base > 0) {
         const n = Math.round(base / rSt);
@@ -98,7 +97,6 @@
         wCm = wCmCalc;
       }
     } else if (wRep > 0 && rSt > 0) {
-      // Пользователь задал ширину в раппортах – пересчитываем см
       const totalSt = wRep * rSt + sSt + e;
       const wCmCalc = (totalSt / dSt) * 10;
       widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
@@ -107,7 +105,6 @@
 
     // ---------- Синхронизация длины (приоритет у см) ----------
     if (lCmVal > 0 && rRo > 0) {
-      // Пользователь задал длину в см – пересчитываем раппорты
       const base = (lCmVal / 10) * dRo - sRo;
       if (base > 0) {
         const m = Math.round(base / rRo);
@@ -126,7 +123,6 @@
         lCm = lCmCalc;
       }
     } else if (lRep > 0 && rRo > 0) {
-      // Пользователь задал длину в раппортах – пересчитываем см
       const totalRo = lRep * rRo + sRo;
       const lCmCalc = (totalRo / dRo) * 10;
       lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
@@ -219,15 +215,13 @@
       lblWidthRep: 'Ширина (в раппортах)',
       lblLength: 'Длина',
       lblLengthRep: 'Длина (в раппортах)',
-      resLabelCastOn: 'Наборный ряд',
-      resLabelRows: 'Ряды',
+      resLabelCastOnKnit: 'Количество петель для набора',
+      resLabelCastOnCrochet: 'Количество воздушных петель для набора',
+      resLabelRows: 'Количество рядов',
     },
     us: {
       printBtn: 'Print',
       pdfBtn: 'Save as PDF',
-      lblSymStart: 'Symmetry (beginning of row)',
-      lblSymEnd: 'Symmetry (end of row)',
-      lblSymRow: 'Symmetry (rows)',
       logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
       resultTitle: 'Results',
@@ -257,15 +251,13 @@
       lblWidthRep: 'Width (in repeats)',
       lblLength: 'Length',
       lblLengthRep: 'Length (in repeats)',
-      resLabelCastOn: 'Cast on',
-      resLabelRows: 'Rows',
+      resLabelCastOnKnit: 'Cast on stitches',
+      resLabelCastOnCrochet: 'Foundation chain stitches',
+      resLabelRows: 'Number of rows',
     },
     uk: {
       printBtn: 'Print',
       pdfBtn: 'Save as PDF',
-      lblSymStart: 'Symmetry (beginning of row)',
-      lblSymEnd: 'Symmetry (end of row)',
-      lblSymRow: 'Symmetry (rows)',
       logo: 'The Hatter',
       logoSub: 'Scarf & Blanket Designer',
       resultTitle: 'Results',
@@ -295,8 +287,9 @@
       lblWidthRep: 'Width (in repeats)',
       lblLength: 'Length',
       lblLengthRep: 'Length (in repeats)',
-      resLabelCastOn: 'Cast on',
-      resLabelRows: 'Rows',
+      resLabelCastOnKnit: 'Cast on stitches',
+      resLabelCastOnCrochet: 'Foundation chain stitches',
+      resLabelRows: 'Number of rows',
     }
   };
 
@@ -374,8 +367,7 @@
     document.getElementById('lblWidthRep').textContent = t.lblWidthRep;
     document.getElementById('lblLength').textContent = t.lblLength;
     document.getElementById('lblLengthRep').textContent = t.lblLengthRep;
-    document.getElementById('resLabelCastOn').textContent = t.resLabelCastOn;
-    document.getElementById('resLabelRows').textContent = t.resLabelRows;
+    // resLabelCastOn и resLabelRows обновляются в updateToolSpecificUI
     document.getElementById('printBtnText').textContent = t.printBtn;
     document.getElementById('pdfBtnText').textContent = t.pdfBtn;
 
@@ -389,6 +381,8 @@
   function updateToolSpecificUI() {
     const isKnit = currentTool === 'knit';
     const isRu = currentLang === 'ru';
+    const lang = currentLang;
+    const t = translations[lang] || translations.ru;
 
     if (edgesGroup) {
       edgesGroup.classList.toggle('hidden', !isKnit);
@@ -397,6 +391,11 @@
     const stWord = isKnit ? (isRu ? 'петли' : 'sts') : (isRu ? 'столбики' : 'sts');
     const lblRepSt = document.getElementById('lblRepSt');
     if (lblRepSt) lblRepSt.textContent = isRu ? `Раппорт (${stWord})` : `Repeat (${stWord})`;
+
+    // Обновляем подписи в результатах
+    const castOnLabel = isKnit ? t.resLabelCastOnKnit : t.resLabelCastOnCrochet;
+    document.getElementById('resLabelCastOn').textContent = castOnLabel;
+    document.getElementById('resLabelRows').textContent = t.resLabelRows;
   }
 
   function updateWarningText() {
@@ -517,5 +516,5 @@
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari/posts/7731692a-b7c1-4855-83fb-3de72975cfc8';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (fixed priority for cm)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (updated result labels)');
 })();

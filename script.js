@@ -188,6 +188,7 @@
   // ---------- Переводы ----------
   const translations = {
     ru: {
+      pwaAndroid: 'Откройте меню браузера и выберите «Добавить на экран домой» или «Установить приложение».',
       pwaTitle: 'Установите «Хаттер»',
       pwaDesc: 'Добавьте на главный экран для быстрого доступа без браузера.',
       pwaBtn: 'Установить',
@@ -228,6 +229,7 @@
       resLabelRows: 'Количество рядов',
     },
     us: {
+      pwaAndroid: 'Open browser menu and select «Add to Home Screen» or «Install App».',
       pwaTitle: 'Install "The Hatter"',
       pwaDesc: 'Add to Home Screen for quick access without browser.',
       pwaBtn: 'Install',
@@ -268,6 +270,7 @@
       resLabelRows: 'Number of rows',
     },
     uk: {
+      pwaAndroid: 'Open browser menu and select «Add to Home Screen» or «Install App».',
       pwaTitle: 'Install "The Hatter"',
       pwaDesc: 'Add to Home Screen for quick access without browser.',
       pwaBtn: 'Install',
@@ -389,7 +392,12 @@
     document.getElementById('pwaDesc').textContent = t.pwaDesc;
     document.getElementById('pwaBtnText').textContent = t.pwaBtn;
     document.getElementById('ios-instructions').innerHTML = t.pwaIOS;
-
+    if (window.isIOS) {
+  document.getElementById('ios-instructions').innerHTML = t.pwaIOS;
+} else {
+  document.getElementById('ios-instructions').innerHTML = t.pwaAndroid;
+}
+    
     document.title = (lang === 'ru' ? 'Хаттер — Калькулятор шарфов' : 'The Hatter — Scarf Calculator');
 
     updateToolSpecificUI();
@@ -541,41 +549,22 @@
 
   console.log('🧶 The Hatter: Scarf Studio loaded (priority to repeats)');
 
-    // ---------- PWA: Кнопка установки ----------
-  let deferredPrompt;
+    // ---------- PWA: Баннер установки (без beforeinstallprompt, только инструкции) ----------
   const pwaBanner = document.getElementById('pwa-install-banner');
   const pwaInstallBtn = document.getElementById('pwa-install-btn');
   const pwaCloseBtn = document.getElementById('pwa-close-btn');
   const pwaIosInstructions = document.getElementById('ios-instructions');
 
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  window.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
   if (!isStandalone) {
-    if (isIOS) {
-      pwaBanner.style.display = 'block';
-      pwaInstallBtn.style.display = 'none';
-      pwaIosInstructions.style.display = 'block';
-    } else {
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        pwaBanner.style.display = 'block';
-      });
-    }
+    pwaBanner.style.display = 'block';
+    pwaInstallBtn.style.display = 'none'; // кнопка не нужна, показываем инструкцию
+    pwaIosInstructions.style.display = 'block';
   }
 
-  pwaInstallBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        pwaBanner.style.display = 'none';
-      }
-      deferredPrompt = null;
-    }
-  });
-
+  // Закрытие баннера
   pwaCloseBtn.addEventListener('click', () => {
     pwaBanner.style.display = 'none';
     localStorage.setItem('pwaBannerClosed', 'true');

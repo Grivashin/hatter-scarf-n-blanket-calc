@@ -77,14 +77,10 @@
     let wRep = wRepVal;
     let lRep = lRepVal;
 
-    // Синхронизация ширины
-    if (wRep > 0 && rSt > 0) {
-      const totalSt = wRep * rSt + sSt + e;
-      const wCmCalc = (totalSt / dSt) * 10;
-      widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
-      wCm = wCmCalc;
-    } else if (wCm > 0 && rSt > 0) {
-      const base = (wCm / 10) * dSt - sSt - e;
+    // ---------- Синхронизация ширины (приоритет у см) ----------
+    if (wCmVal > 0 && rSt > 0) {
+      // Пользователь задал ширину в см – пересчитываем раппорты
+      const base = (wCmVal / 10) * dSt - sSt - e;
       if (base > 0) {
         const n = Math.round(base / rSt);
         wRep = Math.max(1, n);
@@ -101,16 +97,18 @@
         widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
         wCm = wCmCalc;
       }
+    } else if (wRep > 0 && rSt > 0) {
+      // Пользователь задал ширину в раппортах – пересчитываем см
+      const totalSt = wRep * rSt + sSt + e;
+      const wCmCalc = (totalSt / dSt) * 10;
+      widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
+      wCm = wCmCalc;
     }
 
-    // Синхронизация длины
-    if (lRep > 0 && rRo > 0) {
-      const totalRo = lRep * rRo + sRo;
-      const lCmCalc = (totalRo / dRo) * 10;
-      lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
-      lCm = lCmCalc;
-    } else if (lCm > 0 && rRo > 0) {
-      const base = (lCm / 10) * dRo - sRo;
+    // ---------- Синхронизация длины (приоритет у см) ----------
+    if (lCmVal > 0 && rRo > 0) {
+      // Пользователь задал длину в см – пересчитываем раппорты
+      const base = (lCmVal / 10) * dRo - sRo;
       if (base > 0) {
         const m = Math.round(base / rRo);
         lRep = Math.max(1, m);
@@ -127,6 +125,12 @@
         lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
         lCm = lCmCalc;
       }
+    } else if (lRep > 0 && rRo > 0) {
+      // Пользователь задал длину в раппортах – пересчитываем см
+      const totalRo = lRep * rRo + sRo;
+      const lCmCalc = (totalRo / dRo) * 10;
+      lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
+      lCm = lCmCalc;
     }
 
     // Наборный край и ряды
@@ -156,7 +160,6 @@
     const symText = isRuText ? 'сим.' : 'sym';
     const edgeText = isRuText ? 'кром.' : 'edge';
     resCastOn.textContent = `${castOnTotal} ${stLabel}`;
-    // Отображаем симметрию как начало+конец
     resCastOnSub.textContent = isKnit ? 
       `${castOnReps} ${repLabel} + ${symText} (нач. ${sStart} + кон. ${sEnd}) + ${edgeText} ${e}` :
       `${castOnReps} ${repLabel} + ${symText} (нач. ${sStart} + кон. ${sEnd})`;
@@ -394,7 +397,6 @@
     const stWord = isKnit ? (isRu ? 'петли' : 'sts') : (isRu ? 'столбики' : 'sts');
     const lblRepSt = document.getElementById('lblRepSt');
     if (lblRepSt) lblRepSt.textContent = isRu ? `Раппорт (${stWord})` : `Repeat (${stWord})`;
-    // Подписи для симметрии уже обновлены через updateLanguage, ничего дополнительно не нужно
   }
 
   function updateWarningText() {
@@ -496,26 +498,9 @@
     });
   });
 
-  // Кнопка "Рассчитать"
   document.getElementById('calculateBtn').addEventListener('click', calculate);
-
-  // Кнопки печати и PDF с проверкой на наличие
-  const printBtn = document.getElementById('print-btn');
-  const pdfBtn = document.getElementById('save-pdf-btn');
-  if (printBtn) {
-    printBtn.addEventListener('click', function() {
-      window.print();
-    });
-  } else {
-    console.warn('Кнопка печати не найдена в DOM');
-  }
-  if (pdfBtn) {
-    pdfBtn.addEventListener('click', function() {
-      window.print();
-    });
-  } else {
-    console.warn('Кнопка PDF не найдена в DOM');
-  }
+  document.getElementById('print-btn').addEventListener('click', function() { window.print(); });
+  document.getElementById('save-pdf-btn').addEventListener('click', function() { window.print(); });
 
   // Начальные единицы и язык
   currentUnits = 'metric';
@@ -532,5 +517,5 @@
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari/posts/7731692a-b7c1-4855-83fb-3de72975cfc8';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (symmetry split, full translations)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (fixed priority for cm)');
 })();

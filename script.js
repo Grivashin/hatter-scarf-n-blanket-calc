@@ -185,6 +185,8 @@
   // ---------- Переводы ----------
   const translations = {
     ru: {
+      printBtn: 'Печать',
+      pdfBtn: 'Сохранить как PDF',
       logo: 'Хаттер',
       logoSub: 'Дизайнер шарфов и пледов',
       resultTitle: 'Результаты',
@@ -218,6 +220,8 @@
       resLabelRows: 'Ряды',
     },
     us: {
+      printBtn: 'Print',
+      pdfBtn: 'Save as PDF',
       lblSymStart: 'Symmetry (beginning of row)',
       lblSymEnd: 'Symmetry (end of row)',
       lblSymRow: 'Symmetry (rows)',
@@ -254,6 +258,8 @@
       resLabelRows: 'Rows',
     },
     uk: {
+      printBtn: 'Print',
+      pdfBtn: 'Save as PDF',
       lblSymStart: 'Symmetry (beginning of row)',
       lblSymEnd: 'Symmetry (end of row)',
       lblSymRow: 'Symmetry (rows)',
@@ -367,6 +373,8 @@
     document.getElementById('lblLengthRep').textContent = t.lblLengthRep;
     document.getElementById('resLabelCastOn').textContent = t.resLabelCastOn;
     document.getElementById('resLabelRows').textContent = t.resLabelRows;
+    document.getElementById('printBtnText').textContent = t.printBtn;
+    document.getElementById('pdfBtnText').textContent = t.pdfBtn;
 
     document.title = (lang === 'ru' ? 'Хаттер — Калькулятор шарфов' : 'The Hatter — Scarf Calculator');
 
@@ -489,6 +497,8 @@
   });
 
   document.getElementById('calculateBtn').addEventListener('click', calculate);
+  document.getElementById('print-btn').addEventListener('click', window.print);
+  document.getElementById('save-pdf-btn').addEventListener('click', window.print);
 
   // Начальные единицы и язык
   currentUnits = 'metric';

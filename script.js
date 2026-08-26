@@ -52,6 +52,38 @@
     if (endGroup) endGroup.style.display = isCircular ? 'none' : 'flex';
   }
 
+  // ---------- Динамическое обновление манифеста ----------
+  function updateManifest() {
+    const lang = currentLang;
+    const t = translations[lang] || translations.ru;
+    const manifestData = {
+      name: t.manifestName,
+      short_name: t.manifestShortName,
+      description: 'Crochet and Knit Scarf Calculator',
+      start_url: '/',
+      display: 'standalone',
+      theme_color: '#f6f0ea',
+      background_color: '#f6f0ea',
+      icons: [
+        { src: 'images/icon-192.png', sizes: '192x192', type: 'image/png' },
+        { src: 'images/icon.png', sizes: '512x512', type: 'image/png' }
+      ]
+    };
+    const manifestJSON = JSON.stringify(manifestData);
+    // Кодируем в base64
+    const base64 = btoa(unescape(encodeURIComponent(manifestJSON)));
+    const manifestURI = 'data:application/json;base64,' + base64;
+    const link = document.querySelector('link[rel="manifest"]');
+    if (link) {
+      link.href = manifestURI;
+    } else {
+      const newLink = document.createElement('link');
+      newLink.rel = 'manifest';
+      newLink.href = manifestURI;
+      document.head.appendChild(newLink);
+    }
+  }
+
   // ---------- Основной расчёт ----------
   function calculate() {
     const isRu = currentLang === 'ru';
@@ -97,7 +129,6 @@
     let lRep = lRepVal;
 
     // Синхронизация ширины (приоритет у раппортов)
-    // При круговом вязании симметрия не учитывается
     const eUsed = isCircular ? 0 : e;
     if (wRep > 0 && rSt > 0) {
       const totalSt = wRep * rSt + sSt + eUsed;
@@ -124,7 +155,7 @@
       }
     }
 
-    // Синхронизация длины (симметрия рядов всегда учитывается)
+    // Синхронизация длины
     if (lRep > 0 && rRo > 0) {
       const totalRo = lRep * rRo + sRo;
       const lCmCalc = (totalRo / dRo) * 10;
@@ -153,15 +184,13 @@
     // Наборный край и ряды
     let castOnTotal, rowsTotal;
     let castOnCm, rowsCm;
-    let castOnReps; // для отображения количества раппортов в наборном крае
+    let castOnReps;
 
     if (currentDir === 'classic') {
-      // Ширина → наборный край
       let wRepForCast = wRep;
       if (isCircular) {
-        // Удваиваем раппорты, симметрия уже обнулена
         wRepForCast = wRep * 2;
-        castOnTotal = wRepForCast * rSt + sSt; // e=0, sSt=0
+        castOnTotal = wRepForCast * rSt + sSt;
         castOnReps = wRepForCast;
       } else {
         castOnTotal = wRep * rSt + sSt + e;
@@ -171,7 +200,6 @@
       rowsTotal = lRep * rRo + sRo;
       rowsCm = (rowsTotal / dRo) * 10;
     } else {
-      // Поперечное: длина → наборный край
       let lRepForCast = lRep;
       if (isCircular) {
         lRepForCast = lRep * 2;
@@ -196,7 +224,6 @@
     const symText = isRuText ? 'сим.' : 'sym';
     const edgeText = isRuText ? 'кром.' : 'edge';
 
-    // Отображение наборного края
     resCastOn.textContent = `${castOnTotal} ${stLabel}`;
     let subText = '';
     if (isCircular) {
@@ -236,6 +263,8 @@
   // ---------- Переводы ----------
   const translations = {
     ru: {
+      manifestName: 'Хаттер: Дизайнер шарфов и пледов',
+      manifestShortName: 'Хаттер',
       pwaAndroid: 'Откройте меню браузера и выберите «Добавить на экран домой» или «Установить приложение».',
       pwaTitle: 'Установите «Хаттер»',
       pwaDesc: 'Добавьте на главный экран для быстрого доступа без браузера.',
@@ -279,6 +308,8 @@
       resSizeSub: 'Ширина × Длина',
     },
     us: {
+      manifestName: 'The Hatter: Scarf & Blanket Designer',
+      manifestShortName: 'Hatter Scarf',
       pwaAndroid: 'Open browser menu and select «Add to Home Screen» or «Install App».',
       pwaTitle: 'Install "The Hatter"',
       pwaDesc: 'Add to Home Screen for quick access without browser.',
@@ -322,6 +353,8 @@
       resSizeSub: 'Width × Length',
     },
     uk: {
+      manifestName: 'The Hatter: Scarf & Blanket Designer',
+      manifestShortName: 'Hatter Scarf',
       pwaAndroid: 'Open browser menu and select «Add to Home Screen» or «Install App».',
       pwaTitle: 'Install "The Hatter"',
       pwaDesc: 'Add to Home Screen for quick access without browser.',
@@ -459,6 +492,7 @@
     updateToolSpecificUI();
     updateWarningText();
     updateUnitSymbols();
+    updateManifest(); // обновляем манифест при смене языка
   }
 
   function updateToolSpecificUI() {
@@ -479,7 +513,6 @@
     document.getElementById('resLabelCastOn').textContent = castOnLabel;
     document.getElementById('resLabelRows').textContent = t.resLabelRows;
 
-    // Обновляем видимость полей симметрии
     updateSymmetryVisibility();
   }
 
@@ -563,9 +596,9 @@
     });
   }
 
-  // ---------- Настройка полей (без автоматического calculate) ----------
+  // ---------- Настройка полей ----------
   function setupInputs() {
-    // Добавляем слушатель на изменение кромочных для обновления видимости симметрии
+    // Слушатель изменения кромочных
     edges.addEventListener('change', function() {
       updateSymmetryVisibility();
     });
@@ -611,7 +644,7 @@
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari/posts/7731692a-b7c1-4855-83fb-3de72975cfc8';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (circular knitting support)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (dynamic manifest, circular knitting)');
 
   // ---------- PWA: Баннер установки ----------
   const pwaBanner = document.getElementById('pwa-install-banner');
@@ -627,7 +660,6 @@
     document.getElementById('ios-instructions').style.display = 'block';
   }
 
-  // Закрытие баннера
   pwaCloseBtn.addEventListener('click', () => {
     pwaBanner.style.display = 'none';
     localStorage.setItem('pwaBannerClosed', 'true');

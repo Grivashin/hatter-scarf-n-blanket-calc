@@ -79,13 +79,11 @@
 
     // ---------- Синхронизация ширины (приоритет у раппортов) ----------
     if (wRep > 0 && rSt > 0) {
-      // Если введены раппорты – пересчитываем сантиметры
       const totalSt = wRep * rSt + sSt + e;
       const wCmCalc = (totalSt / dSt) * 10;
       widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
       wCm = wCmCalc;
     } else if (wCmVal > 0 && rSt > 0) {
-      // Если раппорты не заданы, но есть сантиметры – пересчитываем раппорты
       const base = (wCmVal / 10) * dSt - sSt - e;
       if (base > 0) {
         const n = Math.round(base / rSt);
@@ -107,13 +105,11 @@
 
     // ---------- Синхронизация длины (приоритет у раппортов) ----------
     if (lRep > 0 && rRo > 0) {
-      // Если введены раппорты – пересчитываем сантиметры
       const totalRo = lRep * rRo + sRo;
       const lCmCalc = (totalRo / dRo) * 10;
       lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
       lCm = lCmCalc;
     } else if (lCmVal > 0 && rRo > 0) {
-      // Если раппорты не заданы, но есть сантиметры – пересчитываем раппорты
       const base = (lCmVal / 10) * dRo - sRo;
       if (base > 0) {
         const m = Math.round(base / rRo);
@@ -206,8 +202,8 @@
       calculateBtn: 'Рассчитать',
       unitMetric: 'см',
       unitImperial: 'дюймы',
-      warningKnit: 'Образец должен быть не менее 12×12 см (5×5 дюймов) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 дюймов), не включая кромочные и края.',
-      warningCrochet: 'Образец должен быть не менее 12×12 см (5×5 дюймов) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 дюймов), не включая петли подъёма.',
+      warningKnit: 'Образец должен быть не менее 12×12 см (5×5 дюймов) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 дюйма), не включая кромочные и края.',
+      warningCrochet: 'Образец должен быть не менее 12×12 см (5×5 дюймов) после ВТО. Плотность измеряйте строго в центре образца, на участке 10×10 см (4×4 дюйма), не включая петли подъёма.',
       toolKnit: 'Спицы',
       toolCrochet: 'Крючок',
       lblRepSt: 'Раппорт (петли)',
@@ -391,12 +387,13 @@
     document.getElementById('pwaTitle').textContent = t.pwaTitle;
     document.getElementById('pwaDesc').textContent = t.pwaDesc;
     document.getElementById('pwaBtnText').textContent = t.pwaBtn;
-    document.getElementById('ios-instructions').innerHTML = t.pwaIOS;
+    // Обновляем инструкцию в зависимости от платформы
+    const iosInstructions = document.getElementById('ios-instructions');
     if (window.isIOS) {
-  document.getElementById('ios-instructions').innerHTML = t.pwaIOS;
-} else {
-  document.getElementById('ios-instructions').innerHTML = t.pwaAndroid;
-}
+      iosInstructions.innerHTML = t.pwaIOS;
+    } else {
+      iosInstructions.innerHTML = t.pwaAndroid;
+    }
     
     document.title = (lang === 'ru' ? 'Хаттер — Калькулятор шарфов' : 'The Hatter — Scarf Calculator');
 
@@ -549,7 +546,7 @@
 
   console.log('🧶 The Hatter: Scarf Studio loaded (priority to repeats)');
 
-    // ---------- PWA: Баннер установки (без beforeinstallprompt, только инструкции) ----------
+  // ---------- PWA: Баннер установки (без beforeinstallprompt, только инструкции) ----------
   const pwaBanner = document.getElementById('pwa-install-banner');
   const pwaInstallBtn = document.getElementById('pwa-install-btn');
   const pwaCloseBtn = document.getElementById('pwa-close-btn');

@@ -526,14 +526,36 @@ body {
 
 /* ---------- Печать ---------- */
 @media print {
-  /* Скрываем всё на странице, кроме карточки результатов */
-  body * {
+  /* Скрываем все элементы, которые не нужны при печати */
+  .header,
+  .controls,
+  .card:not(#resultCard),
+  #result-actions,
+  .action-bar,
+  .warning,
+  .hint,
+  .field-group,
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .toggle-group,
+  .logo,
+  .btn-print:not(#resultCard .btn-print),
+  .controls,
+  .lang-select,
+  .unit-toggle,
+  .btn-donate,
+  #themeToggle {
     display: none !important;
   }
+
+  /* Показываем только карточку результатов и её содержимое */
   #resultCard,
   #resultCard * {
     display: block !important;
+    visibility: visible !important;
   }
+
   #resultCard {
     position: relative;
     margin: 0;
@@ -544,7 +566,59 @@ body {
     box-shadow: none;
     font-size: 12pt;
     line-height: 1.5;
+    width: 100%;
   }
+
+  /* Убедимся, что результат не обрезается */
+  #resultCard .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  #resultCard .result-item {
+    background: #f9f9f9;
+    padding: 18px 22px;
+    border-radius: 8px;
+    border-left: 4px solid #C49A5A;
+  }
+
+  #resultCard .result-item .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.6;
+    font-weight: 600;
+  }
+
+  #resultCard .result-item .value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 4px;
+  }
+
+  #resultCard .result-item .sub {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  #resultCard .result-item .deviation {
+    font-size: 0.85rem;
+    margin-top: 6px;
+  }
+
+  #resultCard .result-item-full {
+    grid-column: 1 / -1;
+    border-left-color: #6B5E52;
+  }
+
+  /* Скрываем кнопки внутри результатов, если они есть */
+  #resultCard .btn-print {
+    display: none !important;
+  }
+}
   /* Скрываем кнопки действий (если они внутри результата) */
   #result-actions,
   #result-actions * {

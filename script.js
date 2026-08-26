@@ -77,8 +77,15 @@
     let wRep = wRepVal;
     let lRep = lRepVal;
 
-    // ---------- Синхронизация ширины (приоритет у см) ----------
-    if (wCmVal > 0 && rSt > 0) {
+    // ---------- Синхронизация ширины (приоритет у раппортов) ----------
+    if (wRep > 0 && rSt > 0) {
+      // Если введены раппорты – пересчитываем сантиметры
+      const totalSt = wRep * rSt + sSt + e;
+      const wCmCalc = (totalSt / dSt) * 10;
+      widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
+      wCm = wCmCalc;
+    } else if (wCmVal > 0 && rSt > 0) {
+      // Если раппорты не заданы, но есть сантиметры – пересчитываем раппорты
       const base = (wCmVal / 10) * dSt - sSt - e;
       if (base > 0) {
         const n = Math.round(base / rSt);
@@ -96,15 +103,17 @@
         widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
         wCm = wCmCalc;
       }
-    } else if (wRep > 0 && rSt > 0) {
-      const totalSt = wRep * rSt + sSt + e;
-      const wCmCalc = (totalSt / dSt) * 10;
-      widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
-      wCm = wCmCalc;
     }
 
-    // ---------- Синхронизация длины (приоритет у см) ----------
-    if (lCmVal > 0 && rRo > 0) {
+    // ---------- Синхронизация длины (приоритет у раппортов) ----------
+    if (lRep > 0 && rRo > 0) {
+      // Если введены раппорты – пересчитываем сантиметры
+      const totalRo = lRep * rRo + sRo;
+      const lCmCalc = (totalRo / dRo) * 10;
+      lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
+      lCm = lCmCalc;
+    } else if (lCmVal > 0 && rRo > 0) {
+      // Если раппорты не заданы, но есть сантиметры – пересчитываем раппорты
       const base = (lCmVal / 10) * dRo - sRo;
       if (base > 0) {
         const m = Math.round(base / rRo);
@@ -122,11 +131,6 @@
         lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
         lCm = lCmCalc;
       }
-    } else if (lRep > 0 && rRo > 0) {
-      const totalRo = lRep * rRo + sRo;
-      const lCmCalc = (totalRo / dRo) * 10;
-      lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
-      lCm = lCmCalc;
     }
 
     // Наборный край и ряды
@@ -367,7 +371,6 @@
     document.getElementById('lblWidthRep').textContent = t.lblWidthRep;
     document.getElementById('lblLength').textContent = t.lblLength;
     document.getElementById('lblLengthRep').textContent = t.lblLengthRep;
-    // resLabelCastOn и resLabelRows обновляются в updateToolSpecificUI
     document.getElementById('printBtnText').textContent = t.printBtn;
     document.getElementById('pdfBtnText').textContent = t.pdfBtn;
 
@@ -392,7 +395,6 @@
     const lblRepSt = document.getElementById('lblRepSt');
     if (lblRepSt) lblRepSt.textContent = isRu ? `Раппорт (${stWord})` : `Repeat (${stWord})`;
 
-    // Обновляем подписи в результатах
     const castOnLabel = isKnit ? t.resLabelCastOnKnit : t.resLabelCastOnCrochet;
     document.getElementById('resLabelCastOn').textContent = castOnLabel;
     document.getElementById('resLabelRows').textContent = t.resLabelRows;
@@ -407,36 +409,36 @@
   }
 
   // ---------- Переключение единиц ----------
-function toggleUnits(newUnits) {
-  if (newUnits === currentUnits) return;
-  const fromMetric = currentUnits === 'metric';
-  const toMetric = newUnits === 'metric';
+  function toggleUnits(newUnits) {
+    if (newUnits === currentUnits) return;
+    const fromMetric = currentUnits === 'metric';
+    const toMetric = newUnits === 'metric';
 
-  function convertField(el, convFn) {
-    if (el) {
-      const val = parseFloat(el.value);
-      if (!isNaN(val)) {
-        el.value = convFn(val).toFixed(el.step && el.step.includes('.') ? 2 : 0);
+    function convertField(el, convFn) {
+      if (el) {
+        const val = parseFloat(el.value);
+        if (!isNaN(val)) {
+          el.value = convFn(val).toFixed(el.step && el.step.includes('.') ? 2 : 0);
+        }
       }
     }
+
+    if (fromMetric !== toMetric) {
+      convertField(widthCm, v => fromMetric ? v / 2.54 : v * 2.54);
+      convertField(lengthCm, v => fromMetric ? v / 2.54 : v * 2.54);
+    }
+
+    currentUnits = newUnits;
+    document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
+      el.classList.toggle('active', el.dataset.unit === newUnits);
+    });
+
+    // Очищаем поля раппортов, чтобы избежать конфликтов
+    widthRep.value = '';
+    lengthRep.value = '';
+
+    updateUnitSymbols();
   }
-
-  if (fromMetric !== toMetric) {
-    convertField(widthCm, v => fromMetric ? v / 2.54 : v * 2.54);
-    convertField(lengthCm, v => fromMetric ? v / 2.54 : v * 2.54);
-  }
-
-  currentUnits = newUnits;
-  document.querySelectorAll('#unitToggle .unit-opt').forEach(el => {
-    el.classList.toggle('active', el.dataset.unit === newUnits);
-  });
-  
-  // Очищаем поля раппортов, чтобы избежать конфликтов
-  widthRep.value = '';
-  lengthRep.value = '';
-
-  updateUnitSymbols();
-}
 
   // ---------- Тема ----------
   function toggleTheme() {
@@ -521,5 +523,5 @@ function toggleUnits(newUnits) {
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari/posts/7731692a-b7c1-4855-83fb-3de72975cfc8';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (updated result labels)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (priority to repeats)');
 })();

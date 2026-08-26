@@ -562,4 +562,22 @@ body {
   #themeToggle {
     display: none !important;
   }
+  /* Кнопки действий */
+#result-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+#result-actions .btn-print {
+  min-width: 160px;
+}
+#result-actions .btn-print.secondary {
+  background: var(--border);
+  color: var(--text);
+}
+#result-actions .btn-print.secondary:hover {
+  background: var(--text-secondary);
+  color: #fff;
+}
 }

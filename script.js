@@ -34,12 +34,20 @@
   let currentTool = 'knit';
   let currentDir = 'classic';
 
-  // Helpers
+  // ---------- Helpers ----------
   function getVal(el) { return parseFloat(el.value) || 0; }
   function getInt(el) { return parseInt(el.value) || 0; }
 
   function toDisplayCm(val) { return currentUnits === 'metric' ? val : val / 2.54; }
   function fromDisplayCm(val) { return currentUnits === 'metric' ? val : val * 2.54; }
+
+  // Функция склонения для русского языка
+  function getRussianPlural(n, one, two, five) {
+    n = Math.abs(n);
+    if (n % 10 === 1 && n % 100 !== 11) return one;
+    if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) return two;
+    return five;
+  }
 
   // ---------- Управление видимостью полей симметрии ----------
   function updateSymmetryVisibility() {
@@ -70,7 +78,6 @@
       ]
     };
     const manifestJSON = JSON.stringify(manifestData);
-    // Кодируем в base64
     const base64 = btoa(unescape(encodeURIComponent(manifestJSON)));
     const manifestURI = 'data:application/json;base64,' + base64;
     const link = document.querySelector('link[rel="manifest"]');
@@ -216,14 +223,26 @@
 
     const isKnit = currentTool === 'knit';
     const isRuText = currentLang === 'ru';
-    const stLabel = isKnit ? (isRuText ? 'петель' : 'sts') : (isRuText ? 'столбиков' : 'sts');
-    const rowLabel = isRuText ? 'рядов' : 'rows';
     const repLabel = isRuText ? 'рапп.' : 'rep.';
     const lengthUnit = currentUnits === 'metric' ? (isRuText ? 'см' : 'cm') : 'in';
-
     const symText = isRuText ? 'сим.' : 'sym';
     const edgeText = isRuText ? 'кром.' : 'edge';
 
+    // ---------- Формирование склоняемых подписей ----------
+    let stLabel, rowLabel;
+    if (isRuText) {
+      // Русский: склоняем
+      stLabel = isKnit 
+        ? getRussianPlural(castOnTotal, 'петля', 'петли', 'петель')
+        : getRussianPlural(castOnTotal, 'столбик', 'столбика', 'столбиков');
+      rowLabel = getRussianPlural(rowsTotal, 'ряд', 'ряда', 'рядов');
+    } else {
+      // Английский: всегда sts и rows
+      stLabel = 'sts';
+      rowLabel = 'rows';
+    }
+
+    // Отображение наборного края
     resCastOn.textContent = `${castOnTotal} ${stLabel}`;
     let subText = '';
     if (isCircular) {
@@ -241,8 +260,9 @@
     else devCastText += ` (${isRuText ? 'на' : ''} ${toDisplayCm(Math.abs(diffCast)).toFixed(1)} ${lengthUnit} ${isRuText ? 'меньше' : 'less'})`;
     resCastOnDev.textContent = devCastText;
 
-    const rowsReps = Math.floor((rowsTotal - sRo) / rRo);
+    // Ряды
     resRows.textContent = `${rowsTotal} ${rowLabel}`;
+    const rowsReps = Math.floor((rowsTotal - sRo) / rRo);
     resRowsSub.textContent = `${rowsReps} ${repLabel} + ${symText} ${sRo}`;
 
     const desiredRowsCm = currentDir === 'classic' ? lCm : wCm;
@@ -260,7 +280,7 @@
     resSize.textContent = `${sizeWidth.toFixed(1)} × ${sizeLength.toFixed(1)} ${sizeUnit}`;
   }
 
-  // ---------- Переводы ----------
+  // ---------- Переводы (не изменяются) ----------
   const translations = {
     ru: {
       manifestName: 'Хаттер: Дизайнер шарфов и пледов',
@@ -399,7 +419,7 @@
     }
   };
 
-  // ---------- Обновление подписей полей плотности ----------
+  // ---------- Остальные функции (без изменений) ----------
   function updateDensityLabels() {
     const isRu = currentLang === 'ru';
     const isMetric = currentUnits === 'metric';
@@ -417,7 +437,6 @@
     document.getElementById('lblRow').textContent = rowLabel;
   }
 
-  // ---------- Обновление текста кнопок переключателя единиц ----------
   function updateUnitToggleLabels() {
     const lang = currentLang;
     const t = translations[lang] || translations.ru;
@@ -427,7 +446,6 @@
     if (imperialSpan) imperialSpan.textContent = t.unitImperial;
   }
 
-  // ---------- Обновление единиц измерения ----------
   function updateUnitSymbols() {
     const isMetric = currentUnits === 'metric';
     const isRu = currentLang === 'ru';
@@ -444,7 +462,6 @@
     updateUnitToggleLabels();
   }
 
-  // ---------- Обновление всего UI ----------
   function updateLanguage() {
     const lang = currentLang;
     const t = translations[lang] || translations.ru;
@@ -480,7 +497,6 @@
     document.getElementById('pwaBtnText').textContent = t.pwaBtn;
     document.getElementById('resLabelSize').textContent = t.resLabelSize;
     document.getElementById('resSizeSub').textContent = t.resSizeSub;
-    // Обновляем инструкцию в зависимости от платформы
     if (window.isIOS) {
       document.getElementById('ios-instructions').innerHTML = t.pwaIOS;
     } else {
@@ -492,7 +508,7 @@
     updateToolSpecificUI();
     updateWarningText();
     updateUnitSymbols();
-    updateManifest(); // обновляем манифест при смене языка
+    updateManifest();
   }
 
   function updateToolSpecificUI() {
@@ -524,7 +540,6 @@
     if (warningEl) warningEl.textContent = t[key];
   }
 
-  // ---------- Переключение единиц ----------
   function toggleUnits(newUnits) {
     if (newUnits === currentUnits) return;
     const fromMetric = currentUnits === 'metric';
@@ -549,14 +564,12 @@
       el.classList.toggle('active', el.dataset.unit === newUnits);
     });
 
-    // Очищаем поля раппортов, чтобы избежать конфликтов
     widthRep.value = '';
     lengthRep.value = '';
 
     updateUnitSymbols();
   }
 
-  // ---------- Тема ----------
   function toggleTheme() {
     const body = document.body;
     const isDark = body.getAttribute('data-theme') === 'dark';
@@ -574,7 +587,6 @@
     document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#1a1a1a' : '#f6f0ea');
   }
 
-  // ---------- Инициализация переключателей ----------
   function setupToggles() {
     document.querySelectorAll('#toolToggle .toggle-option').forEach(btn => {
       btn.addEventListener('click', function() {
@@ -596,9 +608,7 @@
     });
   }
 
-  // ---------- Настройка полей ----------
   function setupInputs() {
-    // Слушатель изменения кромочных
     edges.addEventListener('change', function() {
       updateSymmetryVisibility();
     });
@@ -628,7 +638,6 @@
   document.getElementById('print-btn').addEventListener('click', function() { window.print(); });
   document.getElementById('save-pdf-btn').addEventListener('click', function() { window.print(); });
 
-  // Начальные единицы и язык
   currentUnits = 'metric';
   document.querySelector('#unitToggle .unit-opt[data-unit="metric"]').classList.add('active');
   updateUnitSymbols();
@@ -644,9 +653,9 @@
 
   document.getElementById('donateBoosty').href = 'https://boosty.to/annafengari/posts/7731692a-b7c1-4855-83fb-3de72975cfc8';
 
-  console.log('🧶 The Hatter: Scarf Studio loaded (dynamic manifest, circular knitting)');
+  console.log('🧶 The Hatter: Scarf Studio loaded (fixed Russian declension)');
 
-  // ---------- PWA: Баннер установки ----------
+  // ---------- PWA ----------
   const pwaBanner = document.getElementById('pwa-install-banner');
   const pwaInstallBtn = document.getElementById('pwa-install-btn');
   const pwaCloseBtn = document.getElementById('pwa-close-btn');

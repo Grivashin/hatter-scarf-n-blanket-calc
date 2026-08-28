@@ -91,9 +91,10 @@ body {
 
 .controls {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+  margin-left: auto;          /* прижимаем контролы к правому краю */
+  justify-content: flex-end;  /* выравнивание вправо */
 }
 
 /* ---------- Кнопка переключения темы ---------- */
@@ -180,6 +181,7 @@ body {
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: 36px;
+  width: 70px; /* фиксированная ширина для стабильности */
 }
 [data-theme="dark"] .lang-select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23B0A59B' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
@@ -501,7 +503,9 @@ body {
     gap: 12px;
   }
   .controls {
+    width: 100%;
     justify-content: flex-end;
+    flex-wrap: wrap;      /* на мобильных перенос допустим */
   }
   .logo {
     font-size: 1.2rem;
@@ -515,6 +519,13 @@ body {
   }
   .result-item .value {
     font-size: 1.6rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .controls {
+    flex-wrap: nowrap;   /* запрещаем перенос внутри контролов */
+    flex-shrink: 0;      /* не даём группе сжиматься */
   }
 }
 
@@ -618,62 +629,4 @@ body {
   #resultCard .btn-print {
     display: none !important;
   }
-  /* ---------- Баннер установки PWA ---------- */
-.pwa-banner {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px var(--shadow);
-  padding: 16px;
-  max-width: 90%;
-  width: 400px;
-  z-index: 9999;
-  font-family: var(--font);
-  color: var(--text);
-}
-.pwa-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.pwa-icon { font-size: 24px; }
-.pwa-text {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-}
-.pwa-text strong { font-size: 15px; margin-bottom: 2px; }
-.pwa-btn {
-  background: var(--accent);
-  color: var(--btn-text);
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  font-family: inherit;
-}
-.pwa-btn:hover { background: var(--accent-hover); }
-.pwa-close {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: var(--text-secondary);
-  cursor: pointer;
-  padding: 0 4px;
-}
-.ios-instructions {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text-secondary);
-  text-align: center;
-}
 }

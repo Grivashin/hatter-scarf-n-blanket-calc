@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Manual — The Hatter</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #f6f0ea;
+      color: #3D322A;
+      padding: 24px 20px;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .container {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 32px 36px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+      border: 1px solid #e6ddd4;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .header-logo img {
+      height: 60px;
+      width: auto;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #C49A5A;
+      border-bottom: 2px solid #D3B86A;
+      padding-bottom: 12px;
+      margin-top: 0;
+    }
+    .header-logo h1 {
+      border: none;
+      padding-bottom: 0;
+      margin: 0;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 32px;
+      color: #6B5E52;
+      border-left: 4px solid #C49A5A;
+      padding-left: 14px;
+    }
+    h3 {
+      font-size: 1.2rem;
+      margin-top: 24px;
+      color: #3D322A;
+    }
+    p { margin: 12px 0; }
+    ul, ol { margin: 12px 0 20px 24px; }
+    li { margin-bottom: 6px; }
+    .highlight {
+      background: #fff5e6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .note {
+      background: #edf3f8;
+      border-left: 4px solid #C49A5A;
+      padding: 14px 18px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .screenshot {
+      margin: 16px 0;
+      text-align: center;
+    }
+    .screenshot img {
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid #e6ddd4;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .step-screenshots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin: 16px 0;
+    }
+    .step-screenshots .screenshot {
+      flex: 0 1 calc(50% - 8px);
+      min-width: 200px;
+      margin: 0;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 32px;
+      background: #C49A5A;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .back-link:hover { background: #A67B3D; }
+    @media (max-width: 600px) {
+      .container { padding: 20px 16px; }
+      h1 { font-size: 1.6rem; }
+      .header-logo img { height: 40px; }
+      .step-screenshots .screenshot { flex: 1 1 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header-logo">
+    <img src="images/logo.png" alt="The Hatter">
+    <h1>User Manual</h1>
+  </div>
+  <p style="font-size:1.1rem; color:#6B5E52; margin-top:-10px;">
+    «The Hatter: Scarf and Blanket Designer»
+  </p>
+
+  <h2>1. Introduction</h2>
+  <p>
+    Welcome to <strong>The Hatter</strong> — an intelligent web tool for precise calculation of knitted garment parameters.
+    Originally designed for scarves and blankets, The Hatter has evolved into a universal calculator for <strong>any straight fabric</strong>.
+    Now you can calculate with mathematical precision not only scarves and blankets but also <strong>oversized sweaters, ponchos, and straight‑fit cardigans</strong> that are knitted without complex armholes and neckline shaping.
+  </p>
+  <p>
+    The product is built on <strong>PWA (Progressive Web App)</strong> technology. This means it can be installed on your smartphone or tablet home screen with one click. After installation, it launches in full‑screen mode (without browser address bar), works instantly, and does not require searching for it online every time.
+  </p>
+  <p>
+    <strong>🔒 Privacy and security</strong><br>
+    All calculations are performed <strong>exclusively locally on your device</strong>. The calculator does not send or store any data you enter on servers. All processing stays in your browser or installed application. We do not use third‑party trackers, collect analytics, or request access to your personal information. Your projects remain completely private.
+  </p>
+
+  <h2>2. Key Features</h2>
+  <ul>
+    <li><strong>Accurate base calculation:</strong> Determines the number of cast‑on stitches and total rows based on your personal gauge after blocking.</li>
+    <li><strong>Smart pattern repeat adjustment:</strong> Automatically recalculates width and length, showing the number of full repeats so that the pattern is not cut off at edges.</li>
+    <li><strong>Flexible symmetry settings:</strong> Separate input for symmetry stitches at the beginning and end of the row, plus edge stitches.</li>
+    <li><strong>Adaptability to technique:</strong> Supports knitting (flat and circular) and crochet.</li>
+    <li><strong>PWA mode:</strong> Install on your home screen (iOS/Android) for instant full‑screen access like a native app.</li>
+    <li><strong>Global localization:</strong> Switch between metric (cm, m) and imperial (inches, yards) systems, and three interface languages: RU, US English, UK English.</li>
+    <li><strong>Export, save and print:</strong> Generate a print‑ready PDF of your calculations and print the results.</li>
+  </ul>
+
+  <h2>How to Use The Hatter Calculator</h2>
+  <p><em>(with screenshots)</em></p>
+
+  <h3>Step 1. Choose your tool and enter gauge</h3>
+  <p>On the <strong>«Gauge (after blocking)»</strong> screen:</p>
+  <div class="screenshot">
+    <img src="images/screenshot-density-eng.png" alt="Screenshot of gauge section">
+  </div>
+  <ul>
+    <li><strong>Select tool</strong> – tap «Knitting» or «Crochet» (in the example, <strong>Knitting</strong> is selected).</li>
+    <li><strong>Enter gauge</strong> – two numbers:
+      <ul>
+        <li><strong>Stitches per 10 cm</strong> (in the example <span class="highlight">22</span>)</li>
+        <li><strong>Rows per 10 cm</strong> (in the example <span class="highlight">17</span>)</li>
+      </ul>
+    </li>
+  </ul>
+  <p>These numbers are obtained by measuring your swatch after <strong>blocking</strong> (washing/drying) strictly in the centre on a 10×10 cm area.</p>
+
+  <h3>Step 2. Fill in pattern repeat and symmetry</h3>
+  <p>On the <strong>«Pattern repeat & symmetry»</strong> screen:</p>
+  <div class="screenshot">
+    <img src="images/screenshot-symmetry-eng.png" alt="Screenshot of repeat section">
+  </div>
+  <ol>
+    <li><strong>Repeat (stitches)</strong> – number of stitches in one repeat of the pattern. Example: <span class="highlight">20</span>.</li>
+    <li><strong>Repeat (rows)</strong> – number of rows in one repeat vertically. Example: <span class="highlight">14</span>.</li>
+    <li><strong>Symmetry (beginning of row)</strong> – stitches to add before the first repeat for symmetry. Example: <span class="highlight">2</span>.</li>
+    <li><strong>Symmetry (end of row)</strong> – stitches to add after the last repeat. Example: <span class="highlight">0</span>.</li>
+    <li><strong>Symmetry (rows)</strong> – how many rows to add after the last repeat of the pattern. Example: <span class="highlight">0</span>.</li>
+    <li><strong>Edge stitches</strong> (only for knitting):
+      <ul>
+        <li><span class="highlight">0</span> – circular knitting (no edge stitches).</li>
+        <li><span class="highlight">2</span> – flat knitting (classic method).</li>
+      </ul>
+    </li>
+  </ol>
+  <p>In the example, <strong>2</strong> (flat knitting) is chosen.</p>
+
+  <h3>Step 3. Enter size and direction</h3>
+  <p>On the <strong>«Size & direction»</strong> screen:</p>
+  <div class="screenshot">
+    <img src="images/screenshot-sizes-eng.png" alt="Screenshot of size section">
+  </div>
+  <ol>
+    <li><strong>Knitting direction</strong> – choose:
+      <ul>
+        <li><strong>Classic (width → cast on)</strong> – you cast on stitches for the width, rows are knitted for the length.</li>
+        <li><strong>Crosswise (length → cast on)</strong> – you cast on stitches for the length, rows are knitted for the width.</li>
+      </ul>
+    </li>
+    <li><strong>Width</strong> – desired width of the finished item (in cm or inches). Example: <span class="highlight">30 cm</span>.</li>
+    <li><strong>Length</strong> – desired length. Example: <span class="highlight">120 cm</span>.</li>
+    <li><strong>Width (in repeats)</strong> and <strong>Length (in repeats)</strong> – can be filled if you want to specify size directly in repeats (fields synchronize). In the example they are empty (0).</li>
+  </ol>
+
+  <h3>Step 4. Press «Calculate» and check the results</h3>
+  <div class="screenshot">
+    <img src="images/screenshot-results-eng.png" alt="Screenshot of results">
+  </div>
+  <p>After filling all fields, click the large <strong>«Calculate»</strong> button at the bottom. The calculator will show the number of cast‑on stitches, number of rows, and the final size with pattern repeat adjustment.</p>
+
+  <h2>3. Extended Scenarios: Oversized and Straight Cut</h2>
+  <p>
+    The Hatter is ideal for creating modern <strong>oversized sweaters, pullovers and straight‑fit cardigans</strong> that are knitted in straight pieces without decreases/increases for armholes and neckline.
+  </p>
+  <h3>How to use:</h3>
+  <ol>
+    <li>Decide on the desired <strong>Bust circumference</strong> of the finished garment (including ease, e.g. +15–20 cm for oversized fit). Enter this value in the <strong>«Width»</strong> field.</li>
+    <li>Measure the desired <strong>Length</strong> from shoulder line to lower edge. Enter it in the <strong>«Length»</strong> field.</li>
+    <li>The calculator will automatically adjust these dimensions to your pattern repeat, ensuring a coherent pattern across the whole fabric.</li>
+  </ol>
+
+  <h2>4. Installing on Your Device (PWA)</h2>
+  <p>
+    To have The Hatter always at hand while knitting, install it as an app. It takes 10 seconds and saves you from searching for it online every time.
+  </p>
+
+  <h3>For iOS users (iPhone / iPad):</h3>
+  <div class="step-screenshots">
+    <div class="screenshot">
+      <img src="images/screenshot-ios1-eng.png" alt="Step 1 – Share">
+      <p><em>Step 1: Tap «Share»</em></p>
+    </div>
+    <div class="screenshot">
+      <img src="images/screenshot-ios2-eng.png" alt="Step 2 – Add to Home Screen">
+      <p><em>Step 2: Select «Add to Home Screen»</em></p>
+    </div>
+  </div>
+  <ol>
+    <li>Open the site in <strong>Safari</strong>.</li>
+    <li>Tap the <strong>«Share»</strong> button (square with an arrow pointing up) at the bottom.</li>
+    <li>Scroll down and select <strong>«Add to Home Screen»</strong>.</li>
+    <li>Tap «Add». Done! The Hatter icon will appear among your apps and open in full‑screen mode.</li>
+  </ol>
+
+  <h3>For Android users:</h3>
+  <div class="step-screenshots">
+    <div class="screenshot">
+      <img src="images/screenshot-android1-eng.png" alt="Step 1 – Menu">
+      <p><em>Step 1: Open browser menu</em></p>
+    </div>
+    <div class="screenshot">
+      <img src="images/screenshot-android2-eng.png" alt="Step 2 – Install app">
+      <p><em>Step 2: Select «Install app»</em></p>
+    </div>
+    <div class="screenshot">
+      <img src="images/screenshot-android3-eng.png" alt="Step 3 – Confirm">
+      <p><em>Step 3: Confirm installation</em></p>
+    </div>
+  </div>
+  <ol>
+    <li>Open the site in <strong>Google Chrome</strong>.</li>
+    <li>Tap the menu (three dots) in the top right corner.</li>
+    <li>Select <strong>«Install app»</strong> or <strong>«Add to Home Screen»</strong>.</li>
+    <li>Confirm. The Hatter icon will be added to your home screen for instant launch without browser elements.</li>
+  </ol>
+
+  <h2>5. Support and Community Development</h2>
+  <p>
+    The Hatter is created by enthusiasts for enthusiasts. We constantly work on improving algorithms and adding new useful features.
+  </p>
+  <p>
+    If this tool has saved you time and helped you create the perfect project, you can support the development:<br>
+    <strong>Support the project on Boosty</strong> via the <strong>«Support»</strong> button in the top right corner of the calculator.
+  </p>
+  <p>
+    Your contributions go directly to hosting, technical support, and development of new tools for knitters.
+  </p>
+  <p>
+    If you have any questions, suggestions, or wishes, please write to:  
+    <a href="mailto:thehatterapp@gmail.com">thehatterapp@gmail.com</a>
+  </p>
+
+  <a href="https://Grivashin.github.io/hatter-scarf-n-blanket-calc/" class="back-link">← Back to calculator</a>
+
+</div>
+</body>
+</html>

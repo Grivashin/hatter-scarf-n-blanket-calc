@@ -64,35 +64,57 @@
   }
 
   // ---------- Динамическое обновление манифеста ----------
-  function updateManifest() {
-    const lang = currentLang;
-    const t = translations[lang] || translations.ru;
-    const manifestData = {
-      name: t.manifestName,
-      short_name: t.manifestShortName,
-      description: 'Crochet and Knit Scarf Calculator',
-      start_url: './',
-      display: 'standalone',
-      theme_color: '#f6f0ea',
-      background_color: '#f6f0ea',
-      icons: [
-        { src: 'images/icon-192.png', sizes: '192x192', type: 'image/png' },
-        { src: 'images/icon.png', sizes: '512x512', type: 'image/png' }
-      ]
-    };
-    const manifestJSON = JSON.stringify(manifestData);
-    const encoded = encodeURIComponent(manifestJSON);
-    const manifestURI = 'data:application/manifest+json;charset=utf-8,' + encoded;
-    const link = document.querySelector('link[rel="manifest"]');
-    if (link) {
-      link.href = manifestURI;
-    } else {
-      const newLink = document.createElement('link');
-      newLink.rel = 'manifest';
-      newLink.href = manifestURI;
-      document.head.appendChild(newLink);
-    }
+let currentManifestUrl = null;
+
+function updateManifest() {
+  const lang = currentLang;
+  const t = translations[lang] || translations.ru;
+
+  // Получаем базовый URL текущей директории (с завершающим слешем)
+  const baseUrl = new URL('./', window.location.href).href;
+
+  const manifestData = {
+    name: t.manifestName,
+    short_name: t.manifestShortName,
+    description: 'Crochet and Knit Scarf Calculator',
+    start_url: baseUrl,  // абсолютный URL
+    display: 'standalone',
+    theme_color: '#f6f0ea',
+    background_color: '#f6f0ea',
+    icons: [
+      {
+        src: new URL('images/icon-192.png', baseUrl).href,
+        sizes: '192x192',
+        type: 'image/png'
+      },
+      {
+        src: new URL('images/icon.png', baseUrl).href,
+        sizes: '512x512',
+        type: 'image/png'
+      }
+    ]
+  };
+
+  // Создаём Blob с правильным MIME-типом
+  const blob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
+
+  // Освобождаем старый URL, если был
+  if (currentManifestUrl) {
+    URL.revokeObjectURL(currentManifestUrl);
   }
+  currentManifestUrl = URL.createObjectURL(blob);
+
+  // Обновляем ссылку на манифест
+  const link = document.querySelector('link[rel="manifest"]');
+  if (link) {
+    link.href = currentManifestUrl;
+  } else {
+    const newLink = document.createElement('link');
+    newLink.rel = 'manifest';
+    newLink.href = currentManifestUrl;
+    document.head.appendChild(newLink);
+  }
+}
 
   // ---------- Основной расчёт ----------
   function calculate() {

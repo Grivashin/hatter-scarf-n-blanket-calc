@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Руководство пользователя — Хаттер</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #f6f0ea;
+      color: #3D322A;
+      padding: 24px 20px;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .container {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 32px 36px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+      border: 1px solid #e6ddd4;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .header-logo img {
+      height: 60px;
+      width: auto;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #C49A5A;
+      border-bottom: 2px solid #D3B86A;
+      padding-bottom: 12px;
+      margin-top: 0;
+    }
+    .header-logo h1 {
+      border: none;
+      padding-bottom: 0;
+      margin: 0;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 32px;
+      color: #6B5E52;
+      border-left: 4px solid #C49A5A;
+      padding-left: 14px;
+    }
+    h3 {
+      font-size: 1.2rem;
+      margin-top: 24px;
+      color: #3D322A;
+    }
+    p { margin: 12px 0; }
+    ul, ol { margin: 12px 0 20px 24px; }
+    li { margin-bottom: 6px; }
+    .highlight {
+      background: #fff5e6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .note {
+      background: #edf3f8;
+      border-left: 4px solid #C49A5A;
+      padding: 14px 18px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .screenshot {
+      margin: 16px 0;
+      text-align: center;
+    }
+    .screenshot img {
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid #e6ddd4;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .step-screenshots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin: 16px 0;
+    }
+    .step-screenshots .screenshot {
+      flex: 0 1 calc(50% - 8px);
+      min-width: 200px;
+      margin: 0;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 32px;
+      background: #C49A5A;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .back-link:hover { background: #A67B3D; }
+    @media (max-width: 600px) {
+      .container { padding: 20px 16px; }
+      h1 { font-size: 1.6rem; }
+      .header-logo img { height: 40px; }
+      .step-screenshots .screenshot { flex: 1 1 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header-logo">
+    <img src="images/logo.png" alt="The Hatter">
+    <h1>Руководство пользователя</h1>
+  </div>
+  <p style="font-size:1.1rem; color:#6B5E52; margin-top:-10px;">
+    «Хаттер: Дизайнер шарфов и пледов»
+  </p>
+
+  <h2>1. Введение</h2>
+  <p>
+    Добро пожаловать в <strong>«Хаттер»</strong> — интеллектуальный веб-инструмент для точного расчета параметров вязаных изделий.
+    Изначально созданный для шарфов и пледов, «Хаттер» эволюционировал в универсальный калькулятор для <strong>любого прямого полотна</strong>.
+    Теперь вы можете с математической точностью рассчитывать не только шарфы и пледы, но и <strong>оверсайз-свитера, пончо и кардиганы прямого кроя</strong>, вяжущиеся без сложных пройм и скосов горловины.
+  </p>
+  <p>
+    Продукт построен на технологии <strong>PWA (Progressive Web App)</strong>. Это означает, что его можно установить на главный экран вашего смартфона или планшета в один клик. После установки он запускается в полноэкранном режиме (без адресной строки браузера), работает мгновенно и не требует постоянного поиска в интернете.
+  </p>
+  <p>
+    <strong>🔒 Конфиденциальность и безопасность</strong><br>
+    Все расчёты выполняются <strong>исключительно локально на вашем устройстве</strong>. Калькулятор не отправляет и не хранит на серверах никаких введённых вами данных. Вся информация обрабатывается прямо в браузере или в установленном приложении. Мы не используем сторонние трекеры, не собираем аналитику, не запрашиваем доступ к вашим личным данным. Ваши проекты остаются полностью приватными.
+  </p>
+
+  <h2>2. Ключевые возможности</h2>
+  <ul>
+    <li><strong>Точный расчет базы:</strong> Определение количества петель наборного ряда и общего числа рядов на основе индивидуальной плотности после ВТО.</li>
+    <li><strong>Умная подгонка под раппорт:</strong> Автоматический пересчет ширины и длины с отображением количества полных раппортов, чтобы узор не обрезался на краях.</li>
+    <li><strong>Гибкая настройка симметрии:</strong> Раздельный ввод петель симметрии для начала и конца ряда, а также учет кромочных петель.</li>
+    <li><strong>Адаптивность к технике:</strong> Поддержка вязания спицами (поворотные и круговые ряды) и крючком.</li>
+    <li><strong>Режим приложения (PWA):</strong> Установка на главный экран смартфона (iOS/Android) для мгновенного доступа в полноэкранном режиме, как у нативного приложения.</li>
+    <li><strong>Глобальная локализация:</strong> Переключение между метрической (см, м) и имперской (дюймы, ярды) системами, а также три языка интерфейса: RU, US English, UK English.</li>
+    <li><strong>Экспорт, сохранение и печать:</strong> Генерация готового к печати PDF-файла с вашими расчетами и печать результатов.</li>
+  </ul>
+
+  <h2>Инструкция по работе с калькулятором «Хаттер»</h2>
+  <p><em>(с примерами по скриншотам)</em></p>
+
+  <h3>Шаг 1. Выберите способ вязания и введите плотность</h3>
+  <p>На скриншоте <strong>«Плотность (после ВТО)»</strong>:</p>
+  <div class="screenshot">
+    <img src="images/screenshot-density-ru.png" alt="Скриншот секции плотности">
+  </div>
+  <ul>
+    <li><strong>Выберите инструмент</strong> – нажмите «Спицы» или «Крючок» (в примере выбраны <strong>Спицы</strong>).</li>
+    <li>Если вяжете крючком, термины изменятся на «столбики».</li>
+    <li><strong>Введите плотность</strong> – два числа:
+      <ul>
+        <li><strong>Петель в 10 см</strong> (в примере <span class="highlight">22</span>)</li>
+        <li><strong>Рядов в 10 см</strong> (в примере <span class="highlight">17</span>)</li>
+      </ul>
+    </li>
+  </ul>
+  <p>Эти цифры вы получили, измерив образец после <strong>ВТО</strong> (стирка/сушка) строго в центре на участке 10×10 см.</p>
+
+  <h3>Шаг 2. Заполните раппорт и симметрию</h3>
+  <p>На скриншоте <strong>«Раппорт и симметрия»</strong>:</p>
+  <div class="screenshot">
+    <img src="images/screenshot-symmetry-ru.png" alt="Скриншот секции раппорта">
+  </div>
+  <ol>
+    <li><strong>Раппорт (петли)</strong> – количество петель в одном повторении узора. В примере: <span class="highlight">20</span>.</li>
+    <li><strong>Раппорт (ряды)</strong> – количество рядов в одном повторении по высоте. В примере: <span class="highlight">14</span>.</li>
+    <li><strong>Симметрия (начало ряда)</strong> – сколько петель добавить перед первым раппортом для симметрии. В примере: <span class="highlight">2</span>.</li>
+    <li><strong>Симметрия (конец ряда)</strong> – сколько петель добавить после последнего раппорта. В примере: <span class="highlight">0</span>.</li>
+    <li><strong>Симметрия (ряды)</strong> – сколько рядов добавить после последнего ряда раппорта. В примере: <span class="highlight">0</span>.</li>
+    <li><strong>Кромочные</strong> (только для спиц):
+      <ul>
+        <li><span class="highlight">0</span> – круговое вязание (петли набираются по кругу, без кромочных).</li>
+        <li><span class="highlight">2</span> – поворотные ряды (классический способ).</li>
+      </ul>
+    </li>
+  </ol>
+  <p>В примере выбрано <strong>2</strong> (поворотные ряды).</p>
+
+  <h3>Шаг 3. Введите размеры и направление</h3>
+  <p>На скриншоте <strong>«Размеры и направление»</strong>:</p>
+  <div class="screenshot">
+    <img src="images/screenshot-sizes-ru.png" alt="Скриншот секции размеров">
+  </div>
+  <ol>
+    <li><strong>Направление вязания</strong> – выберите:
+      <ul>
+        <li><strong>Классическое (ширина → набор)</strong> – вы набираете петли по ширине, ряды вяжете по длине.</li>
+        <li><strong>Поперечное (длина → набор)</strong> – вы набираете петли по длине, ряды вяжете по ширине.</li>
+      </ul>
+    </li>
+    <li><strong>Ширина</strong> – желаемая ширина изделия (в см или дюймах). В примере: <span class="highlight">30 см</span>.</li>
+    <li><strong>Длина</strong> – желаемая длина. В примере: <span class="highlight">120 см</span>.</li>
+    <li><strong>Ширина (в раппортах)</strong> и <strong>Длина (в раппортах)</strong> – можно заполнить, если вы хотите задать размер сразу в раппортах (поля синхронизируются). В примере они пустые (0).</li>
+  </ol>
+
+  <h3>Шаг 4. Нажмите «Рассчитать» и посмотрите результаты</h3>
+  <div class="screenshot">
+    <img src="images/screenshot-results-ru.png" alt="Скриншот результатов">
+  </div>
+  <p>После заполнения всех полей нажмите большую кнопку <strong>«Рассчитать»</strong> внизу экрана. Калькулятор покажет количество петель для набора, количество рядов и итоговый размер с учётом подгонки под раппорт.</p>
+
+  <h2>3. Расширенные сценарии: Оверсайз и прямой крой</h2>
+  <p>
+    «Хаттер» идеально подходит для создания современных <strong>оверсайз-свитеров, джемперов и кардиганов прямого силуэта</strong>, которые вяжутся прямыми деталями без убавок и прибавок на проймы и горловину.
+  </p>
+  <h3>Как использовать:</h3>
+  <ol>
+    <li>Рассчитайте желаемый <strong>Обхват груди</strong> готового изделия (с учетом желаемой свободы облегания, например, +15–20 см к мерке тела для оверсайза). Это значение введите в поле <strong>«Ширина»</strong>.</li>
+    <li>Измерьте желаемую <strong>Длину изделия</strong> от линии плеча до нижнего края. Введите это значение в поле <strong>«Длина»</strong>.</li>
+    <li>Калькулятор автоматически подгонит эти размеры под раппорт вашего узора, гарантируя, что рисунок будет выглядеть целостно на всем полотне.</li>
+  </ol>
+
+  <h2>4. Установка на устройство (PWA)</h2>
+  <p>
+    Чтобы «Хаттер» всегда был под рукой во время вязания, установите его как приложение. Это займет 10 секунд и избавит вас от необходимости каждый раз искать сайт в браузере.
+  </p>
+
+  <h3>Для пользователей iOS (iPhone / iPad):</h3>
+  <div class="step-screenshots">
+    <div class="screenshot">
+      <img src="images/screenshot-ios1-ru.png" alt="Шаг 1 – Поделиться">
+      <p><em>Шаг 1: Нажмите «Поделиться»</em></p>
+    </div>
+    <div class="screenshot">
+      <img src="images/screenshot-ios2-ru.png" alt="Шаг 2 – На экран «Домой»">
+      <p><em>Шаг 2: Выберите «На экран «Домой»</em></p>
+    </div>
+  </div>
+  <ol>
+    <li>Откройте сайт в браузере <strong>Safari</strong>.</li>
+    <li>Нажмите кнопку <strong>«Поделиться»</strong> (квадрат со стрелкой вверх) в нижней панели.</li>
+    <li>Прокрутите список вниз и выберите <strong>«На экран «Домой»</strong>.</li>
+    <li>Нажмите «Добавить». Готово! Иконка «Хаттер» появится среди ваших приложений и будет открываться в полноэкранном режиме.</li>
+  </ol>
+
+  <h3>Для пользователей Android:</h3>
+  <div class="step-screenshots">
+    <div class="screenshot">
+      <img src="images/screenshot-android1-ru.png" alt="Шаг 1 – Меню">
+      <p><em>Шаг 1: Откройте меню браузера</em></p>
+    </div>
+    <div class="screenshot">
+      <img src="images/screenshot-android2-ru.png" alt="Шаг 2 – Установить приложение">
+      <p><em>Шаг 2: Выберите «Установить приложение»</em></p>
+    </div>
+    <div class="screenshot">
+      <img src="images/screenshot-android3-ru.png" alt="Шаг 3 – Подтверждение">
+      <p><em>Шаг 3: Подтвердите установку</em></p>
+    </div>
+  </div>
+  <ol>
+    <li>Откройте сайт в браузере <strong>Google Chrome</strong>.</li>
+    <li>Нажмите на меню (три точки) в правом верхнем углу.</li>
+    <li>Выберите пункт <strong>«Установить приложение»</strong> или <strong>«Добавить на главный экран»</strong>.</li>
+    <li>Подтвердите действие. Иконка «Хаттер» будет добавлена на ваш рабочий стол для мгновенного запуска без элементов браузера.</li>
+  </ol>
+
+  <h2>5. Поддержка и развитие сообщества</h2>
+  <p>
+    «Хаттер» создается энтузиастами для энтузиастов. Мы постоянно работаем над улучшением алгоритмов и добавлением новых полезных функций.
+  </p>
+  <p>
+    Если инструмент сэкономил ваше время и помог создать идеальный проект, вы можете поддержать развитие проекта:<br>
+    <strong>Поддержать проект на Boosty</strong> можно через кнопку <strong>«Поддержать»</strong> в правом верхнем углу калькулятора.
+  </p>
+  <p>
+    Ваши взносы напрямую идут на оплату хостинга, техническую поддержку и разработку новых инструментов для вязальщиц.
+  </p>
+  <p>
+    Если у вас есть вопросы, предложения или пожелания, пишите по адресу:  
+    <a href="mailto:thehatterapp@gmail.com">thehatterapp@gmail.com</a>
+  </p>
+
+  <a href="https://Grivashin.github.io/hatter-scarf-n-blanket-calc/" class="back-link">← Вернуться к калькулятору</a>
+
+</div>
+</body>
+</html>

@@ -34,6 +34,9 @@
   let currentTool = 'knit';
   let currentDir = 'classic';
 
+  // Определяем iOS заранее, чтобы использовать в updateLanguage()
+  window.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
   // ---------- Helpers ----------
   function getVal(el) { return parseFloat(el.value) || 0; }
   function getInt(el) { return parseInt(el.value) || 0; }
@@ -68,7 +71,7 @@
       name: t.manifestName,
       short_name: t.manifestShortName,
       description: 'Crochet and Knit Scarf Calculator',
-      start_url: '/',
+      start_url: './',
       display: 'standalone',
       theme_color: '#f6f0ea',
       background_color: '#f6f0ea',
@@ -78,8 +81,8 @@
       ]
     };
     const manifestJSON = JSON.stringify(manifestData);
-    const base64 = btoa(unescape(encodeURIComponent(manifestJSON)));
-    const manifestURI = 'data:application/json;base64,' + base64;
+    const encoded = encodeURIComponent(manifestJSON);
+    const manifestURI = 'data:application/manifest+json;charset=utf-8,' + encoded;
     const link = document.querySelector('link[rel="manifest"]');
     if (link) {
       link.href = manifestURI;
@@ -661,7 +664,6 @@
   const pwaCloseBtn = document.getElementById('pwa-close-btn');
 
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  window.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
   if (!isStandalone) {
     pwaBanner.style.display = 'block';

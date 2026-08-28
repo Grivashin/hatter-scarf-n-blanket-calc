@@ -44,6 +44,14 @@
       padding-bottom: 0;
       margin: 0;
     }
+    .subtitle {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #C49A5A;
+      margin-top: -10px;
+      border-bottom: 1px solid #D3B86A;
+      padding-bottom: 4px;
+    }
     h2 {
       font-size: 1.5rem;
       margin-top: 32px;
@@ -77,10 +85,13 @@
       text-align: center;
     }
     .screenshot img {
-      max-width: 100%;
+      max-width: 30%;
+      height: auto;
       border-radius: 12px;
       border: 1px solid #e6ddd4;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: block;
+      margin: 0 auto;
     }
     .step-screenshots {
       display: flex;
@@ -90,9 +101,12 @@
       margin: 16px 0;
     }
     .step-screenshots .screenshot {
-      flex: 0 1 calc(50% - 8px);
-      min-width: 200px;
+      flex: 0 1 auto;
       margin: 0;
+    }
+    .step-screenshots .screenshot img {
+      max-width: 30%;
+      height: auto;
     }
     .back-link {
       display: inline-block;
@@ -110,7 +124,10 @@
       .container { padding: 20px 16px; }
       h1 { font-size: 1.6rem; }
       .header-logo img { height: 40px; }
-      .step-screenshots .screenshot { flex: 1 1 100%; }
+      .screenshot img,
+      .step-screenshots .screenshot img {
+        max-width: 80%;
+      }
     }
   </style>
 </head>
@@ -121,9 +138,7 @@
     <img src="images/logo.png" alt="The Hatter">
     <h1>Руководство пользователя</h1>
   </div>
-  <p style="font-size:1.1rem; color:#6B5E52; margin-top:-10px;">
-    «Хаттер: Дизайнер шарфов и пледов»
-  </p>
+  <p class="subtitle">«Хаттер: Дизайнер шарфов и пледов»</p>
 
   <h2>1. Введение</h2>
   <p>

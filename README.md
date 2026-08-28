@@ -18,7 +18,7 @@
 
 ## 🚀 Как использовать
 
-Просто откройте [страницу калькулятора](https://Grivashin.github.io/hatter-scarf-calc/) и заполните поля. Все расчёты происходят мгновенно.
+Просто откройте [страницу калькулятора](https://Grivashin.github.io/hatter-scarf-n-blanket-calc/) и заполните поля. Все расчёты происходят мгновенно.
 
 ---
 
@@ -52,7 +52,7 @@ Supports Russian, American, and British English, as well as metric and imperial 
 
 ## 🚀 How to use
 
-Simply open the [calculator page](https://Grivashin.github.io/hatter-scarf-calc/) and fill in the fields. All calculations happen instantly.
+Simply open the [calculator page](https://Grivashin.github.io/hatter-scarf-n-blanket-calc/) and fill in the fields. All calculations happen instantly.
 
 ---
 

@@ -54,9 +54,8 @@
 
   // ---------- Управление видимостью полей симметрии ----------
   function updateSymmetryVisibility() {
-    const isKnit = currentTool === 'knit';
     const e = parseInt(edges.value);
-    const isCircular = (isKnit && e === 0);
+    const isCircular = (e === 0);
     const startGroup = document.getElementById('symStartGroup');
     const endGroup = document.getElementById('symEndGroup');
     if (startGroup) startGroup.style.display = isCircular ? 'none' : 'flex';
@@ -70,14 +69,13 @@ function updateManifest() {
   const lang = currentLang;
   const t = translations[lang] || translations.ru;
 
-  // Получаем базовый URL текущей директории (с завершающим слешем)
   const baseUrl = new URL('./', window.location.href).href;
 
   const manifestData = {
     name: t.manifestName,
     short_name: t.manifestShortName,
     description: 'Crochet and Knit Scarf Calculator',
-    start_url: baseUrl,  // абсолютный URL
+    start_url: baseUrl,
     display: 'standalone',
     theme_color: '#f6f0ea',
     background_color: '#f6f0ea',
@@ -95,16 +93,13 @@ function updateManifest() {
     ]
   };
 
-  // Создаём Blob с правильным MIME-типом
   const blob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
 
-  // Освобождаем старый URL, если был
   if (currentManifestUrl) {
     URL.revokeObjectURL(currentManifestUrl);
   }
   currentManifestUrl = URL.createObjectURL(blob);
 
-  // Обновляем ссылку на манифест
   const link = document.querySelector('link[rel="manifest"]');
   if (link) {
     link.href = currentManifestUrl;
@@ -144,9 +139,9 @@ function updateManifest() {
     }
 
     const e = currentTool === 'knit' ? parseInt(edges.value) : 0;
-    const isCircular = (currentTool === 'knit' && e === 0);
+    const userChoice = parseInt(edges.value);
+    const isCircular = (userChoice === 0);
 
-    // Для кругового вязания симметрия начала и конца не используется
     let sStart = 0, sEnd = 0;
     if (!isCircular) {
       sStart = getInt(symStart);
@@ -160,7 +155,6 @@ function updateManifest() {
     let wRep = wRepVal;
     let lRep = lRepVal;
 
-    // Синхронизация ширины (приоритет у раппортов)
     const eUsed = isCircular ? 0 : e;
     if (wRep > 0 && rSt > 0) {
       const totalSt = wRep * rSt + sSt + eUsed;
@@ -187,7 +181,6 @@ function updateManifest() {
       }
     }
 
-    // Синхронизация длины
     if (lRep > 0 && rRo > 0) {
       const totalRo = lRep * rRo + sRo;
       const lCmCalc = (totalRo / dRo) * 10;
@@ -213,7 +206,6 @@ function updateManifest() {
       }
     }
 
-    // Наборный край и ряды
     let castOnTotal, rowsTotal;
     let castOnCm, rowsCm;
     let castOnReps;
@@ -253,21 +245,17 @@ function updateManifest() {
     const symText = isRuText ? 'сим.' : 'sym';
     const edgeText = isRuText ? 'кром.' : 'edge';
 
-    // ---------- Формирование склоняемых подписей ----------
     let stLabel, rowLabel;
     if (isRuText) {
-      // Русский: склоняем
       stLabel = isKnit 
         ? getRussianPlural(castOnTotal, 'петля', 'петли', 'петель')
         : getRussianPlural(castOnTotal, 'столбик', 'столбика', 'столбиков');
       rowLabel = getRussianPlural(rowsTotal, 'ряд', 'ряда', 'рядов');
     } else {
-      // Английский: всегда sts и rows
       stLabel = 'sts';
       rowLabel = 'rows';
     }
 
-    // Отображение наборного края
     resCastOn.textContent = `${castOnTotal} ${stLabel}`;
     let subText = '';
     if (isCircular) {
@@ -285,7 +273,6 @@ function updateManifest() {
     else devCastText += ` (${isRuText ? 'на' : ''} ${toDisplayCm(Math.abs(diffCast)).toFixed(1)} ${lengthUnit} ${isRuText ? 'меньше' : 'less'})`;
     resCastOnDev.textContent = devCastText;
 
-    // Ряды
     resRows.textContent = `${rowsTotal} ${rowLabel}`;
     const rowsReps = Math.floor((rowsTotal - sRo) / rRo);
     resRowsSub.textContent = `${rowsReps} ${repLabel} + ${symText} ${sRo}`;
@@ -298,14 +285,13 @@ function updateManifest() {
     else devRowText += ` (${isRuText ? 'на' : ''} ${toDisplayCm(Math.abs(diffRow)).toFixed(1)} ${lengthUnit} ${isRuText ? 'меньше' : 'less'})`;
     resRowsDev.textContent = devRowText;
 
-    // Размер
     const sizeWidth = toDisplayCm(wCm);
     const sizeLength = toDisplayCm(lCm);
     const sizeUnit = currentUnits === 'metric' ? (isRuText ? 'см' : 'cm') : 'in';
     resSize.textContent = `${sizeWidth.toFixed(1)} × ${sizeLength.toFixed(1)} ${sizeUnit}`;
   }
 
-  // ---------- Переводы (не изменяются) ----------
+  // ---------- Переводы ----------
   const translations = {
     ru: {
       manifestName: 'Хаттер: Дизайнер шарфов и пледов',
@@ -444,7 +430,7 @@ function updateManifest() {
     }
   };
 
-  // ---------- Остальные функции (без изменений) ----------
+  // ---------- Остальные функции ----------
   function updateDensityLabels() {
     const isRu = currentLang === 'ru';
     const isMetric = currentUnits === 'metric';
@@ -542,9 +528,13 @@ function updateManifest() {
     const lang = currentLang;
     const t = translations[lang] || translations.ru;
 
+    // Поле "Кромочные" всегда видно, чтобы можно было выбрать круговое вязание
     if (edgesGroup) {
-      edgesGroup.classList.toggle('hidden', !isKnit);
+      edgesGroup.classList.remove('hidden');
     }
+
+    const eVal = parseInt(edges.value);
+    const isCircular = (eVal === 0);
 
     const stWord = isKnit ? (isRu ? 'петли' : 'sts') : (isRu ? 'столбики' : 'sts');
     const lblRepSt = document.getElementById('lblRepSt');
@@ -553,6 +543,16 @@ function updateManifest() {
     const castOnLabel = isKnit ? t.resLabelCastOnKnit : t.resLabelCastOnCrochet;
     document.getElementById('resLabelCastOn').textContent = castOnLabel;
     document.getElementById('resLabelRows').textContent = t.resLabelRows;
+
+    // Обновляем подпись ширины при круговом вязании
+    const widthLabel = document.getElementById('lblWidth');
+    if (widthLabel) {
+      if (isCircular) {
+        widthLabel.textContent = isRu ? 'Ширина (1/2 окружности)' : 'Width (half circumference)';
+      } else {
+        widthLabel.textContent = t.lblWidth;
+      }
+    }
 
     updateSymmetryVisibility();
   }
@@ -636,6 +636,7 @@ function updateManifest() {
   function setupInputs() {
     edges.addEventListener('change', function() {
       updateSymmetryVisibility();
+      updateToolSpecificUI(); // чтобы подпись ширины обновилась при смене кругового режима
     });
   }
 

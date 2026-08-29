@@ -294,6 +294,7 @@ function updateManifest() {
   // ---------- Переводы ----------
   const translations = {
     ru: {
+
       manifestName: 'Хаттер: Дизайнер шарфов и пледов',
       manifestShortName: 'Хаттер',
       pwaAndroid: 'Откройте меню браузера и выберите «Добавить на экран домой» или «Установить приложение».',
@@ -324,7 +325,7 @@ function updateManifest() {
       lblSymEnd: 'Симметрия (конец ряда)',
       lblSymRow: 'Симметрия (ряды)',
       lblEdges: 'Кромочные',
-      edgeDesc: '0 — круговое, 2 — поворотные ряды',
+      edgeDesc: '0 — круговое, 2 — поворотные ряды (для крючка кромочные не добавляются)',
       lblDir: 'Направление вязания',
       dirClassic: 'Классическое (ширина → набор)',
       dirCross: 'Поперечное (длина → набор)',
@@ -369,7 +370,7 @@ function updateManifest() {
       lblSymEnd: 'Symmetry (end of row)',
       lblSymRow: 'Symmetry (rows)',
       lblEdges: 'Edge stitches',
-      edgeDesc: '0 — circular, 2 — flat knitting',
+	  edgeDesc: '0 — circular, 2 — flat rows (no edge stitches for crochet)',
       lblDir: 'Knitting direction',
       dirClassic: 'Classic (width → cast on)',
       dirCross: 'Crosswise (length → cast on)',
@@ -414,7 +415,7 @@ function updateManifest() {
       lblSymEnd: 'Symmetry (end of row)',
       lblSymRow: 'Symmetry (rows)',
       lblEdges: 'Edge stitches',
-      edgeDesc: '0 — circular, 2 — flat knitting',
+      edgeDesc: '0 — circular, 2 — flat rows (no edge stitches for crochet)',
       lblDir: 'Knitting direction',
       dirClassic: 'Classic (width → cast on)',
       dirCross: 'Crosswise (length → cast on)',

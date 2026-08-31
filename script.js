@@ -52,6 +52,19 @@
     return five;
   }
 
+  // ---------- Определение начального языка ----------
+  function getInitialLang() {
+    const saved = localStorage.getItem('lang');
+    if (saved === 'ru' || saved === 'us' || saved === 'uk') {
+      return saved;
+    }
+    const navLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    if (navLang.startsWith('ru') || navLang.startsWith('uk') || navLang.startsWith('be')) {
+      return 'ru';
+    }
+    return 'us';
+  }
+
   // ---------- Управление видимостью полей симметрии ----------
   function updateSymmetryVisibility() {
     const e = parseInt(edges.value);
@@ -63,53 +76,53 @@
   }
 
   // ---------- Динамическое обновление манифеста ----------
-let currentManifestUrl = null;
+  let currentManifestUrl = null;
 
-function updateManifest() {
-  const lang = currentLang;
-  const t = translations[lang] || translations.ru;
+  function updateManifest() {
+    const lang = currentLang;
+    const t = translations[lang] || translations.ru;
 
-  const baseUrl = new URL('./', window.location.href).href;
+    const baseUrl = new URL('./', window.location.href).href;
 
-  const manifestData = {
-    name: t.manifestName,
-    short_name: t.manifestShortName,
-    description: 'Crochet and Knit Scarf Calculator',
-    start_url: baseUrl,
-    display: 'standalone',
-    theme_color: '#f6f0ea',
-    background_color: '#f6f0ea',
-    icons: [
-      {
-        src: new URL('images/icon-192.png', baseUrl).href,
-        sizes: '192x192',
-        type: 'image/png'
-      },
-      {
-        src: new URL('images/icon.png', baseUrl).href,
-        sizes: '512x512',
-        type: 'image/png'
-      }
-    ]
-  };
+    const manifestData = {
+      name: t.manifestName,
+      short_name: t.manifestShortName,
+      description: 'Crochet and Knit Scarf Calculator',
+      start_url: baseUrl,
+      display: 'standalone',
+      theme_color: '#f6f0ea',
+      background_color: '#f6f0ea',
+      icons: [
+        {
+          src: new URL('images/icon-192.png', baseUrl).href,
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: new URL('images/icon.png', baseUrl).href,
+          sizes: '512x512',
+          type: 'image/png'
+        }
+      ]
+    };
 
-  const blob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
+    const blob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
 
-  if (currentManifestUrl) {
-    URL.revokeObjectURL(currentManifestUrl);
+    if (currentManifestUrl) {
+      URL.revokeObjectURL(currentManifestUrl);
+    }
+    currentManifestUrl = URL.createObjectURL(blob);
+
+    const link = document.querySelector('link[rel="manifest"]');
+    if (link) {
+      link.href = currentManifestUrl;
+    } else {
+      const newLink = document.createElement('link');
+      newLink.rel = 'manifest';
+      newLink.href = currentManifestUrl;
+      document.head.appendChild(newLink);
+    }
   }
-  currentManifestUrl = URL.createObjectURL(blob);
-
-  const link = document.querySelector('link[rel="manifest"]');
-  if (link) {
-    link.href = currentManifestUrl;
-  } else {
-    const newLink = document.createElement('link');
-    newLink.rel = 'manifest';
-    newLink.href = currentManifestUrl;
-    document.head.appendChild(newLink);
-  }
-}
 
   // ---------- Основной расчёт ----------
   function calculate() {
@@ -294,7 +307,6 @@ function updateManifest() {
   // ---------- Переводы ----------
   const translations = {
     ru: {
-
       manifestName: 'Хаттер: Дизайнер шарфов и пледов',
       manifestShortName: 'Хаттер',
       pwaAndroid: 'Откройте меню браузера и выберите «Добавить на экран домой» или «Установить приложение».',
@@ -370,7 +382,7 @@ function updateManifest() {
       lblSymEnd: 'Symmetry (end of row)',
       lblSymRow: 'Symmetry (rows)',
       lblEdges: 'Edge stitches',
-	  edgeDesc: '0 — circular, 2 — flat rows (no edge stitches for crochet)',
+      edgeDesc: '0 — circular, 2 — flat rows (no edge stitches for crochet)',
       lblDir: 'Knitting direction',
       dirClassic: 'Classic (width → cast on)',
       dirCross: 'Crosswise (length → cast on)',
@@ -651,6 +663,7 @@ function updateManifest() {
     const newLang = e.target.value;
     if (newLang !== currentLang) {
       currentLang = newLang;
+      localStorage.setItem('lang', newLang); // сохраняем выбор языка
       updateLanguage();
     }
   });
@@ -669,8 +682,9 @@ function updateManifest() {
   document.querySelector('#unitToggle .unit-opt[data-unit="metric"]').classList.add('active');
   updateUnitSymbols();
 
-  currentLang = 'ru';
-  document.getElementById('langSelect').value = 'ru';
+  // Устанавливаем начальный язык по браузеру или сохранённому выбору
+  currentLang = getInitialLang();
+  document.getElementById('langSelect').value = currentLang;
   updateLanguage();
 
   updateToolSpecificUI();

@@ -25,10 +25,8 @@
   <!-- Скрипт для перенаправления с параметров URL -->
   <script>
     (function() {
-      // Если в URL есть параметры (например, ?v=1) или якорь (#about), перенаправляем на чистый URL
       if (window.location.search || window.location.hash) {
         var cleanUrl = window.location.origin + window.location.pathname;
-        // Заменяем текущую страницу, чтобы не было истории с параметрами
         window.location.replace(cleanUrl);
       }
     })();
@@ -92,7 +90,7 @@
     </div>
   </section>
 
-<!-- 2. Раппорт и симметрия -->
+  <!-- 2. Раппорт и симметрия -->
 <section class="card">
   <div class="card-title" id="rapportTitle">Раппорт и симметрия</div>
   <div class="grid-3">
@@ -125,8 +123,8 @@
       </select>
       <span style="font-size:0.7rem; opacity:0.6;" id="edgeDesc">0 — круговое, 2 — поворотные ряды</span>
     </div>
-    <!-- Поле для крючка: Способ вязания -->
-    <div class="field-group" id="crochetDirectionGroup" style="display: none;">
+    <!-- Поле для крючка: Способ вязания (inline style удалён, управляется через CSS класс .hidden) -->
+    <div class="field-group" id="crochetDirectionGroup">
       <label id="lblCrochetDir">Способ вязания</label>
       <div class="toggle-group" id="crochetDirectionToggle">
         <button class="toggle-option active" data-dir="flat"><span id="crochetFlat">Поворотное</span></button>

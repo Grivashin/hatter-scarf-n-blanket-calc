@@ -26,6 +26,9 @@
   const resSizeSub = $('resSizeSub');
 
   const edgesGroup = $('edgesGroup');
+  const crochetDirectionGroup = $('crochetDirectionGroup');
+  const crochetDirectionToggle = $('crochetDirectionToggle');
+  let currentCrochetDir = 'flat'; // по умолчанию поворотное
 
   // State
   let currentLang = 'ru';
@@ -66,14 +69,21 @@
   }
 
   // ---------- Управление видимостью полей симметрии ----------
-  function updateSymmetryVisibility() {
+function updateSymmetryVisibility() {
+  const isKnit = currentTool === 'knit';
+  let isCircular = false;
+  if (isKnit) {
     const e = parseInt(edges.value);
-    const isCircular = (e === 0);
-    const startGroup = document.getElementById('symStartGroup');
-    const endGroup = document.getElementById('symEndGroup');
-    if (startGroup) startGroup.style.display = isCircular ? 'none' : 'flex';
-    if (endGroup) endGroup.style.display = isCircular ? 'none' : 'flex';
+    isCircular = (e === 0);
+  } else {
+    const activeBtn = document.querySelector('#crochetDirectionToggle .toggle-option.active');
+    isCircular = (activeBtn && activeBtn.dataset.dir === 'circular');
   }
+  const startGroup = document.getElementById('symStartGroup');
+  const endGroup = document.getElementById('symEndGroup');
+  if (startGroup) startGroup.style.display = isCircular ? 'none' : 'flex';
+  if (endGroup) endGroup.style.display = isCircular ? 'none' : 'flex';
+}
 
   // ---------- Динамическое обновление манифеста ----------
   let currentManifestUrl = null;
@@ -124,190 +134,209 @@
     }
   }
 
-  // ---------- Основной расчёт ----------
-  function calculate() {
-    const isRu = currentLang === 'ru';
+// ---------- Основной расчёт ----------
+function calculate() {
+  const isRu = currentLang === 'ru';
 
-    const dSt = getVal(densitySt);
-    const dRo = getVal(densityRow);
-    if (dSt <= 0 || dRo <= 0) {
-      alert(isRu ? 'Пожалуйста, введите плотность (петли и ряды на 10 см).' : 'Please enter gauge.');
-      return;
-    }
+  const dSt = getVal(densitySt);
+  const dRo = getVal(densityRow);
+  if (dSt <= 0 || dRo <= 0) {
+    alert(isRu ? 'Пожалуйста, введите плотность (петли и ряды на 10 см).' : 'Please enter gauge.');
+    return;
+  }
 
-    const rSt = getInt(repSt);
-    const rRo = getInt(repRow);
-    if (rSt <= 0 || rRo <= 0) {
-      alert(isRu ? 'Пожалуйста, введите раппорт (петли и ряды).' : 'Please enter pattern repeat.');
-      return;
-    }
+  const rSt = getInt(repSt);
+  const rRo = getInt(repRow);
+  if (rSt <= 0 || rRo <= 0) {
+    alert(isRu ? 'Пожалуйста, введите раппорт (петли и ряды).' : 'Please enter pattern repeat.');
+    return;
+  }
 
-    const wCmVal = getVal(widthCm);
-    const lCmVal = getVal(lengthCm);
-    const wRepVal = getInt(widthRep);
-    const lRepVal = getInt(lengthRep);
-    if (wCmVal <= 0 && lCmVal <= 0 && wRepVal <= 0 && lRepVal <= 0) {
-      alert(isRu ? 'Укажите хотя бы один размер (ширину или длину).' : 'Enter at least one dimension.');
-      return;
-    }
+  const wCmVal = getVal(widthCm);
+  const lCmVal = getVal(lengthCm);
+  const wRepVal = getInt(widthRep);
+  const lRepVal = getInt(lengthRep);
+  if (wCmVal <= 0 && lCmVal <= 0 && wRepVal <= 0 && lRepVal <= 0) {
+    alert(isRu ? 'Укажите хотя бы один размер (ширину или длину).' : 'Enter at least one dimension.');
+    return;
+  }
 
-    const e = currentTool === 'knit' ? parseInt(edges.value) : 0;
-    const userChoice = parseInt(edges.value);
-    const isCircular = (userChoice === 0);
+  // Определяем e (кромочные) и isCircular (круговое вязание)
+  let e = 0;
+  let isCircular = false;
+  if (currentTool === 'knit') {
+    e = parseInt(edges.value);
+    isCircular = (e === 0);
+  } else {
+    // Крючок: кромочных нет, круговое определяется переключателем
+    e = 0;
+    const activeBtn = document.querySelector('#crochetDirectionToggle .toggle-option.active');
+    isCircular = (activeBtn && activeBtn.dataset.dir === 'circular');
+  }
 
-    let sStart = 0, sEnd = 0;
-    if (!isCircular) {
-      sStart = getInt(symStart);
-      sEnd = getInt(symEnd);
-    }
-    const sSt = sStart + sEnd;
-    const sRo = getInt(symRow);
+  // Симметрия начала/конца ряда – не используется при круговом вязании
+  let sStart = 0, sEnd = 0;
+  if (!isCircular) {
+    sStart = getInt(symStart);
+    sEnd = getInt(symEnd);
+  }
+  const sSt = sStart + sEnd;
+  const sRo = getInt(symRow);
 
-    let wCm = fromDisplayCm(wCmVal);
-    let lCm = fromDisplayCm(lCmVal);
-    let wRep = wRepVal;
-    let lRep = lRepVal;
+  let wCm = fromDisplayCm(wCmVal);
+  let lCm = fromDisplayCm(lCmVal);
+  let wRep = wRepVal;
+  let lRep = lRepVal;
 
-    const eUsed = isCircular ? 0 : e;
-    if (wRep > 0 && rSt > 0) {
+  const eUsed = isCircular ? 0 : e;
+
+  // Синхронизация ширины (приоритет у раппортов)
+  if (wRep > 0 && rSt > 0) {
+    const totalSt = wRep * rSt + sSt + eUsed;
+    const wCmCalc = (totalSt / dSt) * 10;
+    widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
+    wCm = wCmCalc;
+  } else if (wCmVal > 0 && rSt > 0) {
+    const base = (wCmVal / 10) * dSt - sSt - eUsed;
+    if (base > 0) {
+      const n = Math.round(base / rSt);
+      wRep = Math.max(1, n);
+      widthRep.value = wRep;
       const totalSt = wRep * rSt + sSt + eUsed;
       const wCmCalc = (totalSt / dSt) * 10;
       widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
       wCm = wCmCalc;
-    } else if (wCmVal > 0 && rSt > 0) {
-      const base = (wCmVal / 10) * dSt - sSt - eUsed;
-      if (base > 0) {
-        const n = Math.round(base / rSt);
-        wRep = Math.max(1, n);
-        widthRep.value = wRep;
-        const totalSt = wRep * rSt + sSt + eUsed;
-        const wCmCalc = (totalSt / dSt) * 10;
-        widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
-        wCm = wCmCalc;
-      } else {
-        wRep = 1;
-        widthRep.value = 1;
-        const totalSt = wRep * rSt + sSt + eUsed;
-        const wCmCalc = (totalSt / dSt) * 10;
-        widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
-        wCm = wCmCalc;
-      }
+    } else {
+      wRep = 1;
+      widthRep.value = 1;
+      const totalSt = wRep * rSt + sSt + eUsed;
+      const wCmCalc = (totalSt / dSt) * 10;
+      widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
+      wCm = wCmCalc;
     }
+  }
 
-    if (lRep > 0 && rRo > 0) {
+  // Синхронизация длины
+  if (lRep > 0 && rRo > 0) {
+    const totalRo = lRep * rRo + sRo;
+    const lCmCalc = (totalRo / dRo) * 10;
+    lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
+    lCm = lCmCalc;
+  } else if (lCmVal > 0 && rRo > 0) {
+    const base = (lCmVal / 10) * dRo - sRo;
+    if (base > 0) {
+      const m = Math.round(base / rRo);
+      lRep = Math.max(1, m);
+      lengthRep.value = lRep;
       const totalRo = lRep * rRo + sRo;
       const lCmCalc = (totalRo / dRo) * 10;
       lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
       lCm = lCmCalc;
-    } else if (lCmVal > 0 && rRo > 0) {
-      const base = (lCmVal / 10) * dRo - sRo;
-      if (base > 0) {
-        const m = Math.round(base / rRo);
-        lRep = Math.max(1, m);
-        lengthRep.value = lRep;
-        const totalRo = lRep * rRo + sRo;
-        const lCmCalc = (totalRo / dRo) * 10;
-        lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
-        lCm = lCmCalc;
-      } else {
-        lRep = 1;
-        lengthRep.value = 1;
-        const totalRo = lRep * rRo + sRo;
-        const lCmCalc = (totalRo / dRo) * 10;
-        lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
-        lCm = lCmCalc;
-      }
-    }
-
-    let castOnTotal, rowsTotal;
-    let castOnCm, rowsCm;
-    let castOnReps;
-
-    if (currentDir === 'classic') {
-      let wRepForCast = wRep;
-      if (isCircular) {
-        wRepForCast = wRep * 2;
-        castOnTotal = wRepForCast * rSt + sSt;
-        castOnReps = wRepForCast;
-      } else {
-        castOnTotal = wRep * rSt + sSt + e;
-        castOnReps = wRep;
-      }
-      castOnCm = (castOnTotal / dSt) * 10;
-      rowsTotal = lRep * rRo + sRo;
-      rowsCm = (rowsTotal / dRo) * 10;
     } else {
-      let lRepForCast = lRep;
-      if (isCircular) {
-        lRepForCast = lRep * 2;
-        castOnTotal = lRepForCast * rSt + sSt;
-        castOnReps = lRepForCast;
-      } else {
-        castOnTotal = lRep * rSt + sSt + e;
-        castOnReps = lRep;
-      }
-      castOnCm = (castOnTotal / dSt) * 10;
-      rowsTotal = wRep * rRo + sRo;
-      rowsCm = (rowsTotal / dRo) * 10;
+      lRep = 1;
+      lengthRep.value = 1;
+      const totalRo = lRep * rRo + sRo;
+      const lCmCalc = (totalRo / dRo) * 10;
+      lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
+      lCm = lCmCalc;
     }
-
-    const isKnit = currentTool === 'knit';
-    const isRuText = currentLang === 'ru';
-    const repLabel = isRuText ? 'рапп.' : 'rep.';
-    const lengthUnit = currentUnits === 'metric' ? (isRuText ? 'см' : 'cm') : 'in';
-    const symText = isRuText ? 'сим.' : 'sym';
-    const edgeText = isRuText ? 'кром.' : 'edge';
-
-    let stLabel, rowLabel;
-    if (isRuText) {
-      stLabel = isKnit 
-        ? getRussianPlural(castOnTotal, 'петля', 'петли', 'петель')
-        : getRussianPlural(castOnTotal, 'столбик', 'столбика', 'столбиков');
-      rowLabel = getRussianPlural(rowsTotal, 'ряд', 'ряда', 'рядов');
-    } else {
-      stLabel = 'sts';
-      rowLabel = 'rows';
-    }
-
-    resCastOn.textContent = `${castOnTotal} ${stLabel}`;
-    let subText = '';
-    if (isCircular) {
-      subText = `${castOnReps} ${repLabel} + ${symText} ${sSt} (для кругового вязания)`;
-    } else {
-      subText = `${castOnReps} ${repLabel} + ${symText} (нач. ${sStart} + кон. ${sEnd}) + ${edgeText} ${e}`;
-    }
-    resCastOnSub.textContent = subText;
-
-    const desiredCastOnCm = currentDir === 'classic' ? wCm : lCm;
-    const diffCast = castOnCm - desiredCastOnCm;
-    let devCastText = `→ ${toDisplayCm(castOnCm).toFixed(1)} ${lengthUnit}`;
-    if (Math.abs(diffCast) < 0.01) devCastText += ` (${isRuText ? 'точно' : 'exact'})`;
-    else if (diffCast > 0) devCastText += ` (${isRuText ? 'на' : '+'} ${toDisplayCm(diffCast).toFixed(1)} ${lengthUnit} ${isRuText ? 'больше' : 'more'})`;
-    else devCastText += ` (${isRuText ? 'на' : ''} ${toDisplayCm(Math.abs(diffCast)).toFixed(1)} ${lengthUnit} ${isRuText ? 'меньше' : 'less'})`;
-    resCastOnDev.textContent = devCastText;
-
-    resRows.textContent = `${rowsTotal} ${rowLabel}`;
-    const rowsReps = Math.floor((rowsTotal - sRo) / rRo);
-    resRowsSub.textContent = `${rowsReps} ${repLabel} + ${symText} ${sRo}`;
-
-    const desiredRowsCm = currentDir === 'classic' ? lCm : wCm;
-    const diffRow = rowsCm - desiredRowsCm;
-    let devRowText = `→ ${toDisplayCm(rowsCm).toFixed(1)} ${lengthUnit}`;
-    if (Math.abs(diffRow) < 0.01) devRowText += ` (${isRuText ? 'точно' : 'exact'})`;
-    else if (diffRow > 0) devRowText += ` (${isRuText ? 'на' : '+'} ${toDisplayCm(diffRow).toFixed(1)} ${lengthUnit} ${isRuText ? 'больше' : 'more'})`;
-    else devRowText += ` (${isRuText ? 'на' : ''} ${toDisplayCm(Math.abs(diffRow)).toFixed(1)} ${lengthUnit} ${isRuText ? 'меньше' : 'less'})`;
-    resRowsDev.textContent = devRowText;
-
-    const sizeWidth = toDisplayCm(wCm);
-    const sizeLength = toDisplayCm(lCm);
-    const sizeUnit = currentUnits === 'metric' ? (isRuText ? 'см' : 'cm') : 'in';
-    resSize.textContent = `${sizeWidth.toFixed(1)} × ${sizeLength.toFixed(1)} ${sizeUnit}`;
   }
+
+  // Расчёт наборного края и рядов
+  let castOnTotal, rowsTotal;
+  let castOnCm, rowsCm;
+  let castOnReps;
+
+  if (currentDir === 'classic') {
+    let wRepForCast = wRep;
+    if (isCircular) {
+      wRepForCast = wRep * 2;
+      castOnTotal = wRepForCast * rSt + sSt;
+      castOnReps = wRepForCast;
+    } else {
+      castOnTotal = wRep * rSt + sSt + e;
+      castOnReps = wRep;
+    }
+    castOnCm = (castOnTotal / dSt) * 10;
+    rowsTotal = lRep * rRo + sRo;
+    rowsCm = (rowsTotal / dRo) * 10;
+  } else {
+    let lRepForCast = lRep;
+    if (isCircular) {
+      lRepForCast = lRep * 2;
+      castOnTotal = lRepForCast * rSt + sSt;
+      castOnReps = lRepForCast;
+    } else {
+      castOnTotal = lRep * rSt + sSt + e;
+      castOnReps = lRep;
+    }
+    castOnCm = (castOnTotal / dSt) * 10;
+    rowsTotal = wRep * rRo + sRo;
+    rowsCm = (rowsTotal / dRo) * 10;
+  }
+
+  const isKnit = currentTool === 'knit';
+  const isRuText = currentLang === 'ru';
+  const repLabel = isRuText ? 'рапп.' : 'rep.';
+  const lengthUnit = currentUnits === 'metric' ? (isRuText ? 'см' : 'cm') : 'in';
+  const symText = isRuText ? 'сим.' : 'sym';
+  const edgeText = isRuText ? 'кром.' : 'edge';
+
+  // Склонение для русского языка
+  let stLabel, rowLabel;
+  if (isRuText) {
+    stLabel = isKnit 
+      ? getRussianPlural(castOnTotal, 'петля', 'петли', 'петель')
+      : getRussianPlural(castOnTotal, 'столбик', 'столбика', 'столбиков');
+    rowLabel = getRussianPlural(rowsTotal, 'ряд', 'ряда', 'рядов');
+  } else {
+    stLabel = 'sts';
+    rowLabel = 'rows';
+  }
+
+  resCastOn.textContent = `${castOnTotal} ${stLabel}`;
+  let subText = '';
+  if (isCircular) {
+    subText = `${castOnReps} ${repLabel} + ${symText} ${sSt} (для кругового вязания)`;
+  } else {
+    subText = `${castOnReps} ${repLabel} + ${symText} (нач. ${sStart} + кон. ${sEnd}) + ${edgeText} ${e}`;
+  }
+  resCastOnSub.textContent = subText;
+
+  const desiredCastOnCm = currentDir === 'classic' ? wCm : lCm;
+  const diffCast = castOnCm - desiredCastOnCm;
+  let devCastText = `→ ${toDisplayCm(castOnCm).toFixed(1)} ${lengthUnit}`;
+  if (Math.abs(diffCast) < 0.01) devCastText += ` (${isRuText ? 'точно' : 'exact'})`;
+  else if (diffCast > 0) devCastText += ` (${isRuText ? 'на' : '+'} ${toDisplayCm(diffCast).toFixed(1)} ${lengthUnit} ${isRuText ? 'больше' : 'more'})`;
+  else devCastText += ` (${isRuText ? 'на' : ''} ${toDisplayCm(Math.abs(diffCast)).toFixed(1)} ${lengthUnit} ${isRuText ? 'меньше' : 'less'})`;
+  resCastOnDev.textContent = devCastText;
+
+  resRows.textContent = `${rowsTotal} ${rowLabel}`;
+  const rowsReps = Math.floor((rowsTotal - sRo) / rRo);
+  resRowsSub.textContent = `${rowsReps} ${repLabel} + ${symText} ${sRo}`;
+
+  const desiredRowsCm = currentDir === 'classic' ? lCm : wCm;
+  const diffRow = rowsCm - desiredRowsCm;
+  let devRowText = `→ ${toDisplayCm(rowsCm).toFixed(1)} ${lengthUnit}`;
+  if (Math.abs(diffRow) < 0.01) devRowText += ` (${isRuText ? 'точно' : 'exact'})`;
+  else if (diffRow > 0) devRowText += ` (${isRuText ? 'на' : '+'} ${toDisplayCm(diffRow).toFixed(1)} ${lengthUnit} ${isRuText ? 'больше' : 'more'})`;
+  else devRowText += ` (${isRuText ? 'на' : ''} ${toDisplayCm(Math.abs(diffRow)).toFixed(1)} ${lengthUnit} ${isRuText ? 'меньше' : 'less'})`;
+  resRowsDev.textContent = devRowText;
+
+  // Размер
+  const sizeWidth = toDisplayCm(wCm);
+  const sizeLength = toDisplayCm(lCm);
+  const sizeUnit = currentUnits === 'metric' ? (isRuText ? 'см' : 'cm') : 'in';
+  resSize.textContent = `${sizeWidth.toFixed(1)} × ${sizeLength.toFixed(1)} ${sizeUnit}`;
+}
 
   // ---------- Переводы ----------
   const translations = {
     ru: {
-      manifestName: 'Хаттер: Дизайнер шарфов и пледов',
+      lblCrochetDir: 'Способ вязания',    
+	  crochetFlat: 'Поворотное',         
+	  crochetCircular: 'Круговое',       
+      manifestName: 'Хаттер: Дизайнер шарфов и пледов', 
       manifestShortName: 'Хаттер',
       pwaAndroid: 'Откройте меню браузера и выберите «Добавить на экран домой» или «Установить приложение».',
       pwaTitle: 'Установите «Хаттер»',
@@ -352,6 +381,9 @@
       resSizeSub: 'Ширина × Длина',
     },
     us: {
+      lblCrochetDir: 'Crochet direction',
+      crochetFlat: 'Flat',
+      crochetCircular: 'Circular',
       manifestName: 'The Hatter: Scarf & Blanket Designer',
       manifestShortName: 'Hatter Scarf',
       pwaAndroid: 'Open browser menu and select «Add to Home Screen» or «Install App».',
@@ -397,6 +429,9 @@
       resSizeSub: 'Width × Length',
     },
     uk: {
+      lblCrochetDir: 'Crochet direction',
+      crochetFlat: 'Flat',
+      crochetCircular: 'Circular',
       manifestName: 'The Hatter: Scarf & Blanket Designer',
       manifestShortName: 'Hatter Scarf',
       pwaAndroid: 'Open browser menu and select «Add to Home Screen» or «Install App».',
@@ -521,6 +556,9 @@
     document.getElementById('pwaBtnText').textContent = t.pwaBtn;
     document.getElementById('resLabelSize').textContent = t.resLabelSize;
     document.getElementById('resSizeSub').textContent = t.resSizeSub;
+    document.getElementById('lblCrochetDir').textContent = t.lblCrochetDir;
+	document.getElementById('crochetFlat').textContent = t.crochetFlat;
+	document.getElementById('crochetCircular').textContent = t.crochetCircular;
     if (window.isIOS) {
       document.getElementById('ios-instructions').innerHTML = t.pwaIOS;
     } else {
@@ -541,34 +579,34 @@
     const lang = currentLang;
     const t = translations[lang] || translations.ru;
 
-    // Поле "Кромочные" всегда видно, чтобы можно было выбрать круговое вязание
+    // Показываем/скрываем поля
     if (edgesGroup) {
-      edgesGroup.classList.remove('hidden');
+      edgesGroup.classList.toggle('hidden', !isKnit);
+    }
+    if (crochetDirectionGroup) {
+      crochetDirectionGroup.classList.toggle('hidden', isKnit);
     }
 
-    const eVal = parseInt(edges.value);
-    const isCircular = (eVal === 0);
-
+    // Меняем подписи "петли" ↔ "столбики"
     const stWord = isKnit ? (isRu ? 'петли' : 'sts') : (isRu ? 'столбики' : 'sts');
     const lblRepSt = document.getElementById('lblRepSt');
     if (lblRepSt) lblRepSt.textContent = isRu ? `Раппорт (${stWord})` : `Repeat (${stWord})`;
 
+    // Подписи в результатах
     const castOnLabel = isKnit ? t.resLabelCastOnKnit : t.resLabelCastOnCrochet;
     document.getElementById('resLabelCastOn').textContent = castOnLabel;
     document.getElementById('resLabelRows').textContent = t.resLabelRows;
 
-    // Обновляем подпись ширины при круговом вязании
-    const widthLabel = document.getElementById('lblWidth');
-    if (widthLabel) {
-      if (isCircular) {
-        widthLabel.textContent = isRu ? 'Ширина (1/2 окружности)' : 'Width (half circumference)';
-      } else {
-        widthLabel.textContent = t.lblWidth;
-      }
+    // Если крючок, установить активную кнопку направления
+    if (!isKnit) {
+      document.querySelectorAll('#crochetDirectionToggle .toggle-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.dir === currentCrochetDir);
+      });
     }
 
+    // Обновляем видимость симметрии
     updateSymmetryVisibility();
-  }
+	}
 
   function updateWarningText() {
     const lang = currentLang;
@@ -644,7 +682,14 @@
         currentDir = this.dataset.dir;
       });
     });
-  }
+    document.querySelectorAll('#crochetDirectionToggle .toggle-option').forEach(btn => {
+  	   btn.addEventListener('click', function() {
+       document.querySelectorAll('#crochetDirectionToggle .toggle-option').forEach(b => b.classList.remove('active'));
+       this.classList.add('active');
+       currentCrochetDir = this.dataset.dir;
+      });
+    });
+   }
 
   function setupInputs() {
     edges.addEventListener('change', function() {

@@ -92,7 +92,7 @@
     </div>
   </section>
 
-  <!-- 2. Раппорт и симметрия -->
+<!-- 2. Раппорт и симметрия -->
 <section class="card">
   <div class="card-title" id="rapportTitle">Раппорт и симметрия</div>
   <div class="grid-3">
@@ -105,17 +105,18 @@
       <input type="number" id="repRow" value="" placeholder="0" step="1" min="0">
     </div>
     <div class="field-group" id="symStartGroup">
-  <label id="lblSymStart">Симметрия (начало ряда)</label>
-  <input type="number" id="symStart" value="" placeholder="0" step="1" min="0">
-</div>
-<div class="field-group" id="symEndGroup">
-  <label id="lblSymEnd">Симметрия (конец ряда)</label>
-  <input type="number" id="symEnd" value="" placeholder="0" step="1" min="0">
-</div>
-<div class="field-group">
-  <label id="lblSymRow">Симметрия (ряды)</label>
-  <input type="number" id="symRow" value="" placeholder="0" step="1" min="0">
-</div>
+      <label id="lblSymStart">Симметрия (начало ряда)</label>
+      <input type="number" id="symStart" value="" placeholder="0" step="1" min="0">
+    </div>
+    <div class="field-group" id="symEndGroup">
+      <label id="lblSymEnd">Симметрия (конец ряда)</label>
+      <input type="number" id="symEnd" value="" placeholder="0" step="1" min="0">
+    </div>
+    <div class="field-group">
+      <label id="lblSymRow">Симметрия (ряды)</label>
+      <input type="number" id="symRow" value="" placeholder="0" step="1" min="0">
+    </div>
+    <!-- Поле для спиц: Кромочные -->
     <div class="field-group" id="edgesGroup">
       <label id="lblEdges">Кромочные</label>
       <select id="edges">
@@ -123,6 +124,14 @@
         <option value="2" selected>2</option>
       </select>
       <span style="font-size:0.7rem; opacity:0.6;" id="edgeDesc">0 — круговое, 2 — поворотные ряды</span>
+    </div>
+    <!-- Поле для крючка: Способ вязания -->
+    <div class="field-group" id="crochetDirectionGroup" style="display: none;">
+      <label id="lblCrochetDir">Способ вязания</label>
+      <div class="toggle-group" id="crochetDirectionToggle">
+        <button class="toggle-option active" data-dir="flat"><span id="crochetFlat">Поворотное</span></button>
+        <button class="toggle-option" data-dir="circular"><span id="crochetCircular">Круговое</span></button>
+      </div>
     </div>
   </div>
 </section>

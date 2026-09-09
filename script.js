@@ -295,11 +295,18 @@ function calculate() {
   }
 
   resCastOn.textContent = `${castOnTotal} ${stLabel}`;
+  
+  // Получаем переводы для текущего языка
+  const t = translations[currentLang] || translations.ru;
+  const symStartLabel = t.symStart;
+  const symEndLabel = t.symEnd;
+  const circularLabel = t.circularNote;
+
   let subText = '';
   if (isCircular) {
-    subText = `${castOnReps} ${repLabel} + ${symText} ${sSt} (для кругового вязания)`;
+    subText = `${castOnReps} ${repLabel} + ${symText} ${sSt} ${circularLabel}`;
   } else {
-    subText = `${castOnReps} ${repLabel} + ${symText} (нач. ${sStart} + кон. ${sEnd}) + ${edgeText} ${e}`;
+    subText = `${castOnReps} ${repLabel} + ${symText} (${symStartLabel} ${sStart} + ${symEndLabel} ${sEnd}) + ${edgeText} ${e}`;
   }
   resCastOnSub.textContent = subText;
 
@@ -333,6 +340,9 @@ function calculate() {
   // ---------- Переводы ----------
   const translations = {
     ru: {
+      symLabel: 'нач.',
+	  symLabelEnd: 'кон.',
+	  circularNote: '(для кругового вязания)',
       lblCrochetDir: 'Способ вязания',    
 	  crochetFlat: 'Поворотное',         
 	  crochetCircular: 'Круговое',       
@@ -381,6 +391,9 @@ function calculate() {
       resSizeSub: 'Ширина × Длина',
     },
     us: {
+      symLabel: 'beg.',
+	  symLabelEnd: 'end.',
+	  circularNote: '(for circular knitting)',
       lblCrochetDir: 'Crochet direction',
       crochetFlat: 'Flat',
       crochetCircular: 'Circular',
@@ -429,6 +442,9 @@ function calculate() {
       resSizeSub: 'Width × Length',
     },
     uk: {
+      symLabel: 'beg.',
+	  symLabelEnd: 'end.',
+	  circularNote: '(for circular knitting)',
       lblCrochetDir: 'Crochet direction',
       crochetFlat: 'Flat',
       crochetCircular: 'Circular',

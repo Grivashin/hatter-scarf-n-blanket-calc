@@ -298,8 +298,8 @@ function calculate() {
   
   // Получаем переводы для текущего языка
   const t = translations[currentLang] || translations.ru;
-  const symStartLabel = t.symStart;
-  const symEndLabel = t.symEnd;
+  const symStartLabel = t.symLabel;
+  const symEndLabel = t.symLabelEnd;
   const circularLabel = t.circularNote;
 
   let subText = '';

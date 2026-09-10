@@ -41,7 +41,11 @@
   window.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
   // ---------- Helpers ----------
-  function getVal(el) { return parseFloat(el.value) || 0; }
+  function getVal(el) { 
+    const val = typeof el === 'string' ? el : el.value;
+    const normalized = val.replace(',', '.'); // заменяем запятую на точку
+    return parseFloat(normalized) || 0; 
+  }
   function getInt(el) { return parseInt(el.value) || 0; }
 
   function toDisplayCm(val) { return currentUnits === 'metric' ? val : val / 2.54; }

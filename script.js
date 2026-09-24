@@ -144,10 +144,7 @@ function calculate() {
 
   const dSt = getVal(densitySt);
   const dRo = getVal(densityRow);
-  if (dSt <= 0 || dRo <= 0) {
-    alert(isRu ? 'Пожалуйста, введите плотность (петли и ряды на 10 см).' : 'Please enter gauge.');
-    return;
-  }
+  const hasDensity = (dSt > 0 && dRo > 0);
 
   const rSt = getInt(repSt);
   const rRo = getInt(repRow);
@@ -162,6 +159,13 @@ function calculate() {
   const lRepVal = getInt(lengthRep);
   if (wCmVal <= 0 && lCmVal <= 0 && wRepVal <= 0 && lRepVal <= 0) {
     alert(isRu ? 'Укажите хотя бы один размер (ширину или длину).' : 'Enter at least one dimension.');
+    return;
+  }
+
+  if (!hasDensity && (wCmVal > 0 || lCmVal > 0) && (wRepVal <= 0 && lRepVal <= 0)) {
+    alert(isRu
+      ? 'Для расчёта в сантиметрах нужна плотность. Введите плотность или задайте размеры в раппортах.'
+      : 'To calculate in cm, please enter gauge. Or specify dimensions in repeats.');
     return;
   }
 
@@ -195,57 +199,67 @@ function calculate() {
   const eUsed = isCircular ? 0 : e;
 
   // Синхронизация ширины (приоритет у раппортов)
-  if (wRep > 0 && rSt > 0) {
-    const totalSt = wRep * rSt + sSt + eUsed;
-    const wCmCalc = (totalSt / dSt) * 10;
-    widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
-    wCm = wCmCalc;
-  } else if (wCmVal > 0 && rSt > 0) {
-    const base = (wCmVal / 10) * dSt - sSt - eUsed;
-    if (base > 0) {
-      const n = Math.round(base / rSt);
-      wRep = Math.max(1, n);
-      widthRep.value = wRep;
+  if (hasDensity) {
+    if (wRep > 0 && rSt > 0) {
       const totalSt = wRep * rSt + sSt + eUsed;
       const wCmCalc = (totalSt / dSt) * 10;
       widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
       wCm = wCmCalc;
-    } else {
-      wRep = 1;
-      widthRep.value = 1;
-      const totalSt = wRep * rSt + sSt + eUsed;
-      const wCmCalc = (totalSt / dSt) * 10;
-      widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
-      wCm = wCmCalc;
+    } else if (wCmVal > 0 && rSt > 0) {
+      const base = (wCmVal / 10) * dSt - sSt - eUsed;
+      if (base > 0) {
+        const n = Math.round(base / rSt);
+        wRep = Math.max(1, n);
+        widthRep.value = wRep;
+        const totalSt = wRep * rSt + sSt + eUsed;
+        const wCmCalc = (totalSt / dSt) * 10;
+        widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
+        wCm = wCmCalc;
+      } else {
+        wRep = 1;
+        widthRep.value = 1;
+        const totalSt = wRep * rSt + sSt + eUsed;
+        const wCmCalc = (totalSt / dSt) * 10;
+        widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
+        wCm = wCmCalc;
+      }
     }
+  } else {
+    // Без плотности: раппорты обязательны, ставим значение по умолчанию
+    if (wRep <= 0) { wRep = 1; widthRep.value = 1; }
   }
 
   // Синхронизация длины
-  if (lRep > 0 && rRo > 0) {
-    const totalRo = lRep * rRo + sRo;
-    const lCmCalc = (totalRo / dRo) * 10;
-    lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
-    lCm = lCmCalc;
-  } else if (lCmVal > 0 && rRo > 0) {
-    const base = (lCmVal / 10) * dRo - sRo;
-    if (base > 0) {
-      const m = Math.round(base / rRo);
-      lRep = Math.max(1, m);
-      lengthRep.value = lRep;
+  if (hasDensity) {
+    if (lRep > 0 && rRo > 0) {
       const totalRo = lRep * rRo + sRo;
       const lCmCalc = (totalRo / dRo) * 10;
       lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
       lCm = lCmCalc;
-    } else {
-      lRep = 1;
-      lengthRep.value = 1;
-      const totalRo = lRep * rRo + sRo;
-      const lCmCalc = (totalRo / dRo) * 10;
-      lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
-      lCm = lCmCalc;
+    } else if (lCmVal > 0 && rRo > 0) {
+      const base = (lCmVal / 10) * dRo - sRo;
+      if (base > 0) {
+        const m = Math.round(base / rRo);
+        lRep = Math.max(1, m);
+        lengthRep.value = lRep;
+        const totalRo = lRep * rRo + sRo;
+        const lCmCalc = (totalRo / dRo) * 10;
+        lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
+        lCm = lCmCalc;
+      } else {
+        lRep = 1;
+        lengthRep.value = 1;
+        const totalRo = lRep * rRo + sRo;
+        const lCmCalc = (totalRo / dRo) * 10;
+        lengthCm.value = toDisplayCm(lCmCalc).toFixed(2);
+        lCm = lCmCalc;
+      }
     }
+  } else {
+    // Без плотности: раппорты обязательны, ставим значение по умолчанию
+    if (lRep <= 0) { lRep = 1; lengthRep.value = 1; }
   }
-
+  
   // Расчёт наборного края и рядов
   let castOnTotal, rowsTotal;
   let castOnCm, rowsCm;

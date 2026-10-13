@@ -263,27 +263,44 @@ function calculate() {
   }
   
   // Расчёт наборного края и рядов
-  let castOnTotal, rowsTotal;
-  let castOnCm, rowsCm;
-  let castOnReps;
+      let castOnTotal, rowsTotal;
+    let castOnCm, rowsCm;
+    let castOnReps;
 
-  if (currentDir === 'classic') {
-  let wRepForCast = wRep;
-  let bodyStsForCast;
-  if (isCircular) {
-    wRepForCast = wRep * 2;
-    bodyStsForCast = wRepForCast * rSt + sSt;
-    castOnTotal = bodyStsForCast;        // для кругового кромочных нет
-    castOnReps = wRepForCast;
-  } else {
-    bodyStsForCast = wRep * rSt + sSt;   // тело без кромочных
-    castOnTotal = bodyStsForCast + e;    // с кромочными — только для набора
-    castOnReps = wRep;
-  }
-  castOnCm = (bodyStsForCast / dSt) * 10; // ширина тела (без кромочных)
-  rowsTotal = lRep * rRo + sRo;
-  rowsCm = (rowsTotal / dRo) * 10;
-} else {
+    if (currentDir === 'classic') {
+      let wRepForCast = wRep;
+      let bodyStsForCast;
+      if (isCircular) {
+        wRepForCast = wRep * 2;
+        bodyStsForCast = wRepForCast * rSt + sSt;
+        castOnTotal = bodyStsForCast;
+        castOnReps = wRepForCast;
+      } else {
+        bodyStsForCast = wRep * rSt + sSt;
+        castOnTotal = bodyStsForCast + e;
+        castOnReps = wRep;
+      }
+      castOnCm = (bodyStsForCast / dSt) * 10;
+      rowsTotal = lRep * rRo + sRo;
+      rowsCm = (rowsTotal / dRo) * 10;
+    } else {
+      let lRepForCast = lRep;
+      let bodyStsForCast;
+      if (isCircular) {
+        lRepForCast = lRep * 2;
+        bodyStsForCast = lRepForCast * rSt + sSt;
+        castOnTotal = bodyStsForCast;
+        castOnReps = lRepForCast;
+      } else {
+        bodyStsForCast = lRep * rSt + sSt;
+        castOnTotal = bodyStsForCast + e;
+        castOnReps = lRep;
+      }
+      castOnCm = (bodyStsForCast / dSt) * 10;
+      rowsTotal = wRep * rRo + sRo;
+      rowsCm = (rowsTotal / dRo) * 10;
+    }
+   else {
   let lRepForCast = lRep;
   let bodyStsForCast;
   if (isCircular) {

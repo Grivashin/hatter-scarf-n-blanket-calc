@@ -699,16 +699,24 @@ function calculate() {
 
   function setupToggles() {
     document.querySelectorAll('#toolToggle .toggle-option').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('#toolToggle .toggle-option').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        currentTool = this.dataset.tool;
-        updateToolSpecificUI();
-        updateWarningText();
-        updateUnitSymbols();
-        updateSymmetryVisibility();
-      });
-    });
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('#toolToggle .toggle-option').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentTool = this.dataset.tool;
+
+    // Автоматически ставим кромочные в зависимости от инструмента
+    if (currentTool === 'knit') {
+      edges.value = '2';  // для спиц по умолчанию поворотное вязание
+    } else {
+      edges.value = '0';  // для крючка по умолчанию круговое
+    }
+
+    updateToolSpecificUI();
+    updateWarningText();
+    updateUnitSymbols();
+    updateSymmetryVisibility();
+  });
+});
     document.querySelectorAll('#directionToggle .toggle-option').forEach(btn => {
       btn.addEventListener('click', function() {
         document.querySelectorAll('#directionToggle .toggle-option').forEach(b => b.classList.remove('active'));

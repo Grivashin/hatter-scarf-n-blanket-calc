@@ -267,7 +267,7 @@ function calculate() {
     let castOnCm, rowsCm;
     let castOnReps;
 
-    if (currentDir === 'classic') {
+        if (currentDir === 'classic') {
       let wRepForCast = wRep;
       let bodyStsForCast;
       if (isCircular) {
@@ -300,37 +300,6 @@ function calculate() {
       rowsTotal = wRep * rRo + sRo;
       rowsCm = (rowsTotal / dRo) * 10;
     }
-   else {
-  let lRepForCast = lRep;
-  let bodyStsForCast;
-  if (isCircular) {
-    lRepForCast = lRep * 2;
-    bodyStsForCast = lRepForCast * rSt + sSt;
-    castOnTotal = bodyStsForCast;
-    castOnReps = lRepForCast;
-  } else {
-    bodyStsForCast = lRep * rSt + sSt;
-    castOnTotal = bodyStsForCast + e;
-    castOnReps = lRep;
-  }
-  castOnCm = (bodyStsForCast / dSt) * 10;
-  rowsTotal = wRep * rRo + sRo;
-  rowsCm = (rowsTotal / dRo) * 10;
-}
-  else {
-    let lRepForCast = lRep;
-    if (isCircular) {
-      lRepForCast = lRep * 2;
-      castOnTotal = lRepForCast * rSt + sSt;
-      castOnReps = lRepForCast;
-    } else {
-      castOnTotal = lRep * rSt + sSt + e;
-      castOnReps = lRep;
-    }
-    castOnCm = (castOnTotal / dSt) * 10;
-    rowsTotal = wRep * rRo + sRo;
-    rowsCm = (rowsTotal / dRo) * 10;
-  }
 
   const isKnit = currentTool === 'knit';
   const isRuText = currentLang === 'ru';

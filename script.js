@@ -304,15 +304,14 @@ function calculate() {
 
   // Склонение для русского языка
   let stLabel, rowLabel;
-  if (isRuText) {
-    stLabel = isKnit 
-      ? getRussianPlural(castOnTotal, 'петля', 'петли', 'петель')
-      : getRussianPlural(castOnTotal, 'столбик', 'столбика', 'столбиков');
-    rowLabel = getRussianPlural(rowsTotal, 'ряд', 'ряда', 'рядов');
-  } else {
-    stLabel = 'sts';
-    rowLabel = 'rows';
-  }
+if (isRuText) {
+  // И для спиц, и для крючка используем "петля" — считаем набор
+  stLabel = getRussianPlural(castOnTotal, 'петля', 'петли', 'петель');
+  rowLabel = getRussianPlural(rowsTotal, 'ряд', 'ряда', 'рядов');
+} else {
+  stLabel = 'sts';
+  rowLabel = 'rows';
+}
 
   resCastOn.textContent = `${castOnTotal} ${stLabel}`;
   

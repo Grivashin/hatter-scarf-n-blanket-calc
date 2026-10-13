@@ -201,29 +201,31 @@ function calculate() {
   // Синхронизация ширины (приоритет у раппортов)
   if (hasDensity) {
     if (wRep > 0 && rSt > 0) {
-      const totalSt = wRep * rSt + sSt + eUsed;
-      const wCmCalc = (totalSt / dSt) * 10;
-      widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
-      wCm = wCmCalc;
-    } else if (wCmVal > 0 && rSt > 0) {
-      const base = (wCmVal / 10) * dSt - sSt - eUsed;
-      if (base > 0) {
-        const n = Math.round(base / rSt);
-        wRep = Math.max(1, n);
-        widthRep.value = wRep;
-        const totalSt = wRep * rSt + sSt + eUsed;
-        const wCmCalc = (totalSt / dSt) * 10;
-        widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
-        wCm = wCmCalc;
-      } else {
-        wRep = 1;
-        widthRep.value = 1;
-        const totalSt = wRep * rSt + sSt + eUsed;
-        const wCmCalc = (totalSt / dSt) * 10;
-        widthCm.value = toDisplayCm(wCmCalc).toFixed(2);
-        wCm = wCmCalc;
-      }
-    }
+  const bodySts = wRep * rSt + sSt;
+  const bodyCmCalc = (bodySts / dSt) * 10;
+  widthCm.value = toDisplayCm(bodyCmCalc).toFixed(2);
+  wCm = bodyCmCalc;
+}
+     else if (wCmVal > 0 && rSt > 0) {
+  // Целевое количество петель ТЕЛА (без кромочных)
+  const bodyStsTarget = (wCmVal / 10) * dSt - sSt;
+  if (bodyStsTarget > 0) {
+    const n = Math.round(bodyStsTarget / rSt);
+    wRep = Math.max(1, n);
+    widthRep.value = wRep;
+    const bodySts = wRep * rSt + sSt;
+    const bodyCmCalc = (bodySts / dSt) * 10;
+    widthCm.value = toDisplayCm(bodyCmCalc).toFixed(2);
+    wCm = bodyCmCalc;
+  } else {
+    wRep = 1;
+    widthRep.value = 1;
+    const bodySts = wRep * rSt + sSt;
+    const bodyCmCalc = (bodySts / dSt) * 10;
+    widthCm.value = toDisplayCm(bodyCmCalc).toFixed(2);
+    wCm = bodyCmCalc;
+  }
+}
   } else {
     // Без плотности: раппорты обязательны, ставим значение по умолчанию
     if (wRep <= 0) { wRep = 1; widthRep.value = 1; }
